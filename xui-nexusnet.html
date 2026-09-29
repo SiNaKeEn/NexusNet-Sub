@@ -33,37 +33,40 @@
         // هر برنامه: name نام نمایشی و url لینک دانلود.
         apps: [
           { platform: "Android", icon: "fa-brands fa-android", apps: [
-            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases" },
-            { name: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" },
-            { name: "V2Box",   url: "https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box" },
-            { name: "Happ",    url: "https://play.google.com/store/apps/details?id=com.happproxy" },
+            { name: "Happ", url: "https://play.google.com/store/apps/details?id=com.happproxy", iconImg: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/happ.png" },
+            { name: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases", iconImg: "" },
+            { name: "V2Box", url: "https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box", iconImg: "" },
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases", iconImg: "" },
           ]},
           { platform: "iOS", icon: "fa-brands fa-apple", apps: [
-            { name: "Streisand",    url: "https://apps.apple.com/app/id6450534064" },
-            { name: "V2Box",        url: "https://apps.apple.com/app/id6446814690" },
-            { name: "Shadowrocket", url: "https://apps.apple.com/app/id932747118" },
-            { name: "Happ",         url: "https://apps.apple.com/app/id6504287215" },
+            { name: "Happ", url: "https://apps.apple.com/app/id6504287215", iconImg: "" },
+            { name: "Streisand", url: "https://apps.apple.com/app/id6450534064", iconImg: "" },
+            { name: "V2Box", url: "https://apps.apple.com/app/id6446814690", iconImg: "" },
+            { name: "Shadowrocket", url: "https://apps.apple.com/app/id932747118", iconImg: "" },
           ]},
           { platform: "Windows", icon: "fa-brands fa-windows", apps: [
-            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases" },
-            { name: "v2rayN",  url: "https://github.com/2dust/v2rayN/releases" },
-            { name: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" },
+            { name: "Happ", url: "https://github.com/Happ-proxy/happ-desktop/releases", iconImg: "" },
+            { name: "Throne", url: "https://github.com/throneproj/Throne/releases", iconImg: "" },
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases", iconImg: "" },
+            { name: "v2rayN", url: "https://github.com/2dust/v2rayN/releases", iconImg: "" },
           ]},
           { platform: "macOS", icon: "fa-brands fa-apple", apps: [
-            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases" },
-            { name: "V2Box",   url: "https://apps.apple.com/app/id6446814690" },
+            { name: "Happ", url: "https://apps.apple.com/app/id6504287215", iconImg: "" },
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases", iconImg: "" },
+            { name: "V2Box", url: "https://apps.apple.com/app/id6446814690", iconImg: "" },
+          ]},
+          { platform: "Linux", icon: "fa-brands fa-linux", apps: [
+            { name: "Happ", url: "https://github.com/Happ-proxy/happ-desktop/releases", iconImg: "" },
+            { name: "Throne", url: "https://github.com/throneproj/Throne/releases", iconImg: "" },
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases", iconImg: "" },
           ]},
         ],
 
-        // دکمه‌های «افزودن سریع» در داشبورد؛ هر دکمه لینک اشتراک را مستقیم در برنامه باز می‌کند.
-        // داخل scheme می‌توانید از این جای‌نگهدارها استفاده کنید:
-        // {SUB_URL} لینک اشتراک · {SUB_URL_ENCODED} همان لینک به شکل URL-encoded · {SUB_TITLE} نام اشتراک
-        // name و icon مثل بخش apps هستند (icon از Font Awesome 6.5.2).
         quickImport: [
-          { name: "Hiddify", icon: "fa-solid fa-shield-halved",  scheme: "hiddify://import/{SUB_URL}" },
-          { name: "V2Box",   icon: "fa-solid fa-box-open",       scheme: "v2box://install-sub?url={SUB_URL_ENCODED}&title={SUB_TITLE}" },
-          { name: "v2rayNG", icon: "fa-brands fa-android",       scheme: "v2rayng://install-config?url={SUB_URL_ENCODED}" },
-          { name: "Happ",    icon: "fa-solid fa-bolt-lightning", scheme: "happ://add/{SUB_URL}" },
+          { name: "Happ", icon: "fa-solid fa-bolt-lightning", scheme: "happ://add/{SUB_URL}" },
+          { name: "Hiddify", icon: "fa-solid fa-shield-halved", scheme: "hiddify://import/{SUB_URL}" },
+          { name: "v2rayNG", icon: "fa-brands fa-android", scheme: "v2rayng://install-config?url={SUB_URL_ENCODED}" },
+          { name: "V2Box", icon: "fa-solid fa-box-open", scheme: "v2box://install-sub?url={SUB_URL_ENCODED}&title={SUB_TITLE}" },
         ],
       };
     </script>
@@ -144,12 +147,14 @@
 
       body {
         font-family: var(--font);
-        background: 
-          radial-gradient(circle at 15% 25%, var(--bg-glow-1) 0%, transparent 40%),
-          radial-gradient(circle at 85% 75%, var(--bg-glow-2) 0%, transparent 45%),
-          linear-gradient(135deg, var(--bg-base) 0%, var(--bg-mid) 50%, var(--bg-end) 100%);
-        background-size: 200% 200%;
-        animation: auroraBG 18s ease infinite alternate;
+        background-color: #02040a;
+        background-image:
+          radial-gradient(ellipse at 20% 20%, rgba(0, 212, 255, 0.12) 0%, transparent 50%),
+          radial-gradient(ellipse at 80% 80%, rgba(0, 120, 255, 0.10) 0%, transparent 45%),
+          radial-gradient(circle at 50% 50%, transparent 0%, #02040a 70%),
+          url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Ccircle cx='2' cy='2' r='1' fill='%2300d4ff' opacity='0.15'/%3E%3C/svg%3E"),
+          linear-gradient(160deg, #02040a 0%, #06101c 40%, #030810 100%);
+        background-size: 100% 100%, 100% 100%, 100% 100%, 80px 80px, 100% 100%;
         color: var(--text-primary);
         display: flex;
         justify-content: center;
@@ -755,6 +760,57 @@
         font-size: 0.85rem; font-weight: 700; transition: 0.3s; z-index: 200; pointer-events: none;
       }
       .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    
+      /* ===== NexusNet Desktop Layout ===== */
+      @media (min-width: 900px) {
+        .app-container {
+          max-width: 980px !important;
+          margin: 1.5rem auto;
+          border-radius: 1.25rem;
+          border: 1px solid rgba(0, 212, 255, 0.15);
+          box-shadow: 0 0 60px rgba(0, 180, 255, 0.08);
+          overflow: hidden;
+          min-height: calc(100vh - 3rem);
+        }
+        .content-area {
+          padding: 1.5rem 2rem 7rem;
+        }
+        .header {
+          padding: 1.25rem 2rem;
+        }
+        .header-title {
+          font-size: 1.35rem !important;
+          letter-spacing: 0.02em;
+        }
+      }
+      @media (min-width: 1100px) {
+        .app-container {
+          max-width: 1100px !important;
+        }
+      }
+      .nexus-logo {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-left: 0.5rem;
+        box-shadow: 0 0 12px rgba(0, 212, 255, 0.4);
+      }
+      html[dir="ltr"] .nexus-logo { margin-left: 0; margin-right: 0.5rem; }
+      .header-brand {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .app-icon-img {
+        width: 22px;
+        height: 22px;
+        border-radius: 5px;
+        object-fit: contain;
+        margin-inline-end: 0.4rem;
+        vertical-align: middle;
+      }
+
     </style>
   </head>
   <body>
@@ -762,7 +818,10 @@
       
       <header class="header">
         <div class="header-info">
+          <div class="header-brand">
+          <img class="nexus-logo" src="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/logo-nexusnet.png" alt="NexusNet" onerror="this.style.display='none'" />
           <span class="header-title" id="panelTitle">NexusNet</span>
+        </div>
           <div class="header-email-wrap" id="headerEmailWrap">
             <span class="header-status-dot" id="headerStatusDot"></span>
             <span class="header-email" id="userEmailText"></span>
@@ -780,8 +839,6 @@
             <div class="lang-dropdown">
               <div class="lang-option" data-value="fa">فارسی</div>
               <div class="lang-option" data-value="en">English</div>
-              <div class="lang-option" data-value="zh">简体中文</div>
-              <div class="lang-option" data-value="ru">Русский</div>
             </div>
           </div>
         </div>
@@ -1692,16 +1749,41 @@
         });
       }
 
+      function detectOS() {
+        const ua = (navigator.userAgent || "").toLowerCase();
+        const platform = (navigator.platform || "").toLowerCase();
+        if (/android/.test(ua)) return "Android";
+        if (/iphone|ipad|ipod/.test(ua)) return "iOS";
+        if (/win/.test(platform) || /windows/.test(ua)) return "Windows";
+        if (/mac/.test(platform) && !/iphone|ipad/.test(ua)) return "macOS";
+        if (/linux/.test(platform) || /linux/.test(ua)) return "Linux";
+        return "Unknown";
+      }
+
       function renderApps() {
-        const apps = CONFIG.apps;
+        const apps = CONFIG.apps || [];
         const grid = document.getElementById("appsGridContainer");
         if (!grid) return;
-        grid.innerHTML = apps.map(os => `
-          <div class="app-group">
-            <div class="app-group-title"><i class="${os.icon}"></i> ${os.platform}</div>
-            ${os.apps.map(app => `<a href="${app.url}" target="_blank" rel="noopener noreferrer" class="app-link"><span>${app.name}</span><i class="fa-solid fa-download"></i></a>`).join('')}
-          </div>
-        `).join('');
+        const detected = detectOS();
+        // Put detected OS first
+        const sorted = [...apps].sort((a, b) => {
+          if (a.platform === detected) return -1;
+          if (b.platform === detected) return 1;
+          return 0;
+        });
+        grid.innerHTML = sorted.map(os => {
+          const isCurrent = os.platform === detected;
+          const badge = isCurrent ? ' <span style="font-size:0.7rem;color:var(--primary);font-weight:700;">●</span>' : '';
+          return `
+          <div class="app-group" style="${isCurrent ? 'border:1px solid rgba(0,212,255,0.25);border-radius:0.85rem;padding:0.75rem;margin-bottom:0.75rem;' : ''}">
+            <div class="app-group-title"><i class="${os.icon}"></i> ${os.platform}${badge}</div>
+            ${os.apps.map(app => {
+              const img = app.iconImg ? `<img class="app-icon-img" src="${app.iconImg}" alt="" onerror="this.style.display='none'" />` : '';
+              const rec = (app.name === 'Happ' || app.name === 'Throne') ? ' <span style="font-size:0.65rem;opacity:0.7;">★</span>' : '';
+              return `<a href="${app.url}" target="_blank" rel="noopener noreferrer" class="app-link">${img}<span>${app.name}${rec}</span><i class="fa-solid fa-download"></i></a>`;
+            }).join('')}
+          </div>`;
+        }).join('');
       }
 
       function renderProfile() {
