@@ -4,7 +4,7 @@ set -euo pipefail
 # ============================================================
 # NexusNet Subscription Theme Installer
 # Supports: 3x-ui (Sanaei) and PasarGuard
-# Themes:   Default (generic) | NexusNet (branded)
+# Themes:   Default | NexusNet
 # Repo:     https://github.com/SiNaKeEn/NexusNet-Sub
 # ============================================================
 
@@ -50,7 +50,7 @@ install_xui() {
   local theme="$1"
   local install_dir="/etc/x-ui/sub"
   local install_file="${install_dir}/sub.html"
-  local source_url="${REPO_RAW}/themes/xui/${theme}/sub.html"
+  local source_url="${REPO_RAW}/xui-${theme}.html"
 
   mkdir -p "$install_dir"
   chmod 755 "$install_dir"
@@ -73,7 +73,7 @@ install_pasarguard() {
   local install_dir="/var/lib/pasarguard/templates/subscription"
   local install_file="${install_dir}/index.html"
   local env_file="/opt/pasarguard/.env"
-  local source_url="${REPO_RAW}/themes/pasarguard/${theme}/index.html"
+  local source_url="${REPO_RAW}/pasarguard-${theme}.html"
 
   mkdir -p "$install_dir"
   chmod 755 "$install_dir"
