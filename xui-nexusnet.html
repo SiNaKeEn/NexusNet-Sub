@@ -41,19 +41,28 @@ body {
   min-height: 100vh;
   display: flex;
   justify-content: center;
-  background-color: #071018;
+  background-color: #04060d;
   background-image:
-    linear-gradient(180deg, rgba(7,16,24,0.72) 0%, rgba(7,16,24,0.88) 50%, rgba(7,16,24,0.94) 100%),
-    url("https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/logo-nexusnet.png");
-  background-size: cover, cover;
-  background-position: center center, center center;
-  background-repeat: no-repeat;
+    radial-gradient(ellipse 80% 50% at 15% 20%, rgba(34, 211, 238, 0.14) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 45% at 85% 75%, rgba(59, 130, 246, 0.16) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(14, 40, 80, 0.4) 0%, transparent 70%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(34, 211, 238, 0.03) 39px, rgba(34, 211, 238, 0.03) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(34, 211, 238, 0.03) 39px, rgba(34, 211, 238, 0.03) 40px),
+    radial-gradient(circle, rgba(34, 211, 238, 0.09) 1px, transparent 1px),
+    linear-gradient(160deg, #04060d 0%, #0a1224 45%, #060914 100%);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px, 28px 28px, 100% 100%;
   background-attachment: fixed;
 }
 html[data-theme="light"] body {
+  background-color: #eef4fb;
   background-image:
-    linear-gradient(180deg, rgba(238,245,251,0.85) 0%, rgba(238,245,251,0.92) 100%),
-    url("https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/logo-nexusnet.png");
+    radial-gradient(ellipse 80% 50% at 15% 20%, rgba(8, 145, 178, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 45% at 85% 75%, rgba(37, 99, 235, 0.1) 0%, transparent 50%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(8, 145, 178, 0.04) 39px, rgba(8, 145, 178, 0.04) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(8, 145, 178, 0.04) 39px, rgba(8, 145, 178, 0.04) 40px),
+    radial-gradient(circle, rgba(8, 145, 178, 0.08) 1px, transparent 1px),
+    linear-gradient(160deg, #eef4fb 0%, #e0ebf7 50%, #f0f7fc 100%);
+  background-size: 100% 100%, 100% 100%, 40px 40px, 40px 40px, 28px 28px, 100% 100%;
 }
 .wrap {
   width: 100%;
@@ -63,18 +72,48 @@ html[data-theme="light"] body {
 }
 @media (min-width: 960px) {
   .wrap {
-    max-width: 920px;
+    max-width: 880px;
     margin: 1.5rem auto;
-    padding: 1.5rem 1.5rem 2rem;
+    padding: 1.5rem 1.75rem 1.75rem;
     min-height: auto;
-    background: var(--surface);
+    background: rgba(10, 20, 40, 0.55);
     border: 1px solid var(--border);
     border-radius: 24px;
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
     box-shadow: 0 25px 80px rgba(0,0,0,0.35);
   }
-  .desk { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; align-items: start; }
+  html[data-theme="light"] .wrap {
+    background: rgba(255,255,255,0.7);
+  }
+  .desk {
+    display: block;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .row {
+    flex-wrap: nowrap;
+  }
+  .btn {
+    min-width: 0;
+    flex: 1 1 0;
+  }
+  .qi {
+    grid-template-columns: 1fr 1fr;
+  }
+  .grid3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .nav {
+    position: static;
+    transform: none;
+    max-width: none;
+    width: 100%;
+    margin-bottom: 1.15rem;
+  }
+  /* On desktop both side columns visible for home+apps when on home tab:
+     keep simple single flow - show all tabs normally */
+  .tab.on { display: block; }
 }
 .header {
   display: flex;
@@ -198,12 +237,12 @@ html[data-theme="light"] .cell { background: rgba(0,0,0,0.04); }
   display: flex;
   gap: 0.5rem;
   margin-top: 1rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .btn {
-  flex: 1;
-  min-width: 110px;
-  padding: 0.72rem 1rem;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0.72rem 0.85rem;
   border-radius: 12px;
   border: 0;
   font-family: var(--font);
@@ -237,8 +276,14 @@ html[data-theme="light"] .cell { background: rgba(0,0,0,0.04); }
 .stitle i { color: var(--primary); }
 .qi {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.45rem;
+}
+.qi a {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .qi a {
   display: flex;
