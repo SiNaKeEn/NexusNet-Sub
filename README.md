@@ -17,7 +17,7 @@
 با دسترسی root این دستور را اجرا کنید:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
 ```
 
 نصب‌کننده از شما می‌پرسد:
@@ -35,7 +35,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/i
 
 ```bash
 mkdir -p /etc/x-ui/sub
-curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/themes/xui/nexusnet/sub.html \
+curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/themes/xui/nexusnet/sub.html \
   -o /etc/x-ui/sub/sub.html
 ```
 
@@ -46,7 +46,7 @@ curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/themes/x
 ```bash
 mkdir -p /var/lib/pasarguard/templates/subscription
 
-curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/themes/pasarguard/nexusnet/index.html \
+curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/themes/pasarguard/nexusnet/index.html \
   -o /var/lib/pasarguard/templates/subscription/index.html
 ```
 
