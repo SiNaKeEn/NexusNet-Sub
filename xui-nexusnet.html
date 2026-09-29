@@ -33,22 +33,25 @@
         // هر برنامه: name نام نمایشی و url لینک دانلود.
         apps: [
           { platform: "Android", icon: "fa-brands fa-android", apps: [
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases" },
             { name: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" },
+            { name: "V2Box",   url: "https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box" },
             { name: "Happ",    url: "https://play.google.com/store/apps/details?id=com.happproxy" },
-            { name: "Incy",    url: "https://play.google.com/store/apps/details?id=llc.itdev.incy" },
-            { name: "V2Box (Recommend)",   url: "https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box" },
           ]},
           { platform: "iOS", icon: "fa-brands fa-apple", apps: [
             { name: "Streisand",    url: "https://apps.apple.com/app/id6450534064" },
+            { name: "V2Box",        url: "https://apps.apple.com/app/id6446814690" },
             { name: "Shadowrocket", url: "https://apps.apple.com/app/id932747118" },
             { name: "Happ",         url: "https://apps.apple.com/app/id6504287215" },
-            { name: "V2Box (Recommend)",        url: "https://apps.apple.com/app/id6446814690" },
           ]},
           { platform: "Windows", icon: "fa-brands fa-windows", apps: [
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases" },
             { name: "v2rayN",  url: "https://github.com/2dust/v2rayN/releases" },
-            { name: "Hiddify (Recommend)", url: "https://github.com/hiddify/hiddify-app/releases" },
             { name: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" },
-            { name: "Happ",    url: "https://github.com/Happ-proxy/happ-desktop/releases" },
+          ]},
+          { platform: "macOS", icon: "fa-brands fa-apple", apps: [
+            { name: "Hiddify", url: "https://github.com/hiddify/hiddify-app/releases" },
+            { name: "V2Box",   url: "https://apps.apple.com/app/id6446814690" },
           ]},
         ],
 
@@ -57,11 +60,10 @@
         // {SUB_URL} لینک اشتراک · {SUB_URL_ENCODED} همان لینک به شکل URL-encoded · {SUB_TITLE} نام اشتراک
         // name و icon مثل بخش apps هستند (icon از Font Awesome 6.5.2).
         quickImport: [
-          { name: "v2rayNG", icon: "fa-brands fa-android",       scheme: "v2rayng://install-config?url={SUB_URL_ENCODED}" },
           { name: "Hiddify", icon: "fa-solid fa-shield-halved",  scheme: "hiddify://import/{SUB_URL}" },
-          { name: "Happ",    icon: "fa-solid fa-bolt-lightning", scheme: "happ://add/{SUB_URL}" },
-          { name: "Incy",    icon: "fa-solid fa-rocket",         scheme: "incy://import/{SUB_URL}" },
           { name: "V2Box",   icon: "fa-solid fa-box-open",       scheme: "v2box://install-sub?url={SUB_URL_ENCODED}&title={SUB_TITLE}" },
+          { name: "v2rayNG", icon: "fa-brands fa-android",       scheme: "v2rayng://install-config?url={SUB_URL_ENCODED}" },
+          { name: "Happ",    icon: "fa-solid fa-bolt-lightning", scheme: "happ://add/{SUB_URL}" },
         ],
       };
     </script>
@@ -81,29 +83,29 @@
         --bg-mid: #06101c;
         --bg-end: #030810;
 
-        --surface: rgba(20, 30, 55, 0.4);
-        --surface-hover: rgba(35, 45, 75, 0.5);
-        --border: rgba(255, 255, 255, 0.08);
+        --surface: rgba(8, 20, 40, 0.55);
+        --surface-hover: rgba(12, 30, 55, 0.65);
+        --border: rgba(0, 212, 255, 0.12);
         --text-primary: #f8fafc;
         --text-secondary: #94a3b8;
         
         --color-usage: #00d4ff;        
         --color-chart: #00b4ff;        
-        --color-time: #f59e0b;        
-        --color-apps: #10b981;        
+        --color-time: #22d3ee;        
+        --color-apps: #38bdf8;        
         
         --primary: var(--color-usage);
         --primary-glow: rgba(0, 212, 255, 0.25);
         --nav-active: #00d4ff;
         --nav-inactive: #64748b;
         
-        --success: #10b981;
+        --success: #2dd4bf;
         --warning: #f59e0b;
         --danger: #ef4444;
 
-        --radius-lg: 1.5rem;
-        --radius-md: 1.15rem;
-        --radius-sm: 0.7rem;
+        --radius-lg: 1.25rem;
+        --radius-md: 0.95rem;
+        --radius-sm: 0.55rem;
       }
 
       html[data-theme="light"] {
