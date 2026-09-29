@@ -8,7 +8,7 @@ set -euo pipefail
 # Repo:     https://github.com/SiNaKeEn/NexusNet-Sub
 # ============================================================
 
-REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main"
+REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes"
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 CYAN='\033[0;36m'
@@ -17,14 +17,11 @@ NC='\033[0m'
 
 print_banner() {
   echo -e "${CYAN}"
-  cat << 'EOF'
-  _   _                      _   _      _
- | \ | | _____  ___   _ __ | \ | | ___| |_
- |  \| |/ _ \ \/ / | | / __||  \| |/ _ \ __|
- | |\  |  __/>  <| |_| \__ \| |\  |  __/ |_
- |_| \_|\___/_/\_\\__,_|___/|_| \_|\___|\__|
-        Subscription Theme Installer
-EOF
+  cat << 'BANNER'
+  ========================================
+       NexusNet  Theme  Installer
+  ========================================
+BANNER
   echo -e "${NC}"
 }
 
@@ -50,7 +47,7 @@ download_file() {
 }
 
 install_xui() {
-  local theme="$1"   # default | nexusnet
+  local theme="$1"
   local install_dir="/etc/x-ui/sub"
   local install_file="${install_dir}/sub.html"
   local source_url="${REPO_RAW}/themes/xui/${theme}/sub.html"
@@ -72,7 +69,7 @@ install_xui() {
 }
 
 install_pasarguard() {
-  local theme="$1"   # default | nexusnet
+  local theme="$1"
   local install_dir="/var/lib/pasarguard/templates/subscription"
   local install_file="${install_dir}/index.html"
   local env_file="/opt/pasarguard/.env"
@@ -90,7 +87,6 @@ install_pasarguard() {
   fi
   chmod 644 "$install_file"
 
-  # Ensure .env settings
   mkdir -p "$(dirname "$env_file")"
   touch "$env_file"
 
