@@ -21,11 +21,13 @@ html[data-theme="light"]{
   --p:#0891b2; --pg:rgba(8,145,178,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow-x:hidden}
+html,body{height:100%;overflow-x:hidden;overscroll-behavior-y:contain}
 body{
   font-family:var(--font);color:var(--tx);min-height:100vh;
   background:var(--bg);display:flex;justify-content:center;
+  -webkit-overflow-scrolling:touch;
 }
+.app{-webkit-overflow-scrolling:touch}
 #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 html[data-theme="light"] #bgCanvas{opacity:.45;filter:brightness(1.25) saturate(.75)}
 
@@ -116,12 +118,16 @@ html[data-theme="light"] .item{background:rgba(0,0,0,.04)}
 .mb{width:32px;height:32px;border-radius:9px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);
   display:grid;place-items:center;cursor:pointer;font-size:.74rem;flex-shrink:0}
 
-.grp{margin-bottom:.85rem}
-.grp h4{font-size:.74rem;color:var(--mu);margin-bottom:.35rem;font-weight:700}
-.grp.hot{border:1px solid rgba(34,211,238,.25);border-radius:14px;padding:.7rem;background:var(--pg)}
-.al{display:flex;align-items:center;gap:.4rem;padding:.55rem .65rem;border-radius:10px;background:rgba(0,0,0,.12);
-  color:var(--tx);text-decoration:none;font-size:.8rem;font-weight:600;margin-bottom:.3rem}
+.grp{margin-bottom:.85rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.75rem;
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.grp h4{font-size:.74rem;color:var(--mu);margin-bottom:.4rem;font-weight:700}
+.grp.hot{border-color:rgba(34,211,238,.28);background:rgba(34,211,238,.08)}
+.al{display:flex;align-items:center;gap:.4rem;padding:.55rem .65rem;border-radius:10px;background:rgba(0,0,0,.1);
+  color:var(--tx);text-decoration:none;font-size:.8rem;font-weight:600;margin-bottom:.3rem;
+  border:1px solid transparent}
+.al:last-child{margin-bottom:0}
 html[data-theme="light"] .al{background:rgba(0,0,0,.04)}
+.al:hover{border-color:var(--bd)}
 .al .t{color:var(--p);font-size:.62rem;margin-inline-start:.15rem}
 .al .d{margin-inline-start:auto;opacity:.35;font-size:.7rem}
 
@@ -371,16 +377,32 @@ const mapState={nodes:[],arcs:[],t:0};
     }
     return false;
   }
+  // mobile: zoom into Europe–Asia–ME; desktop: full world
+  let isMobile=true, view={lon0:40,lat0:28,spanLon:160,spanLat:100};
+  function updateView(){
+    isMobile=W<720;
+    if(isMobile){
+      // focus: Americas left edge to Japan, denser
+      view={lon0:35,lat0:30,spanLon:140,spanLat:90};
+    }else{
+      view={lon0:20,lat0:20,spanLon:320,spanLat:140};
+    }
+  }
   function project(lat,lon){
-    return {x:((lon+180)/360)*W, y:((90-lat)/180)*H};
+    const x=((lon-(view.lon0-view.spanLon/2))/view.spanLon)*W;
+    const y=(((view.lat0+view.spanLat/2)-lat)/view.spanLat)*H;
+    return {x,y};
   }
   function buildLand(){
     landDots=[];
-    const stepLat=1.6, stepLon=1.6;
-    for(let lat=-60;lat<=75;lat+=stepLat){
-      for(let lon=-170;lon<=180;lon+=stepLon){
-        if(inLand(lat,lon) && Math.random()>0.22){
-          landDots.push({lat,lon,r:0.4+Math.random()*0.9,a:0.08+Math.random()*0.18});
+    updateView();
+    const step=isMobile?1.35:1.7;
+    const latMin=view.lat0-view.spanLat/2, latMax=view.lat0+view.spanLat/2;
+    const lonMin=view.lon0-view.spanLon/2, lonMax=view.lon0+view.spanLon/2;
+    for(let lat=latMin;lat<=latMax;lat+=step){
+      for(let lon=lonMin;lon<=lonMax;lon+=step){
+        if(inLand(lat,lon) && Math.random()>(isMobile?0.18:0.25)){
+          landDots.push({lat,lon,r:(isMobile?0.55:0.4)+Math.random()*(isMobile?1.1:0.85),a:0.09+Math.random()*0.2});
         }
       }
     }
@@ -439,7 +461,9 @@ const mapState={nodes:[],arcs:[],t:0};
     }
     requestAnimationFrame(draw);
   }
-  addEventListener("resize",resize);resize();draw();
+  let _rz;
+  addEventListener("resize",()=>{clearTimeout(_rz);_rz=setTimeout(resize,120)});
+  resize();draw();
 })();
 
 /* ===== Liquid wave ===== */
@@ -700,7 +724,8 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
     btn.classList.add("on");
     document.getElementById("tab-"+btn.dataset.t).classList.add("on");
-    window.scrollTo({top:0,behavior:"smooth"});
+    // instant jump avoids scroll jank on mobile
+    window.scrollTo(0,0);
   };
 });
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
