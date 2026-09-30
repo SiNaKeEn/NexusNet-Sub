@@ -21,20 +21,20 @@ html[data-theme="light"]{
   --p:#0891b2; --pg:rgba(8,145,178,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow-x:hidden;overscroll-behavior-y:contain}
+html,body{height:auto;min-height:100%;overflow-x:hidden}
 body{
   font-family:var(--font);color:var(--tx);min-height:100vh;
   background:var(--bg);display:flex;justify-content:center;
   -webkit-overflow-scrolling:touch;
 }
-.app{-webkit-overflow-scrolling:touch}
+.app{-webkit-overflow-scrolling:touch;padding-bottom:0}
 #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 html[data-theme="light"] #bgCanvas{opacity:.45;filter:brightness(1.25) saturate(.75)}
 
 /* Always phone-column — works on Windows too */
 .app{
   position:relative;z-index:2;width:100%;max-width:440px;min-height:100vh;
-  padding:1rem 1rem 5.75rem;background:transparent;
+  padding:1rem 1rem 8.5rem;background:transparent;
 }
 
 .hd{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.85rem}
@@ -67,20 +67,30 @@ html[data-theme="light"] #bgCanvas{opacity:.45;filter:brightness(1.25) saturate(
 .badge.bad{background:rgba(248,113,113,.14);color:var(--er)}
 
 /* Usage block */
-.usage{display:flex;align-items:center;gap:1.1rem}
-.ring-wrap{position:relative;width:118px;height:118px;flex-shrink:0}
-.ring-wrap svg{width:118px;height:118px;display:block}
+.usage{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem;flex-wrap:wrap}
+.usage .vol-grid{flex:1;min-width:160px}
+.ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
+.ring-wrap svg{width:110px;height:110px;display:block}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-.ring-center .pct{font-size:1.35rem;font-weight:900;line-height:1.1}
-.ring-center .lab{font-size:.65rem;color:var(--mu);margin-top:.15rem;font-weight:600}
-.stats{flex:1;display:flex;flex-direction:column;gap:.15rem;min-width:0}
-.stat{display:flex;justify-content:space-between;align-items:center;padding:.45rem 0;border-bottom:1px solid rgba(255,255,255,.05)}
-html[data-theme="light"] .stat{border-bottom-color:rgba(0,0,0,.05)}
-.stat:last-child{border-bottom:0}
-.stat .k{font-size:.74rem;color:var(--mu);display:flex;align-items:center;gap:.3rem;font-weight:600}
-.stat .k i{width:14px;text-align:center;color:var(--p);font-size:.75rem}
-.stat .v{font-size:.88rem;font-weight:800}
+.ring-center .pct{font-size:1.25rem;font-weight:900;line-height:1.1}
+.ring-center .lab{font-size:.62rem;color:var(--mu);margin-top:.12rem;font-weight:600}
+.period-card{margin-bottom:.75rem}
+.period-card .st{margin:0 0 .55rem}
+.period{display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem}
+.period button{border:1px solid var(--bd);background:rgba(0,0,0,.12);color:var(--mu);font-family:var(--font);
+  font-size:.72rem;font-weight:700;padding:.55rem .35rem;border-radius:12px;cursor:pointer;transition:.15s}
+html[data-theme="light"] .period button{background:rgba(0,0,0,.04)}
+.period button.on{background:var(--pg);color:var(--p);border-color:rgba(34,211,238,.35);box-shadow:0 0 0 1px rgba(34,211,238,.15)}
+.period button:active{transform:scale(.97)}
+.vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
+.vol{padding:.65rem .7rem;border-radius:12px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.04)}
+html[data-theme="light"] .vol{background:rgba(0,0,0,.04)}
+.vol .k{font-size:.66rem;color:var(--mu);font-weight:600;display:flex;align-items:center;gap:.28rem;margin-bottom:.25rem}
+.vol .k i{color:var(--p);font-size:.7rem;width:12px;text-align:center}
+.vol .v{font-size:.92rem;font-weight:800;direction:ltr;text-align:start;unicode-bidi:isolate}
+.vol.full{grid-column:1/-1}
+.vol.accent{border-color:rgba(34,211,238,.2);background:rgba(34,211,238,.06)}
 
 /* Expiry timer */
 .exp-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
@@ -151,7 +161,7 @@ html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
 .nav button i{font-size:1.1rem}
 .nav button.on{color:var(--p);background:var(--pg)}
 
-.tab{display:none}.tab.on{display:block;animation:fadeIn .3s ease}
+.tab{display:none;padding-bottom:.75rem}.tab.on{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);opacity:0;background:var(--sf2);
@@ -213,8 +223,17 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
   <div id="ann" class="ann"><i class="fa-solid fa-bullhorn"></i><span id="annTxt"></span></div>
 
   <div id="tab-home" class="tab on">
+    <div class="card period-card">
+      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
+      <div class="period" id="periodBar">
+        <button type="button" data-p="24h">24h</button>
+        <button type="button" data-p="7d">7d</button>
+        <button type="button" data-p="30d">30d</button>
+        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
+      </div>
+    </div>
     <div class="card">
-      <div style="display:flex;justify-content:flex-end;margin-bottom:.75rem">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
         <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
       </div>
       <div class="usage">
@@ -236,10 +255,12 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
           </svg>
           <div class="ring-center"><div class="pct" id="pctT">0%</div><div class="lab" id="lTraffic">Traffic</div></div>
         </div>
-        <div class="stats">
-          <div class="stat"><span class="k"><i class="fa-solid fa-arrow-down"></i><span id="sUsed">Used</span></span><span class="v" id="used">—</span></div>
-          <div class="stat"><span class="k"><i class="fa-solid fa-database"></i><span id="sLimit">Limit</span></span><span class="v" id="limit">—</span></div>
-          <div class="stat"><span class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">Left</span></span><span class="v" id="left">—</span></div>
+        <div class="vol-grid" style="flex:1">
+          <div class="vol accent full"><div class="k"><i class="fa-solid fa-database"></i><span id="sLimit">حجم کل</span></div><div class="v" id="limit">—</div></div>
+          <div class="vol"><div class="k"><i class="fa-solid fa-download"></i><span id="sDown">دانلود</span></div><div class="v" id="down">—</div></div>
+          <div class="vol"><div class="k"><i class="fa-solid fa-upload"></i><span id="sUp">آپلود</span></div><div class="v" id="up">—</div></div>
+          <div class="vol"><div class="k"><i class="fa-solid fa-chart-simple"></i><span id="sUsed">مصرف</span></div><div class="v" id="used">—</div></div>
+          <div class="vol"><div class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
         </div>
       </div>
       <div class="bar"><i id="bar"></i></div>
@@ -299,7 +320,6 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
       <div class="prow"><span id="p1">Username</span><b id="pv1">—</b></div>
       <div class="prow"><span id="p2">User ID</span><b id="pv2">—</b></div>
       <div class="prow"><span id="p3">Status</span><b id="pv3">—</b></div>
-      <div class="prow"><span id="p4">Servers</span><b id="pv4">—</b></div>
       <div class="prow"><span id="p5">Expire</span><b id="pv5">—</b></div>
       <div class="prow"><span id="p6">Last online</span><b id="pv6">—</b></div>
     </div>
@@ -482,7 +502,7 @@ function updateWaves(){
 }
 
 /* ===== Jalali ===== */
-function toJalali(gy,gm,gd){
+function toJalaliParts(gy,gm,gd){
   const g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
   let jy=(gy<=1600)?0:979;gy-=(gy<=1600)?621:1600;
   const gy2=(gm>2)?(gy+1):gy;
@@ -491,14 +511,24 @@ function toJalali(gy,gm,gd){
   if(days>365){jy+=parseInt((days-1)/365);days=(days-1)%365}
   const jm=(days<186)?1+parseInt(days/31):7+parseInt((days-186)/30);
   const jd=1+((days<186)?(days%31):((days-186)%30));
-  return jy+"."+jm+"."+jd;
+  return {jy,jm,jd};
 }
-function formatLastOnline(v){
+function pad2(n){return String(n).padStart(2,"0")}
+function toJalali(gy,gm,gd){const p=toJalaliParts(gy,gm,gd);return p.jy+"/"+pad2(p.jm)+"/"+pad2(p.jd)}
+function formatJalaliDateTime(v){
   if(!v||v==="0"||v==="—"||v==="-")return"—";
   let d=null;
   if(/^\d+$/.test(String(v))){const n=Number(v);d=new Date(n>1e12?n:n*1000)}
   else d=new Date(v);
   if(!d||isNaN(d.getTime()))return String(v);
+  const date=toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
+  return date+" - "+pad2(d.getHours())+":"+pad2(d.getMinutes());
+}
+function formatLastOnline(v){return formatJalaliDateTime(v)}
+function formatExpireDate(v){
+  if(!v||v==="0"||v==="")return null;
+  let d=new Date(isNaN(v)?v:Number(v)*1000);
+  if(!d||isNaN(d.getTime())||d.getFullYear()<2000)return null;
   return toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
 }
 
@@ -508,7 +538,7 @@ const _LINKS={{ links | tojson | safe }};
 const TV=(function(){
   const u=_UD||{},linksArr=Array.isArray(_LINKS)?_LINKS:[];
   return{sId:String(u.id||""),enabled:(String(u.status||"").toLowerCase()==="active")?"true":"false",isOnline:"false",
-    downloadByte:String(u.used_traffic||0),uploadByte:"0",totalByte:String(u.data_limit||0),
+    downloadByte:String(u.download||u.used_traffic||0),uploadByte:String(u.upload||u.upload_traffic||0),totalByte:String(u.data_limit||0),
     expire:u.expire?String(u.expire):"",lastOnline:u.last_online?String(u.last_online):(u.online_at?String(u.online_at):""),
     subUrl:location.href.split("?")[0],subJsonUrl:"",subClashUrl:"",
     subTitle:u.username||"{{ user.username }}",subSupportUrl:"",announce:"",
@@ -523,8 +553,8 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف",limit:"سقف",left:"باقیمانده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p4:"تعداد سرور",p5:"انقضا",p6:"آخرین آنلاین",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Limit",left:"Left",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p4:"Servers",p5:"Expire",p6:"Last online",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins"}
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total"}
 };
 let lang=localStorage.getItem("nn_lang")||"fa";
 let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
@@ -549,14 +579,19 @@ function uiLang(){
   document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
   ["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=t(["n1","n2","n3","n4"][i]));
   document.getElementById("sUsed").textContent=t("used");document.getElementById("sLimit").textContent=t("limit");
-  document.getElementById("sLeft").textContent=t("left");document.getElementById("tCopy").textContent=t("copy");
+  document.getElementById("sLeft").textContent=t("left");
+  const sd=document.getElementById("sDown"),su=document.getElementById("sUp");
+  if(sd)sd.textContent=t("down");if(su)su.textContent=t("up");
+  const pt=document.getElementById("pTotal");if(pt)pt.textContent=t("total");
+  document.getElementById("tCopy").textContent=t("copy");
   document.getElementById("tQi").textContent=t("qi");document.getElementById("tCfg").textContent=t("cfg");
   document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
   document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=t("traffic");
   document.getElementById("tLat").textContent=t("lat");document.getElementById("tExp").textContent=t("exp");
+  const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
   document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
   document.getElementById("lMin").textContent=t("min");
-  for(let i=1;i<=6;i++)document.getElementById("p"+i).textContent=t("p"+i);
+  ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
   localStorage.setItem("nn_lang",lang);renderLatencyList();syncMapLabels();data();
 }
 function uiTheme(){
@@ -564,6 +599,66 @@ function uiTheme(){
   document.getElementById("themeBtn").innerHTML=dark?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
   localStorage.setItem("nn_theme",dark?"dark":"light");
 }
+
+/* usage period: client-side samples in localStorage */
+let usagePeriod=localStorage.getItem("nn_usage_period")||"total";
+function recordUsageSample(down,up){
+  try{
+    const key="nn_usage_hist";
+    let arr=JSON.parse(localStorage.getItem(key)||"[]");
+    const now=Date.now();
+    arr.push({t:now,d:down,u:up});
+    // keep 40 days
+    arr=arr.filter(x=>now-x.t<40*864e5);
+    // dedupe if last sample < 10min and same totals
+    if(arr.length>1){
+      const a=arr[arr.length-2],b=arr[arr.length-1];
+      if(b.t-a.t<600000 && a.d===b.d && a.u===b.u) arr.splice(arr.length-2,1);
+    }
+    localStorage.setItem(key,JSON.stringify(arr));
+  }catch(e){}
+}
+function periodWindowMs(p){
+  if(p==="24h")return 864e5;
+  if(p==="7d")return 7*864e5;
+  if(p==="30d")return 30*864e5;
+  return null;
+}
+function usageForPeriod(down,up,period){
+  if(period==="total"||!periodWindowMs(period)) return {d:down,u:up,approx:false};
+  try{
+    const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
+    if(arr.length<2) return {d:down,u:up,approx:true};
+    const now=Date.now(), win=periodWindowMs(period);
+    const from=now-win;
+    // find sample nearest to window start
+    let base=arr[0];
+    for(const s of arr){if(s.t<=from) base=s; else break}
+    const d=Math.max(0,down-(base.d||0));
+    const u=Math.max(0,up-(base.u||0));
+    return {d,u,approx:true};
+  }catch(e){return {d:down,u:up,approx:true}}
+}
+function renderTraffic(){
+  const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
+  // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
+  recordUsageSample(rawD,rawU);
+  const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
+  const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
+  const noLimit=!tot||tot<=0;
+  document.getElementById("down").textContent=bytes(d);
+  document.getElementById("up").textContent=bytes(u);
+  document.getElementById("used").textContent=bytes(used);
+  document.getElementById("limit").textContent=noLimit?"∞":bytes(tot);
+  document.getElementById("left").textContent=noLimit?"∞":bytes(left);
+  const pctBase=rawD+rawU;
+  const pct=noLimit?0:Math.min(100,Math.round(pctBase/tot*100));
+  document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
+  document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
+  document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
+  document.querySelectorAll("#periodBar button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
+}
+
 function data(){
   document.getElementById("title").textContent=subTitle;
   document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
@@ -575,18 +670,9 @@ function data(){
   else{badge.className="badge ok";stTxt=t("on");dot.className="dot"}
   bt.textContent=stTxt;
 
-  const d=num(TV.downloadByte)||0,u=num(TV.uploadByte)||0,tot=num(TV.totalByte)||0;
-  const used=d+u,left=tot>0?Math.max(0,tot-used):0;
-  const noLimit=!tot||tot<=0;
-  document.getElementById("used").textContent=bytes(used);
-  document.getElementById("limit").textContent=noLimit?t("unl"):bytes(tot);
-  document.getElementById("left").textContent=noLimit?t("unl"):bytes(left);
-  const pct=noLimit?0:Math.min(100,Math.round(used/tot*100));
-  document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
-  document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
-  document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
+  renderTraffic();
 
-  // expiry timer
+  // expiry timer (precise)
   let hasExp=false,expDate=null;
   if(TV.expire&&TV.expire!=="0"&&TV.expire!==""){
     expDate=new Date(isNaN(TV.expire)?TV.expire:Number(TV.expire)*1000);
@@ -599,7 +685,7 @@ function data(){
     document.getElementById("expH").textContent=String(hh).padStart(2,"0");
     document.getElementById("expM").textContent=String(mm).padStart(2,"0");
     document.getElementById("expTag").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
-    document.getElementById("pv5").textContent=dd+" "+t("days");
+    document.getElementById("pv5").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
   }else{
     document.getElementById("expD").textContent="∞";
     document.getElementById("expH").textContent="∞";
@@ -611,7 +697,6 @@ function data(){
   document.getElementById("pv1").textContent=emails[0]||"—";
   document.getElementById("pv2").textContent=n(TV.sId,"—");
   document.getElementById("pv3").textContent=stTxt;
-  document.getElementById("pv4").textContent=String(links.length);
   document.getElementById("pv6").textContent=formatLastOnline(TV.lastOnline);
   if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
 }
@@ -725,9 +810,11 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
     btn.classList.add("on");
     document.getElementById("tab-"+btn.dataset.t).classList.add("on");
-    // instant jump avoids scroll jank on mobile
-    window.scrollTo(0,0);
+    requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
+});
+document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
+  usagePeriod=b.dataset.p;localStorage.setItem("nn_usage_period",usagePeriod);renderTraffic();
 });
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
