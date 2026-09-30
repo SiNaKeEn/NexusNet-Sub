@@ -334,89 +334,110 @@ const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"}
 const mapState={nodes:[],arcs:[],t:0};
 (function(){
   const c=document.getElementById("bgCanvas"),ctx=c.getContext("2d");
-  let W,H;
-  // Simplified continent outlines (normalized lon/lat-ish blobs for visual land)
-  const LAND=[
-    [[-130,55],[-100,60],[-70,50],[-60,30],[-90,20],[-110,25],[-125,40]], // NA
-    [[-80,10],[-60,5],[-50,-20],[-60,-40],[-70,-50],[-75,-20]], // SA
-    [[-10,60],[20,70],[30,60],[30,45],[10,40],[-5,45]], // EU
-    [[-15,35],[10,35],[40,30],[40,0],[20,-30],[0,-30],[-15,0]], // AF
-    [[40,60],[80,70],[140,60],[145,40],[120,20],[80,20],[50,30],[40,50]], // AS
-    [[110,-15],[150,-15],[155,-35],[130,-40],[115,-30]], // AU
+  let W,H,landDots=[];
+  /* Realistic continent masks via multiple ellipses (lat,lon,rx°,ry°) */
+  const BLOBS=[
+    // North America
+    [45,-100,18,22],[55,-120,12,10],[30,-100,14,10],[60,-95,10,8],
+    // Greenland
+    [72,-40,8,10],
+    // South America
+    [-15,-60,10,22],[-35,-65,8,12],
+    // Europe
+    [50,10,12,8],[60,20,8,6],[45,5,6,5],
+    // Africa
+    [5,20,16,28],[-20,25,10,12],[20,10,8,8],
+    // Asia
+    [50,90,35,18],[35,100,25,15],[60,100,20,12],[25,80,12,10],[15,105,10,8],
+    // India
+    [22,78,8,10],
+    // SE Asia / Indonesia
+    [0,110,12,6],[-5,120,10,5],
+    // Australia
+    [-25,135,12,10],
+    // Japan
+    [36,138,3,5],
+    // UK
+    [54,-2,3,4],
   ];
-  function project(lat,lon){
-    // equirectangular, slight vertical bias for aesthetics
-    const x=((lon+180)/360)*W;
-    const y=((90-lat)/180)*H;
-    return {x,y};
+  function inLand(lat,lon){
+    for(const [cy,cx,rx,ry] of BLOBS){
+      const dx=(lon-cx)/rx, dy=(lat-cy)/ry;
+      if(dx*dx+dy*dy<1){
+        // coast noise
+        const n=Math.sin(lon*0.35+lat*0.28)*0.12+Math.sin(lon*0.9)*0.06;
+        if(dx*dx+dy*dy<0.88+n) return true;
+      }
+    }
+    return false;
   }
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight}
+  function project(lat,lon){
+    return {x:((lon+180)/360)*W, y:((90-lat)/180)*H};
+  }
+  function buildLand(){
+    landDots=[];
+    const stepLat=1.6, stepLon=1.6;
+    for(let lat=-60;lat<=75;lat+=stepLat){
+      for(let lon=-170;lon<=180;lon+=stepLon){
+        if(inLand(lat,lon) && Math.random()>0.22){
+          landDots.push({lat,lon,r:0.4+Math.random()*0.9,a:0.08+Math.random()*0.18});
+        }
+      }
+    }
+  }
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;buildLand()}
   function draw(){
     ctx.clearRect(0,0,W,H);
-    // base
-    const g=ctx.createRadialGradient(W*.5,H*.4,0,W*.5,H*.5,Math.max(W,H)*.7);
+    const g=ctx.createRadialGradient(W*.5,H*.42,0,W*.5,H*.5,Math.max(W,H)*.72);
     g.addColorStop(0,"#0a1628");g.addColorStop(1,"#020617");
     ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
 
-    // land masses (soft)
-    ctx.fillStyle="rgba(40,70,120,.22)";
-    for(const poly of LAND){
-      ctx.beginPath();
-      poly.forEach((p,i)=>{const pt=project(p[1],p[0]);i?ctx.lineTo(pt.x,pt.y):ctx.moveTo(pt.x,pt.y)});
-      ctx.closePath();ctx.fill();
+    // starfield
+    ctx.fillStyle="rgba(180,210,255,.06)";
+    for(let i=0;i<80;i++){
+      const sx=(i*97.3)%W, sy=(i*61.7)%H;
+      ctx.beginPath();ctx.arc(sx,sy,.4+((i%3)*.3),0,Math.PI*2);ctx.fill();
     }
-    // land dots
-    ctx.fillStyle="rgba(80,140,200,.1)";
-    const step=Math.max(5,Math.floor(Math.min(W,H)/95));
-    for(let y=0;y<H;y+=step)for(let x=0;x<W;x+=step){
-      if(Math.random()>.7){ctx.beginPath();ctx.arc(x+Math.random()*2,y+Math.random()*2,.5+Math.random()*.6,0,Math.PI*2);ctx.fill()}
+
+    // continent dotted silhouette
+    for(const d of landDots){
+      const p=project(d.lat,d.lon);
+      ctx.beginPath();ctx.arc(p.x,p.y,d.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(70,130,190,${d.a})`;ctx.fill();
     }
 
     mapState.t+=0.008;
-    // arcs between server nodes
     const nodes=mapState.nodes;
+    // connection arcs (no labels)
     for(let i=0;i<nodes.length;i++){
       for(let j=i+1;j<nodes.length;j++){
-        if((i+j)%2!==0&&nodes.length>3) continue;
+        if(nodes.length>4 && (i*3+j)%3!==0) continue;
         const a=nodes[i],b=nodes[j];
         const pa=project(a.lat,a.lon),pb=project(b.lat,b.lon);
-        const mx=(pa.x+pb.x)/2, my=(pa.y+pb.y)/2-Math.abs(pa.x-pb.x)*.12-10;
+        const mx=(pa.x+pb.x)/2, my=(pa.y+pb.y)/2-Math.abs(pa.x-pb.x)*.12-12;
         ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.quadraticCurveTo(mx,my,pb.x,pb.y);
-        const alpha=.14+.1*Math.sin(mapState.t*(.4+i*.05)+j);
-        ctx.strokeStyle=`rgba(34,211,238,${alpha})`;ctx.lineWidth=1.1;
-        ctx.setLineDash([4,6]);ctx.lineDashOffset=-mapState.t*16;ctx.stroke();ctx.setLineDash([]);
-        // particle
-        const tt=((mapState.t*.5+i+j)%(Math.PI*2))/(Math.PI*2);
+        const alpha=.16+.1*Math.sin(mapState.t*(.35+i*.04)+j);
+        ctx.strokeStyle=`rgba(34,211,238,${alpha})`;ctx.lineWidth=1.05;
+        ctx.setLineDash([4,7]);ctx.lineDashOffset=-mapState.t*14;ctx.stroke();ctx.setLineDash([]);
+        const tt=((mapState.t*.45+i*.3+j)%(Math.PI*2))/(Math.PI*2);
         const px=(1-tt)*(1-tt)*pa.x+2*(1-tt)*tt*mx+tt*tt*pb.x;
         const py=(1-tt)*(1-tt)*pa.y+2*(1-tt)*tt*my+tt*tt*pb.y;
-        const pg=ctx.createRadialGradient(px,py,0,px,py,5);
-        pg.addColorStop(0,"rgba(125,230,255,.8)");pg.addColorStop(1,"rgba(34,211,238,0)");
-        ctx.beginPath();ctx.arc(px,py,5,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();
+        const pg=ctx.createRadialGradient(px,py,0,px,py,4.5);
+        pg.addColorStop(0,"rgba(125,230,255,.75)");pg.addColorStop(1,"rgba(34,211,238,0)");
+        ctx.beginPath();ctx.arc(px,py,4.5,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();
       }
     }
-    // nodes + labels
+    // server nodes only (no country text)
     for(const n of nodes){
       const p=project(n.lat,n.lon);
-      const pulse=2.2+Math.sin(mapState.t*1.2+n.lat)*.7;
-      const gr=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,pulse*5);
+      const pulse=2.3+Math.sin(mapState.t*1.15+n.lat)*.75;
+      const gr=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,pulse*5.5);
       gr.addColorStop(0,"rgba(52,211,153,.5)");gr.addColorStop(1,"rgba(34,211,238,0)");
-      ctx.beginPath();ctx.arc(p.x,p.y,pulse*5,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
+      ctx.beginPath();ctx.arc(p.x,p.y,pulse*5.5,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
       ctx.beginPath();ctx.arc(p.x,p.y,pulse,0,Math.PI*2);ctx.fillStyle="#34d399";ctx.fill();
       ctx.beginPath();ctx.arc(p.x,p.y,pulse*.4,0,Math.PI*2);ctx.fillStyle="#ecfdf5";ctx.fill();
-      // label pill
-      const label=n.name+(n.ping!=null?"  "+n.ping+"ms":"");
-      ctx.font="600 11px Inter,Vazirmatn,sans-serif";
-      const tw=ctx.measureText(label).width;
-      const lx=p.x+10, ly=p.y-8;
-      ctx.fillStyle="rgba(6,14,28,.75)";
-      roundRect(ctx,lx-4,ly-11,tw+10,16,6);ctx.fill();
-      ctx.fillStyle="#e0f2fe";ctx.fillText(label,lx,ly);
     }
     requestAnimationFrame(draw);
-  }
-  function roundRect(ctx,x,y,w,h,r){
-    ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);
-    ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();
   }
   addEventListener("resize",resize);resize();draw();
 })();
