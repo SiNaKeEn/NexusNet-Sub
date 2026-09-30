@@ -21,20 +21,20 @@ html[data-theme="light"]{
   --p:#0891b2; --pg:rgba(8,145,178,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow-x:hidden;overscroll-behavior-y:contain}
+html,body{height:auto;min-height:100%;overflow-x:hidden}
 body{
   font-family:var(--font);color:var(--tx);min-height:100vh;
   background:var(--bg);display:flex;justify-content:center;
   -webkit-overflow-scrolling:touch;
 }
-.app{-webkit-overflow-scrolling:touch}
+.app{-webkit-overflow-scrolling:touch;padding-bottom:0}
 #bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
 html[data-theme="light"] #bgCanvas{opacity:.45;filter:brightness(1.25) saturate(.75)}
 
 /* Always phone-column — works on Windows too */
 .app{
   position:relative;z-index:2;width:100%;max-width:440px;min-height:100vh;
-  padding:1rem 1rem 5.75rem;background:transparent;
+  padding:1rem 1rem 8.5rem;background:transparent;
 }
 
 .hd{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.85rem}
@@ -67,18 +67,22 @@ html[data-theme="light"] #bgCanvas{opacity:.45;filter:brightness(1.25) saturate(
 .badge.bad{background:rgba(248,113,113,.14);color:var(--er)}
 
 /* Usage block */
-.usage{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem}
+.usage{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem;flex-wrap:wrap}
+.usage .vol-grid{flex:1;min-width:160px}
 .ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
 .ring-wrap svg{width:110px;height:110px;display:block}
 .ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.4)}
 .ring-center .pct{font-size:1.25rem;font-weight:900;line-height:1.1}
 .ring-center .lab{font-size:.62rem;color:var(--mu);margin-top:.12rem;font-weight:600}
-.period{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.75rem}
+.period-card{margin-bottom:.75rem}
+.period-card .st{margin:0 0 .55rem}
+.period{display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem}
 .period button{border:1px solid var(--bd);background:rgba(0,0,0,.12);color:var(--mu);font-family:var(--font);
-  font-size:.68rem;font-weight:700;padding:.32rem .55rem;border-radius:999px;cursor:pointer}
+  font-size:.72rem;font-weight:700;padding:.55rem .35rem;border-radius:12px;cursor:pointer;transition:.15s}
 html[data-theme="light"] .period button{background:rgba(0,0,0,.04)}
-.period button.on{background:var(--pg);color:var(--p);border-color:rgba(34,211,238,.35)}
+.period button.on{background:var(--pg);color:var(--p);border-color:rgba(34,211,238,.35);box-shadow:0 0 0 1px rgba(34,211,238,.15)}
+.period button:active{transform:scale(.97)}
 .vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
 .vol{padding:.65rem .7rem;border-radius:12px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.04)}
 html[data-theme="light"] .vol{background:rgba(0,0,0,.04)}
@@ -157,7 +161,7 @@ html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
 .nav button i{font-size:1.1rem}
 .nav button.on{color:var(--p);background:var(--pg)}
 
-.tab{display:none}.tab.on{display:block;animation:fadeIn .3s ease}
+.tab{display:none;padding-bottom:.75rem}.tab.on{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);opacity:0;background:var(--sf2);
@@ -219,14 +223,17 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
   <div id="ann" class="ann"><i class="fa-solid fa-bullhorn"></i><span id="annTxt"></span></div>
 
   <div id="tab-home" class="tab on">
+    <div class="card period-card">
+      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
+      <div class="period" id="periodBar">
+        <button type="button" data-p="24h">24h</button>
+        <button type="button" data-p="7d">7d</button>
+        <button type="button" data-p="30d">30d</button>
+        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
+      </div>
+    </div>
     <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.65rem">
-        <div class="period" id="periodBar">
-          <button type="button" data-p="24h">24h</button>
-          <button type="button" data-p="7d">7d</button>
-          <button type="button" data-p="30d">30d</button>
-          <button type="button" data-p="total" class="on" id="pTotal">کل</button>
-        </div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
         <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
       </div>
       <div class="usage">
@@ -545,8 +552,8 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total"}
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total"}
 };
 let lang=localStorage.getItem("nn_lang")||"fa";
 let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
@@ -580,6 +587,7 @@ function uiLang(){
   document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
   document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=t("traffic");
   document.getElementById("tLat").textContent=t("lat");document.getElementById("tExp").textContent=t("exp");
+  const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
   document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
   document.getElementById("lMin").textContent=t("min");
   ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
@@ -801,8 +809,7 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
     btn.classList.add("on");
     document.getElementById("tab-"+btn.dataset.t).classList.add("on");
-    // instant jump avoids scroll jank on mobile
-    window.scrollTo(0,0);
+    requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
 });
 document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
