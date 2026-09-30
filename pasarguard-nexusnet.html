@@ -533,16 +533,46 @@ function formatExpireDate(v){
 }
 
 /* ===== Data ===== */
-const _UD={{ user_data | tojson | safe }};
-const _LINKS={{ links | tojson | safe }};
+/* PasarGuard injects: user, links, announce (optional) */
+const _UD = {% if user %}{% set user_data = {
+  'id': user.id,
+  'username': user.username,
+  'status': user.status.name if user.status else 'active',
+  'used_traffic': user.used_traffic,
+  'lifetime_used_traffic': user.lifetime_used_traffic,
+  'data_limit': user.data_limit,
+  'expire': user.expire.isoformat() if user.expire else None,
+  'online_at': user.online_at.isoformat() if user.online_at else None,
+  'created_at': user.created_at.isoformat() if user.created_at else None
+} %}{{ user_data | tojson | safe }}{% else %}null{% endif %};
+const _LINKS = {{ links | tojson | safe }};
+const _ANNOUNCE = {% if announce %}{{ announce | tojson | safe }}{% else %}""{% endif %};
 const TV=(function(){
   const u=_UD||{},linksArr=Array.isArray(_LINKS)?_LINKS:[];
-  return{sId:String(u.id||""),enabled:(String(u.status||"").toLowerCase()==="active")?"true":"false",isOnline:"false",
-    downloadByte:String(u.download||u.used_traffic||0),uploadByte:String(u.upload||u.upload_traffic||0),totalByte:String(u.data_limit||0),
-    expire:u.expire?String(u.expire):"",lastOnline:u.last_online?String(u.last_online):(u.online_at?String(u.online_at):""),
-    subUrl:location.href.split("?")[0],subJsonUrl:"",subClashUrl:"",
-    subTitle:u.username||"{{ user.username }}",subSupportUrl:"",announce:"",
-    links:linksArr.join("\n"),emails:u.username||"{{ user.username }}"};
+  const st=String(u.status||"active").toLowerCase();
+  const active=(st==="active"||st==="on_hold")?"true":"false";
+  let exp="";
+  if(u.expire){
+    const d=new Date(u.expire);
+    exp=isNaN(d.getTime())?String(u.expire):String(Math.floor(d.getTime()/1000));
+  }
+  return{
+    sId:String(u.id||""),
+    enabled:active,
+    isOnline:"false",
+    downloadByte:String(u.used_traffic||0),
+    uploadByte:"0",
+    totalByte:String(u.data_limit||0),
+    expire:exp,
+    lastOnline:u.online_at?String(u.online_at):"",
+    subUrl:location.href.split("?")[0],
+    subJsonUrl:"",subClashUrl:"",
+    subTitle:u.username||"{{ user.username }}",
+    subSupportUrl:"",
+    announce:typeof _ANNOUNCE==="string"?_ANNOUNCE:(_ANNOUNCE||""),
+    links:linksArr.join("\n"),
+    emails:u.username||"{{ user.username }}"
+  };
 })();
 const APPS=[
   {p:"Android",i:"fa-brands fa-android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
