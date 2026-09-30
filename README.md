@@ -15,9 +15,8 @@ bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes
 
 نصب‌کننده از شما می‌پرسد:
 
-1. **پنل** → `3x-ui / Sanaei` یا `PasarGuard`
-2. **تم** → `Default` یا `NexusNet`
-
+**پنل** → `3x-ui / Sanaei` یا `PasarGuard`
+2. 
 سپس فایل مناسب را به صورت خودکار نصب می‌کند.
 
 ---
