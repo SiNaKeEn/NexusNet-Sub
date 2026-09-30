@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/32835823/README.md)
+
 # تم اشتراک NexusNet
 
 تم‌های مدرن صفحه اشتراک برای پنل‌های **3x-ui (سنایی)** و **پاسارگارد (PasarGuard)**.
