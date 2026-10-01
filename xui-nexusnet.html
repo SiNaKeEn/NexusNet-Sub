@@ -28,8 +28,8 @@ body{
   -webkit-overflow-scrolling:touch;
 }
 .app{-webkit-overflow-scrolling:touch;padding-bottom:0}
-.bg{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#0b1a33 0%,#030712 55%,#02040a 100%)}
-html[data-theme="light"] .bg{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#0b1a33 0%,#030712 55%,#02040a 100%)}
+html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
 .orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:float 18s ease-in-out infinite;pointer-events:none}
 .orb.a{width:340px;height:340px;background:#1d4ed8;top:-8%;left:-10%;animation-duration:22s}
 .orb.b{width:280px;height:280px;background:#0ea5e9;bottom:5%;right:-12%;animation-duration:26s;animation-delay:-6s}
@@ -211,7 +211,7 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 </style>
 </head>
 <body>
-<div class="bg" aria-hidden="true">
+<div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
   <div class="stars"></div>
 </div>
@@ -316,11 +316,11 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
       <div class="lat-meta"><span id="latUpdated">—</span></div>
       <div class="lat-note" id="latNote">پینگ مرورگر تقریبی است؛ حالت WS نزدیک‌ترین تخمین است.</div>
     </div>
-    <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">Configs</span></div>
-    <div class="row" style="margin-top:0;margin-bottom:.6rem">
-      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">Copy all</span></button>
-    </div>
+    <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
+    <div class="row" style="margin-top:.6rem">
+      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+    </div>
   </div>
 
   <div id="tab-apps" class="tab">
@@ -498,19 +498,23 @@ function periodWindowMs(p){
   return null;
 }
 function usageForPeriod(down,up,period){
-  if(period==="total"||!periodWindowMs(period)) return {d:down,u:up,approx:false};
+  if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
   try{
     const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
-    if(arr.length<2) return {d:down,u:up,approx:true};
-    const now=Date.now(), win=periodWindowMs(period);
-    const from=now-win;
-    // find sample nearest to window start
-    let base=arr[0];
-    for(const s of arr){if(s.t<=from) base=s; else break}
-    const d=Math.max(0,down-(base.d||0));
-    const u=Math.max(0,up-(base.u||0));
-    return {d,u,approx:true};
-  }catch(e){return {d:down,u:up,approx:true}}
+    const now=Date.now(),win=periodWindowMs(period),from=now-win;
+    if(!arr.length)return{d:0,u:0};
+    // base = last sample at or before window start; else first sample
+    let base=null;
+    for(const s of arr){if(s.t<=from)base=s;else break}
+    if(!base){
+      // history shorter than window: usage since first sample only
+      base=arr[0];
+      const span=Math.max(1,now-base.t);
+      // do not scale up to full window — show real delta only
+      return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
+    }
+    return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
+  }catch(e){return{d:down,u:up}}
 }
 function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
