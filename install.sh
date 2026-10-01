@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
+# NexusNet Sub v2.0 — branch: Template
 set -euo pipefail
-REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes"
+REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template"
 RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; NC='\033[0m'
 echo -e "${CYAN}"
 echo "  ========================================"
-echo "       NexusNet  Theme  Installer"
+echo "       NexusNet Theme Installer v2.0"
 echo "  ========================================"
 echo -e "${NC}"
 [[ "${EUID}" -eq 0 ]] || { echo -e "${RED}run as root${NC}"; exit 1; }
