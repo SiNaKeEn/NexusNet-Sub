@@ -1,8 +1,9 @@
+[README.md](https://github.com/user-attachments/files/32892072/README.md)
 # تم اشتراک NexusNet
 
 تم‌های مدرن صفحه اشتراک برای پنل‌های **3x-ui (سنایی)** و **پاسارگارد (PasarGuard)**.
 
-**نسخه: 1.2.1**
+**نسخه: 2.0**
 
 ---
 
@@ -11,7 +12,7 @@
 با دسترسی root این دستور را اجرا کنید:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template/install.sh)
 ```
 
 نصب‌کننده از شما می‌پرسد:
