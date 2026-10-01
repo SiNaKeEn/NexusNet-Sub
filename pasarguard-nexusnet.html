@@ -28,8 +28,18 @@ body{
   -webkit-overflow-scrolling:touch;
 }
 .app{-webkit-overflow-scrolling:touch;padding-bottom:0}
-#bgCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
-html[data-theme="light"] #bgCanvas{opacity:.45;filter:brightness(1.25) saturate(.75)}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#0b1a33 0%,#030712 55%,#02040a 100%)}
+html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
+.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:float 18s ease-in-out infinite;pointer-events:none}
+.orb.a{width:340px;height:340px;background:#1d4ed8;top:-8%;left:-10%;animation-duration:22s}
+.orb.b{width:280px;height:280px;background:#0ea5e9;bottom:5%;right:-12%;animation-duration:26s;animation-delay:-6s}
+.orb.c{width:220px;height:220px;background:#4338ca;top:40%;left:55%;animation-duration:20s;animation-delay:-10s;opacity:.35}
+html[data-theme="light"] .orb{opacity:.35}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4%,6%) scale(1.06)}66%{transform:translate(-5%,-3%) scale(.96)}}
+.stars{position:absolute;inset:0;opacity:.7;pointer-events:none;animation:twinkle 8s ease-in-out infinite alternate;background-image:radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.25),transparent),radial-gradient(1.5px 1.5px at 70% 30%,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.2),transparent)}
+html[data-theme="light"] .stars{opacity:.2}
+@keyframes twinkle{from{opacity:.4}to{opacity:.85}}
+.lat-note{font-size:.65rem;color:var(--mu);margin-top:.4rem;line-height:1.4;opacity:.85}
 
 /* Always phone-column — works on Windows too */
 .app{
@@ -201,7 +211,10 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 </style>
 </head>
 <body>
-<canvas id="bgCanvas"></canvas>
+<div class="ambient" aria-hidden="true">
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="stars"></div>
+</div>
 <div class="app">
   <div class="hd">
     <div class="hd-info">
@@ -292,21 +305,22 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
         <div class="st"><i class="fa-solid fa-signal"></i> <span id="tLat">Live Latency</span></div>
         <div style="display:flex;align-items:center;gap:.35rem">
           <div class="lat-modes" id="latModes">
-            <button type="button" data-m="tcp" class="on">TCP</button>
+            <button type="button" data-m="ws" class="on">WS</button>
             <button type="button" data-m="http">HTTP</button>
-            <button type="button" data-m="real">Real</button>
+            <button type="button" data-m="auto">Auto</button>
           </div>
           <button class="lat-refresh" type="button" id="btnLatRefresh"><i class="fa-solid fa-rotate"></i></button>
         </div>
       </div>
       <div id="latList"><div class="lat-empty">—</div></div>
       <div class="lat-meta"><span id="latUpdated">—</span></div>
+      <div class="lat-note" id="latNote">پینگ مرورگر تقریبی است؛ حالت WS نزدیک‌ترین تخمین است.</div>
     </div>
-    <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">Configs</span></div>
-    <div class="row" style="margin-top:0;margin-bottom:.6rem">
-      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">Copy all</span></button>
-    </div>
+    <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
+    <div class="row" style="margin-top:.6rem">
+      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+    </div>
   </div>
 
   <div id="tab-apps" class="tab">
@@ -339,153 +353,12 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 
 <script>
 /* ===== Geo data: real-ish positions (lat, lon) ===== */
-const GEO={
-  DE:[51.2,10.5],US:[39.8,-98.5],GB:[51.5,-0.12],FR:[46.2,2.2],NL:[52.3,5.3],TR:[39.0,35.0],
-  AE:[24.5,54.4],SG:[1.35,103.8],JP:[36.2,138.3],KR:[36.5,127.9],IN:[22.0,79.0],CA:[56.1,-106.3],
-  AU:[-25.3,133.8],BR:[-14.2,-51.9],RU:[61.5,105.3],PL:[52.1,19.4],IT:[41.9,12.6],ES:[40.4,-3.7],
-  SE:[60.1,18.6],FI:[61.9,25.7],NO:[60.5,8.5],DK:[56.3,9.5],CH:[46.8,8.2],AT:[47.5,14.5],
-  BE:[50.5,4.5],PT:[39.4,-8.2],IE:[53.1,-8.2],HK:[22.3,114.2],TW:[23.7,121.0],VN:[14.1,108.3],
-  TH:[15.9,100.9],MY:[4.2,101.9],ID:[-2.5,118.0],PH:[12.9,121.8],IL:[31.5,34.8],SA:[23.9,45.1],
-  ZA:[-29.0,25.0],MX:[23.6,-102.5],AR:[-38.4,-63.6],UA:[48.4,31.2],RO:[45.9,24.9],CZ:[49.8,15.5],
-  HU:[47.2,19.5],GR:[39.1,21.8],BG:[42.7,25.5],HR:[45.1,15.2],RS:[44.0,21.0],SK:[48.7,19.7],
-  LT:[55.2,24.0],LV:[56.9,24.1],EE:[58.6,25.0],IS:[65.0,-18.0],NZ:[-41.0,174.0],CL:[-35.7,-71.5],
-  CO:[4.6,-74.3],PE:[-9.2,-75.0],IR:[32.4,53.7],CN:[35.9,104.2]
-};
 const FLAG_MAP={"🇩🇪":"DE","🇺🇸":"US","🇬🇧":"GB","🇫🇷":"FR","🇳🇱":"NL","🇹🇷":"TR","🇦🇪":"AE","🇸🇬":"SG","🇯🇵":"JP","🇰🇷":"KR","🇮🇳":"IN","🇨🇦":"CA","🇦🇺":"AU","🇧🇷":"BR","🇷🇺":"RU","🇵🇱":"PL","🇮🇹":"IT","🇪🇸":"ES","🇸🇪":"SE","🇫🇮":"FI","🇳🇴":"NO","🇩🇰":"DK","🇨🇭":"CH","🇦🇹":"AT","🇧🇪":"BE","🇵🇹":"PT","🇮🇪":"IE","🇭🇰":"HK","🇹🇼":"TW","🇻🇳":"VN","🇹🇭":"TH","🇲🇾":"MY","🇮🇩":"ID","🇵🇭":"PH","🇮🇱":"IL","🇸🇦":"SA","🇿🇦":"ZA","🇲🇽":"MX","🇦🇷":"AR","🇺🇦":"UA","🇷🇴":"RO","🇨🇿":"CZ","🇭🇺":"HU","🇬🇷":"GR","🇧🇬":"BG","🇭🇷":"HR","🇷🇸":"RS","🇸🇰":"SK","🇱🇹":"LT","🇱🇻":"LV","🇪🇪":"EE","🇮🇸":"IS","🇳🇿":"NZ","🇨🇱":"CL","🇨🇴":"CO","🇵🇪":"PE","🇮🇷":"IR","🇨🇳":"CN"};
 const CODE_TO_FLAG=Object.fromEntries(Object.entries(FLAG_MAP).map(([f,c])=>[c,f]));
 const CODE_RE=/\b(DE|US|GB|UK|FR|NL|TR|AE|SG|JP|KR|IN|CA|AU|BR|RU|PL|IT|ES|SE|FI|NO|DK|CH|AT|BE|PT|IE|HK|TW|VN|TH|MY|ID|PH|IL|SA|ZA|MX|AR|UA|RO|CZ|HU|GR|BG|HR|RS|SK|LT|LV|EE|IS|NZ|CL|CO|PE|IR|CN)\b/i;
 const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"},GB:{fa:"انگلستان",en:"UK"},FR:{fa:"فرانسه",en:"France"},NL:{fa:"هلند",en:"Netherlands"},TR:{fa:"ترکیه",en:"Turkey"},AE:{fa:"امارات",en:"UAE"},SG:{fa:"سنگاپور",en:"Singapore"},JP:{fa:"ژاپن",en:"Japan"},KR:{fa:"کره",en:"Korea"},IN:{fa:"هند",en:"India"},CA:{fa:"کانادا",en:"Canada"},AU:{fa:"استرالیا",en:"Australia"},BR:{fa:"برزیل",en:"Brazil"},RU:{fa:"روسیه",en:"Russia"},PL:{fa:"لهستان",en:"Poland"},IT:{fa:"ایتالیا",en:"Italy"},ES:{fa:"اسپانیا",en:"Spain"},SE:{fa:"سوئد",en:"Sweden"},FI:{fa:"فنلاند",en:"Finland"},NO:{fa:"نروژ",en:"Norway"},DK:{fa:"دانمارک",en:"Denmark"},CH:{fa:"سوئیس",en:"Switzerland"},AT:{fa:"اتریش",en:"Austria"},BE:{fa:"بلژیک",en:"Belgium"},PT:{fa:"پرتغال",en:"Portugal"},IE:{fa:"ایرلند",en:"Ireland"},HK:{fa:"هنگ‌کنگ",en:"Hong Kong"},TW:{fa:"تایوان",en:"Taiwan"},VN:{fa:"ویتنام",en:"Vietnam"},TH:{fa:"تایلند",en:"Thailand"},MY:{fa:"مالزی",en:"Malaysia"},ID:{fa:"اندونزی",en:"Indonesia"},PH:{fa:"فیلیپین",en:"Philippines"},IL:{fa:"اسرائیل",en:"Israel"},SA:{fa:"عربستان",en:"Saudi"},ZA:{fa:"آفریقای جنوبی",en:"S.Africa"},MX:{fa:"مکزیک",en:"Mexico"},AR:{fa:"آرژانتین",en:"Argentina"},UA:{fa:"اوکراین",en:"Ukraine"},RO:{fa:"رومانی",en:"Romania"},CZ:{fa:"چک",en:"Czechia"},HU:{fa:"مجارستان",en:"Hungary"},GR:{fa:"یونان",en:"Greece"},BG:{fa:"بلغارستان",en:"Bulgaria"},HR:{fa:"کرواسی",en:"Croatia"},RS:{fa:"صربستان",en:"Serbia"},SK:{fa:"اسلواکی",en:"Slovakia"},LT:{fa:"لیتوانی",en:"Lithuania"},LV:{fa:"لتونی",en:"Latvia"},EE:{fa:"استونی",en:"Estonia"},IS:{fa:"ایسلند",en:"Iceland"},NZ:{fa:"نیوزیلند",en:"New Zealand"},CL:{fa:"شیلی",en:"Chile"},CO:{fa:"کلمبیا",en:"Colombia"},PE:{fa:"پرو",en:"Peru"},IR:{fa:"ایران",en:"Iran"},CN:{fa:"چین",en:"China"}};
 
 /* ===== Background: real map positions for panel servers ===== */
-const mapState={nodes:[],arcs:[],t:0};
-(function(){
-  const c=document.getElementById("bgCanvas"),ctx=c.getContext("2d");
-  let W,H,landDots=[];
-  /* Realistic continent masks via multiple ellipses (lat,lon,rx°,ry°) */
-  const BLOBS=[
-    // North America
-    [45,-100,18,22],[55,-120,12,10],[30,-100,14,10],[60,-95,10,8],
-    // Greenland
-    [72,-40,8,10],
-    // South America
-    [-15,-60,10,22],[-35,-65,8,12],
-    // Europe
-    [50,10,12,8],[60,20,8,6],[45,5,6,5],
-    // Africa
-    [5,20,16,28],[-20,25,10,12],[20,10,8,8],
-    // Asia
-    [50,90,35,18],[35,100,25,15],[60,100,20,12],[25,80,12,10],[15,105,10,8],
-    // India
-    [22,78,8,10],
-    // SE Asia / Indonesia
-    [0,110,12,6],[-5,120,10,5],
-    // Australia
-    [-25,135,12,10],
-    // Japan
-    [36,138,3,5],
-    // UK
-    [54,-2,3,4],
-  ];
-  function inLand(lat,lon){
-    for(const [cy,cx,rx,ry] of BLOBS){
-      const dx=(lon-cx)/rx, dy=(lat-cy)/ry;
-      if(dx*dx+dy*dy<1){
-        // coast noise
-        const n=Math.sin(lon*0.35+lat*0.28)*0.12+Math.sin(lon*0.9)*0.06;
-        if(dx*dx+dy*dy<0.88+n) return true;
-      }
-    }
-    return false;
-  }
-  // mobile: zoom into Europe–Asia–ME; desktop: full world
-  let isMobile=true, view={lon0:40,lat0:28,spanLon:160,spanLat:100};
-  function updateView(){
-    isMobile=W<720;
-    if(isMobile){
-      // focus: Americas left edge to Japan, denser
-      view={lon0:35,lat0:30,spanLon:140,spanLat:90};
-    }else{
-      view={lon0:20,lat0:20,spanLon:320,spanLat:140};
-    }
-  }
-  function project(lat,lon){
-    const x=((lon-(view.lon0-view.spanLon/2))/view.spanLon)*W;
-    const y=(((view.lat0+view.spanLat/2)-lat)/view.spanLat)*H;
-    return {x,y};
-  }
-  function buildLand(){
-    landDots=[];
-    updateView();
-    const step=isMobile?1.35:1.7;
-    const latMin=view.lat0-view.spanLat/2, latMax=view.lat0+view.spanLat/2;
-    const lonMin=view.lon0-view.spanLon/2, lonMax=view.lon0+view.spanLon/2;
-    for(let lat=latMin;lat<=latMax;lat+=step){
-      for(let lon=lonMin;lon<=lonMax;lon+=step){
-        if(inLand(lat,lon) && Math.random()>(isMobile?0.18:0.25)){
-          landDots.push({lat,lon,r:(isMobile?0.55:0.4)+Math.random()*(isMobile?1.1:0.85),a:0.09+Math.random()*0.2});
-        }
-      }
-    }
-  }
-  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;buildLand()}
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    const g=ctx.createRadialGradient(W*.5,H*.42,0,W*.5,H*.5,Math.max(W,H)*.72);
-    g.addColorStop(0,"#0a1628");g.addColorStop(1,"#020617");
-    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
-
-    // starfield
-    ctx.fillStyle="rgba(180,210,255,.06)";
-    for(let i=0;i<80;i++){
-      const sx=(i*97.3)%W, sy=(i*61.7)%H;
-      ctx.beginPath();ctx.arc(sx,sy,.4+((i%3)*.3),0,Math.PI*2);ctx.fill();
-    }
-
-    // continent dotted silhouette
-    for(const d of landDots){
-      const p=project(d.lat,d.lon);
-      ctx.beginPath();ctx.arc(p.x,p.y,d.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(70,130,190,${d.a})`;ctx.fill();
-    }
-
-    mapState.t+=0.008;
-    const nodes=mapState.nodes;
-    // connection arcs (no labels)
-    for(let i=0;i<nodes.length;i++){
-      for(let j=i+1;j<nodes.length;j++){
-        if(nodes.length>4 && (i*3+j)%3!==0) continue;
-        const a=nodes[i],b=nodes[j];
-        const pa=project(a.lat,a.lon),pb=project(b.lat,b.lon);
-        const mx=(pa.x+pb.x)/2, my=(pa.y+pb.y)/2-Math.abs(pa.x-pb.x)*.12-12;
-        ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.quadraticCurveTo(mx,my,pb.x,pb.y);
-        const alpha=.16+.1*Math.sin(mapState.t*(.35+i*.04)+j);
-        ctx.strokeStyle=`rgba(34,211,238,${alpha})`;ctx.lineWidth=1.05;
-        ctx.setLineDash([4,7]);ctx.lineDashOffset=-mapState.t*14;ctx.stroke();ctx.setLineDash([]);
-        const tt=((mapState.t*.45+i*.3+j)%(Math.PI*2))/(Math.PI*2);
-        const px=(1-tt)*(1-tt)*pa.x+2*(1-tt)*tt*mx+tt*tt*pb.x;
-        const py=(1-tt)*(1-tt)*pa.y+2*(1-tt)*tt*my+tt*tt*pb.y;
-        const pg=ctx.createRadialGradient(px,py,0,px,py,4.5);
-        pg.addColorStop(0,"rgba(125,230,255,.75)");pg.addColorStop(1,"rgba(34,211,238,0)");
-        ctx.beginPath();ctx.arc(px,py,4.5,0,Math.PI*2);ctx.fillStyle=pg;ctx.fill();
-      }
-    }
-    // server nodes only (no country text)
-    for(const n of nodes){
-      const p=project(n.lat,n.lon);
-      const pulse=2.3+Math.sin(mapState.t*1.15+n.lat)*.75;
-      const gr=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,pulse*5.5);
-      gr.addColorStop(0,"rgba(52,211,153,.5)");gr.addColorStop(1,"rgba(34,211,238,0)");
-      ctx.beginPath();ctx.arc(p.x,p.y,pulse*5.5,0,Math.PI*2);ctx.fillStyle=gr;ctx.fill();
-      ctx.beginPath();ctx.arc(p.x,p.y,pulse,0,Math.PI*2);ctx.fillStyle="#34d399";ctx.fill();
-      ctx.beginPath();ctx.arc(p.x,p.y,pulse*.4,0,Math.PI*2);ctx.fillStyle="#ecfdf5";ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  }
-  let _rz;
-  addEventListener("resize",()=>{clearTimeout(_rz);_rz=setTimeout(resize,120)});
-  resize();draw();
-})();
-
 /* ===== Liquid wave ===== */
 let wavePhase=0;
 function updateWaves(){
@@ -588,7 +461,7 @@ const I={
 };
 let lang=localStorage.getItem("nn_lang")||"fa";
 let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
-let latMode=localStorage.getItem("nn_lat_mode")||"tcp";
+let latMode=localStorage.getItem("nn_lat_mode")||"ws";
 const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
 const n=(v,d)=>v==null||v===""?d:v;
 const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
@@ -622,7 +495,7 @@ function uiLang(){
   document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
   document.getElementById("lMin").textContent=t("min");
   ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
-  localStorage.setItem("nn_lang",lang);renderLatencyList();syncMapLabels();data();
+  localStorage.setItem("nn_lang",lang);renderLatencyList();data();
 }
 function uiTheme(){
   document.documentElement.setAttribute("data-theme",dark?"dark":"light");
@@ -655,19 +528,23 @@ function periodWindowMs(p){
   return null;
 }
 function usageForPeriod(down,up,period){
-  if(period==="total"||!periodWindowMs(period)) return {d:down,u:up,approx:false};
+  if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
   try{
     const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
-    if(arr.length<2) return {d:down,u:up,approx:true};
-    const now=Date.now(), win=periodWindowMs(period);
-    const from=now-win;
-    // find sample nearest to window start
-    let base=arr[0];
-    for(const s of arr){if(s.t<=from) base=s; else break}
-    const d=Math.max(0,down-(base.d||0));
-    const u=Math.max(0,up-(base.u||0));
-    return {d,u,approx:true};
-  }catch(e){return {d:down,u:up,approx:true}}
+    const now=Date.now(),win=periodWindowMs(period),from=now-win;
+    if(!arr.length)return{d:0,u:0};
+    // base = last sample at or before window start; else first sample
+    let base=null;
+    for(const s of arr){if(s.t<=from)base=s;else break}
+    if(!base){
+      // history shorter than window: usage since first sample only
+      base=arr[0];
+      const span=Math.max(1,now-base.t);
+      // do not scale up to full window — show real delta only
+      return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
+    }
+    return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
+  }catch(e){return{d:down,u:up}}
 }
 function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
@@ -768,38 +645,48 @@ function buildLatServers(){
   links.forEach(l=>{
     const {host,port,name}=extractHost(l);const loc=detectLocation(name);
     if(!loc||!host)return;const key=host+":"+port+":"+loc.code;if(seen.has(key))return;seen.add(key);
-    const geo=GEO[loc.code]||[20,0];
-    latServers.push({host,port,flag:loc.flag,code:loc.code,lat:geo[0],lon:geo[1],ping:null});
-  });
-  // sync map nodes
-  mapState.nodes=latServers.map(s=>({lat:s.lat,lon:s.lon,code:s.code,name:countryLabel(s.code),ping:s.ping}));
-}
-function syncMapLabels(){
-  mapState.nodes.forEach(n=>{
-    const s=latServers.find(x=>x.code===n.code);
-    n.name=countryLabel(n.code);
-    n.ping=s?s.ping:null;
+    latServers.push({host,port,flag:loc.flag,code:loc.code,ping:null});
   });
 }
 
-async function measureHTTP(s){const t0=performance.now();
-  try{await Promise.race([fetch(`https://${s.host}/favicon.ico?_=${Date.now()}`,{mode:"no-cors",cache:"no-store",credentials:"omit"}),
-    new Promise((_,r)=>setTimeout(()=>r("to"),2800))]);return Math.round(performance.now()-t0)}catch(e){return null}}
-async function measureTCP(s){return new Promise(resolve=>{const t0=performance.now();const img=new Image();let done=false;
-  const finish=()=>{if(done)return;done=true;const ms=Math.round(performance.now()-t0);resolve(ms>10?ms:null)};
-  img.onload=finish;img.onerror=finish;img.src=`https://${s.host}/?_=${Date.now()}`;setTimeout(finish,2600)})}
-async function measureReal(s){const [a,b]=await Promise.all([measureTCP(s),measureHTTP(s)]);
-  const vals=[a,b].filter(v=>v!=null&&v>12);return vals.length?Math.min(...vals):null}
+function measureWS(s){
+  return new Promise(resolve=>{
+    const t0=performance.now();let done=false;let ws;
+    const finish=ms=>{if(done)return;done=true;try{ws&&ws.close()}catch(e){}resolve(ms)};
+    try{
+      const port=(s.port&&s.port!==443&&s.port!==80)?(":"+s.port):"";
+      ws=new WebSocket("wss://"+s.host+port+"/");
+    }catch(e){resolve(null);return}
+    const timer=setTimeout(()=>finish(null),2500);
+    ws.onopen=()=>{clearTimeout(timer);finish(Math.round(performance.now()-t0))};
+    ws.onerror=()=>{clearTimeout(timer);finish(null)};
+    ws.onclose=()=>{clearTimeout(timer);if(!done)finish(null)};
+  });
+}
+async function measureHTTP(s){
+  const t0=performance.now();
+  try{
+    await Promise.race([
+      fetch("https://"+s.host+(s.port&&s.port!==443?":"+s.port:"")+"/",{mode:"no-cors",cache:"no-store",credentials:"omit"}),
+      new Promise((_,r)=>setTimeout(()=>r(new Error("to")),2500))
+    ]);
+    return Math.round(performance.now()-t0);
+  }catch(e){
+    return new Promise(resolve=>{
+      const t1=performance.now();let done=false;
+      const fin=()=>{if(done)return;done=true;const ms=Math.round(performance.now()-t1);resolve(ms>8?ms:null)};
+      const img=new Image();img.onload=fin;img.onerror=fin;
+      img.src="https://"+s.host+"/favicon.ico?_="+Date.now();
+      setTimeout(fin,2200);
+    });
+  }
+}
 async function measureOne(s){
   let ms=null;
-  if(latMode==="http")ms=await measureHTTP(s);
-  else if(latMode==="real")ms=await measureReal(s);
-  else ms=await measureTCP(s);
-  if(ms==null)ms=150+Math.floor(Math.random()*160);
+  if(latMode==="ws")ms=await measureWS(s);
+  else if(latMode==="http")ms=await measureHTTP(s);
+  else{ms=await measureWS(s);if(ms==null)ms=await measureHTTP(s)}
   s.ping=ms;
-  // update map node
-  const n=mapState.nodes.find(x=>x.code===s.code&&Math.abs(x.lat-s.lat)<.01);
-  if(n)n.ping=ms;
 }
 function pingClass(ms){if(ms==null)return"wait";if(ms<120)return"good";if(ms<280)return"mid";return"bad"}
 function barWidth(ms){if(ms==null)return 0;return Math.max(8,Math.min(100,Math.round(100-(ms/600)*100)))}
@@ -818,7 +705,7 @@ function renderLatencyList(){
 async function runLatency(){
   if(latRunning)return;latRunning=true;
   const btn=document.getElementById("btnLatRefresh");btn.classList.add("spin");
-  latServers.forEach(s=>s.ping=null);syncMapLabels();renderLatencyList();
+  latServers.forEach(s=>s.ping=null);renderLatencyList();
   const queue=[...latServers];
   await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{
     while(queue.length){const s=queue.shift();await measureOne(s);renderLatencyList()}
