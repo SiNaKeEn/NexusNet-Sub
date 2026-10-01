@@ -613,7 +613,7 @@ function buildLatServers(){
     if(!loc||!host)return;const key=host+":"+port+":"+loc.code;if(seen.has(key))return;seen.add(key);
     latServers.push({host,port,flag:loc.flag,code:loc.code,ping:null});
   });
-
+}
 
 function measureWS(s){
   return new Promise(resolve=>{
