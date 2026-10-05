@@ -22,7 +22,7 @@ html[data-theme="light"]{
   --p:#0891b2; --pg:rgba(8,145,178,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:auto;min-height:100%;overflow-x:hidden}
+html,body{height:auto;min-height:100%;overflow-x:hiddencolor:var(--tx);}
 body{
   font-family:var(--font);color:var(--tx);min-height:100vh;
   background:var(--bg);display:flex;justify-content:center;
@@ -50,7 +50,7 @@ html[data-theme="light"] .stars{opacity:.2}
 
 .hd{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.85rem}
 .hd-info{min-width:0}
-.hd h1{font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd h1{font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx);min-height:1.3em}
 .hd .sub{font-size:.72rem;color:var(--mu);margin-top:.12rem;display:flex;align-items:center;gap:.35rem}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);flex-shrink:0}
 .dot.off{background:var(--er);box-shadow:0 0 8px var(--er)}
@@ -173,7 +173,7 @@ html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
 .nav button i{font-size:1.1rem}
 .nav button.on{color:var(--p);background:var(--pg)}
 
-.tab{display:none;padding-bottom:.75rem}.tab.on{display:block;animation:fadeIn .3s ease}
+.tab{display:none;padding-bottom:.75rem;color:var(--tx)}.tab.on{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);opacity:0;background:var(--sf2);
@@ -289,12 +289,17 @@ html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
 .tab{transition:opacity .25s ease,transform .25s ease}
 .tab.on{animation:tabIn .28s ease}
 @keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media(min-width:960px){
-  .app{max-width:440px!important;margin:1.25rem auto}
-}
-  .desk-grid .span2{grid-column:1/-1}
-}
+@media(min-width:960px){.app{max-width:440px!important;margin:1.25rem auto;}}
 .lat-note{font-size:.65rem;color:var(--mu);margin-top:.45rem;line-height:1.4}
+
+
+/* visibility fixes */
+.hd h1,.cfg-name,.al span,.prow b,.vol .v,.timer .n,.qi a{color:var(--tx)!important}
+.cfg-item,.al,.prow,.vol,.item{color:var(--tx)}
+.cfg-name{color:var(--tx)!important;opacity:1!important}
+.ann:empty,.ann:not(.show){display:none!important}
+#ann:not([style*="flex"]){display:none!important}
+.skel,.skel.on{display:none!important}
 
 </style>
 </head>
@@ -327,9 +332,7 @@ html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
   <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
 
   <div id="tab-home" class="tab on">
-    <div class="skel on" id="skel">
-      <div class="srow lg"></div>
-      <div class="srow"></div>
+<div class="srow"></div>
       <div class="srow" style="width:70%"></div>
     </div>
     <div class="home-renew" id="homeRenew">
@@ -655,7 +658,7 @@ function renderTraffic(){
 }
 
 function data(){
-  document.getElementById("title").textContent=subTitle;
+  document.getElementById("title").textContent=subTitle||"Subscription";
 
   // warnings + formats + support (v2.1)
   try{
@@ -978,7 +981,6 @@ document.querySelectorAll("#latModes button").forEach(b=>b.onclick=()=>setLatMod
 document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===latMode));
 
 uiTheme();uiLang();data();renderQi();renderList();renderApps();
-try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
 buildLatServers();renderLatencyList();updateWaves();
 setTimeout(runLatency,500);
 // refresh expiry every minute
