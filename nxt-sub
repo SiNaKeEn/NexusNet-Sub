@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
-# NexusNet Sub Manager v2.1 — nxt-sub
+# NexusNet Sub Manager v2.1
 REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template"
 RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; NC='\033[0m'
 VERSION="2.1"
 
-[[ "${EUID}" -eq 0 ]] || { echo -e "${RED}run as root: sudo nxt-sub${NC}"; exit 1; }
+[[ "${EUID}" -eq 0 ]] || { echo -e "${RED}Run as root: sudo nxt-sub${NC}"; exit 1; }
 
 dl(){
   if command -v curl >/dev/null 2>&1; then curl -fsSL "$1" -o "$2"
@@ -13,12 +13,91 @@ dl(){
   else echo -e "${RED}curl/wget missing${NC}"; exit 1; fi
 }
 
+
+CFG_DIR="/etc/nxt-sub"
+CFG_FILE="${CFG_DIR}/config"
+
+load_cfg() {
+  PROFILE_TITLE=""; SUPPORT_URL=""; RENEW_URL=""; TELEGRAM_BOT=""
+  [[ -f "$CFG_FILE" ]] && # shellcheck source
+  source "$CFG_FILE" 2>/dev/null || true
+  # derive renew from bot if empty
+  if [[ -z "${RENEW_URL:-}" && -n "${TELEGRAM_BOT:-}" ]]; then
+    local bot="${TELEGRAM_BOT#@}"
+    RENEW_URL="https://t.me/${bot}"
+  fi
+  if [[ -z "${SUPPORT_URL:-}" && -n "${TELEGRAM_BOT:-}" ]]; then
+    local bot2="${TELEGRAM_BOT#@}"
+    SUPPORT_URL="https://t.me/${bot2}"
+  fi
+}
+
+save_cfg() {
+  mkdir -p "$CFG_DIR"
+  cat > "$CFG_FILE" << EOF
+# NexusNet Sub config — managed by nxt-sub
+PROFILE_TITLE="${PROFILE_TITLE:-}"
+SUPPORT_URL="${SUPPORT_URL:-}"
+RENEW_URL="${RENEW_URL:-}"
+TELEGRAM_BOT="${TELEGRAM_BOT:-}"
+EOF
+  chmod 600 "$CFG_FILE"
+  echo -e "${GREEN}Saved ${CFG_FILE}${NC}"
+}
+
+# Inject CONFIG into a theme HTML file
+inject_theme() {
+  local file="$1"
+  load_cfg
+  [[ -f "$file" ]] || return 1
+  # escape for sed
+  local pt="${PROFILE_TITLE//\\/\\\\}"; pt="${pt//\//\\/}"; pt="${pt//&/\\&}"
+  local su="${SUPPORT_URL//\\/\\\\}"; su="${su//\//\\/}"; su="${su//&/\\&}"
+  local ru="${RENEW_URL//\\/\\\\}"; ru="${ru//\//\\/}"; ru="${ru//&/\\&}"
+  # replace profileTitle / supportUrl / renewUrl values inside CONFIG block
+  sed -i -E \
+    -e "s|(profileTitle:[[:space:]]*\")[^\"]*(\")|\\1${pt}\\2|" \
+    -e "s|(supportUrl:[[:space:]]*\")[^\"]*(\")|\\1${su}\\2|" \
+    -e "s|(renewUrl:[[:space:]]*\")[^\"]*(\")|\\1${ru}\\2|" \
+    "$file"
+}
+
+
 backup(){
   local f="$1"
   if [[ -f "$f" ]]; then
     cp -a "$f" "${f}.bak.$(date +%Y%m%d%H%M%S)"
     echo -e "${GREEN}Backup created${NC}"
   fi
+}
+
+settings_menu() {
+  load_cfg
+  echo ""
+  echo -e "${CYAN}Current settings${NC}"
+  echo "  Profile title : ${PROFILE_TITLE:-'(empty)'}"
+  echo "  Telegram bot  : ${TELEGRAM_BOT:-'(empty)'}"
+  echo "  Support URL   : ${SUPPORT_URL:-'(empty)'}"
+  echo "  Renew URL     : ${RENEW_URL:-'(empty)'}"
+  echo ""
+  echo -n "Profile title (brand name for PasarGuard) [enter skip]: "
+  read -r v; [[ -n "$v" ]] && PROFILE_TITLE="$v"
+  echo -n "Telegram bot username (e.g. MyBot or @MyBot) [enter skip]: "
+  read -r v
+  if [[ -n "$v" ]]; then
+    TELEGRAM_BOT="${v#@}"
+    # auto-fill URLs if empty
+    [[ -z "${SUPPORT_URL:-}" ]] && SUPPORT_URL="https://t.me/${TELEGRAM_BOT}"
+    [[ -z "${RENEW_URL:-}" ]] && RENEW_URL="https://t.me/${TELEGRAM_BOT}"
+  fi
+  echo -n "Support URL (full link, enter skip): "
+  read -r v; [[ -n "$v" ]] && SUPPORT_URL="$v"
+  echo -n "Renew URL (full link, enter skip): "
+  read -r v; [[ -n "$v" ]] && RENEW_URL="$v"
+  save_cfg
+  # re-inject into installed themes
+  [[ -f /etc/x-ui/sub/sub.html ]] && inject_theme /etc/x-ui/sub/sub.html && echo -e "${GREEN}Updated 3x-ui theme${NC}"
+  [[ -f /var/lib/pasarguard/templates/subscription/index.html ]] && inject_theme /var/lib/pasarguard/templates/subscription/index.html && echo -e "${GREEN}Updated PasarGuard theme${NC}"
 }
 
 clear
@@ -29,13 +108,14 @@ echo "  ========================================"
 echo -e "${NC}"
 echo "  1) Install / Update  3x-ui theme"
 echo "  2) Install / Update  PasarGuard theme"
-echo "  3) Remove 3x-ui theme"
-echo "  4) Remove PasarGuard theme"
-echo "  5) Status"
-echo "  6) Version / Check update"
-echo "  7) Full uninstall (themes + CLI)"
-echo "  8) Exit"
-echo -n "Choice [1-8]: "
+echo "  3) Settings (bot / support / renew / title)"
+echo "  4) Remove 3x-ui theme"
+echo "  5) Remove PasarGuard theme"
+echo "  6) Status"
+echo "  7) Version"
+echo "  8) Full uninstall"
+echo "  9) Exit"
+echo -n "Choice [1-9]: "
 read -r c
 
 case "$c" in
@@ -45,8 +125,9 @@ case "$c" in
     echo -e "${YELLOW}Downloading...${NC}"
     dl "${REPO_RAW}/xui-nexusnet.html" /etc/x-ui/sub/sub.html
     chmod 644 /etc/x-ui/sub/sub.html
+    inject_theme /etc/x-ui/sub/sub.html
     echo -e "${GREEN}OK /etc/x-ui/sub/sub.html${NC}"
-    echo -e "${CYAN}Panel: Sub Theme Directory = /etc/x-ui/sub/${NC}"
+    echo -e "${CYAN}Panel → Sub Theme Directory = /etc/x-ui/sub/${NC}"
     ;;
   2)
     mkdir -p /var/lib/pasarguard/templates/subscription
@@ -54,44 +135,43 @@ case "$c" in
     echo -e "${YELLOW}Downloading...${NC}"
     dl "${REPO_RAW}/pasarguard-nexusnet.html" /var/lib/pasarguard/templates/subscription/index.html
     chmod 644 /var/lib/pasarguard/templates/subscription/index.html
+    inject_theme /var/lib/pasarguard/templates/subscription/index.html
     envf="/opt/pasarguard/.env"; mkdir -p "$(dirname "$envf")"; touch "$envf"
     grep -q '^CUSTOM_TEMPLATES_DIRECTORY=' "$envf" 2>/dev/null && sed -i 's|^CUSTOM_TEMPLATES_DIRECTORY=.*|CUSTOM_TEMPLATES_DIRECTORY="/var/lib/pasarguard/templates/"|' "$envf" || echo 'CUSTOM_TEMPLATES_DIRECTORY="/var/lib/pasarguard/templates/"' >> "$envf"
     grep -q '^SUBSCRIPTION_PAGE_TEMPLATE=' "$envf" 2>/dev/null && sed -i 's|^SUBSCRIPTION_PAGE_TEMPLATE=.*|SUBSCRIPTION_PAGE_TEMPLATE="subscription/index.html"|' "$envf" || echo 'SUBSCRIPTION_PAGE_TEMPLATE="subscription/index.html"' >> "$envf"
     command -v pasarguard >/dev/null 2>&1 && pasarguard restart || true
-    echo -e "${GREEN}OK PasarGuard theme${NC}"
+    echo -e "${GREEN}OK PasarGuard${NC}"
     ;;
-  3)
+  3) settings_menu ;;
+  4)
     rm -f /etc/x-ui/sub/sub.html
     echo -e "${GREEN}Removed 3x-ui theme${NC}"
     ;;
-  4)
+  5)
     rm -f /var/lib/pasarguard/templates/subscription/index.html
     command -v pasarguard >/dev/null 2>&1 && pasarguard restart || true
     echo -e "${GREEN}Removed PasarGuard theme${NC}"
     ;;
-  5)
-    echo -e "${CYAN}Status${NC}"
-    [[ -f /etc/x-ui/sub/sub.html ]] && echo -e "3x-ui: ${GREEN}installed${NC} ($(wc -c </etc/x-ui/sub/sub.html) bytes)" || echo -e "3x-ui: ${YELLOW}not installed${NC}"
-    [[ -f /var/lib/pasarguard/templates/subscription/index.html ]] && echo -e "PasarGuard: ${GREEN}installed${NC}" || echo -e "PasarGuard: ${YELLOW}not installed${NC}"
-    command -v nxt-sub >/dev/null && echo -e "CLI: ${GREEN}nxt-sub${NC}" || echo -e "CLI: ${YELLOW}missing${NC}"
-    ;;
   6)
-    echo -e "Local version: ${GREEN}${VERSION}${NC}"
-    echo -e "Repo: ${CYAN}https://github.com/SiNaKeEn/NexusNet-Sub${NC}"
-    echo -e "Branch: Template"
-    if curl -fsSL "${REPO_RAW}/nxt-sub" 2>/dev/null | head -5 | grep -q "v2"; then
-      echo -e "${GREEN}Remote installer reachable${NC}"
-    else
-      echo -e "${YELLOW}Could not verify remote (network or path)${NC}"
-    fi
+    echo -e "${CYAN}Status${NC}"
+    [[ -f /etc/x-ui/sub/sub.html ]] && echo -e "3x-ui: ${GREEN}installed${NC}" || echo -e "3x-ui: ${YELLOW}no${NC}"
+    [[ -f /var/lib/pasarguard/templates/subscription/index.html ]] && echo -e "PasarGuard: ${GREEN}installed${NC}" || echo -e "PasarGuard: ${YELLOW}no${NC}"
+    if command -v nxt-sub >/dev/null 2>&1; then echo -e "CLI: ${GREEN}$(command -v nxt-sub)${NC}"; else echo -e "CLI: ${YELLOW}not in PATH — use /usr/local/bin/nxt-sub${NC}"; fi
+    load_cfg
+    echo "Bot: ${TELEGRAM_BOT:-none} | Support: ${SUPPORT_URL:-none}"
     ;;
   7)
+    echo -e "Version: ${GREEN}${VERSION}${NC}"
+    echo "Repo: https://github.com/SiNaKeEn/NexusNet-Sub (branch Template)"
+    ;;
+  8)
     rm -f /etc/x-ui/sub/sub.html
     rm -f /var/lib/pasarguard/templates/subscription/index.html
-    rm -f /usr/local/bin/nxt-sub /usr/local/bin/nexusnetsub
+    rm -f /usr/local/bin/nxt-sub /usr/bin/nxt-sub /usr/local/bin/nexusnetsub
+    rm -rf /etc/nxt-sub
     command -v pasarguard >/dev/null 2>&1 && pasarguard restart || true
     echo -e "${GREEN}Full uninstall done${NC}"
     ;;
-  8) exit 0 ;;
+  9) exit 0 ;;
   *) echo -e "${RED}Invalid${NC}"; exit 1 ;;
 esac
