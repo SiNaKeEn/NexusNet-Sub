@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306b6d4'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <title>{{ .subTitle }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
@@ -22,7 +21,7 @@ html[data-theme="light"]{
   --p:#0891b2; --pg:rgba(8,145,178,.12);
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:auto;min-height:100%;overflow-x:hiddencolor:var(--tx);}
+html,body{height:auto;min-height:100%;overflow-x:hidden}
 body{
   font-family:var(--font);color:var(--tx);min-height:100vh;
   background:var(--bg);display:flex;justify-content:center;
@@ -50,7 +49,7 @@ html[data-theme="light"] .stars{opacity:.2}
 
 .hd{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.85rem}
 .hd-info{min-width:0}
-.hd h1{font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--tx);min-height:1.3em}
+.hd h1{font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hd .sub{font-size:.72rem;color:var(--mu);margin-top:.12rem;display:flex;align-items:center;gap:.35rem}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);flex-shrink:0}
 .dot.off{background:var(--er);box-shadow:0 0 8px var(--er)}
@@ -76,7 +75,6 @@ html[data-theme="light"] .stars{opacity:.2}
   padding:.25rem .65rem;border-radius:999px}
 .badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
 .badge.bad{background:rgba(248,113,113,.14);color:var(--er)}
-.badge.wn{background:rgba(251,191,36,.14);color:var(--wn)}
 
 /* Usage block */
 .usage{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem;flex-wrap:wrap}
@@ -173,7 +171,7 @@ html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
 .nav button i{font-size:1.1rem}
 .nav button.on{color:var(--p);background:var(--pg)}
 
-.tab{display:none;padding-bottom:.75rem;color:var(--tx)}.tab.on{display:block;animation:fadeIn .3s ease}
+.tab{display:none;padding-bottom:.75rem}.tab.on{display:block;animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 
 .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);opacity:0;background:var(--sf2);
@@ -211,102 +209,49 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 .lat-empty{text-align:center;padding:1rem;color:var(--mu);font-size:.78rem}
 .lat-meta{margin-top:.45rem;font-size:.65rem;color:var(--mu);text-align:end}
 
-/* v2.1 */
-.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
-.warn.show{display:flex}
-.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
-.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
-.warn i{margin-top:.1rem}
-.fmt{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem}
-.fmt button{flex:1 1 auto;min-width:72px;padding:.55rem .5rem;border-radius:11px;border:1px solid var(--bd);
-  background:var(--sf);color:var(--tx);font-family:var(--font);font-size:.72rem;font-weight:700;cursor:pointer}
-.fmt button:active{transform:scale(.97)}
-.fmt button.hid{display:none}
-.act-row{display:flex;gap:.4rem;margin:.7rem 0;flex-wrap:wrap}
-.act-row a{flex:1;min-width:0;text-decoration:none;text-align:center}
-.lat-int{display:flex;gap:.25rem;margin-inline-start:.25rem}
-.lat-int button{border:0;background:transparent;color:var(--mu);font-family:var(--font);font-size:.62rem;font-weight:700;
-  padding:.25rem .4rem;border-radius:7px;cursor:pointer}
-.lat-int button.on{background:var(--pg);color:var(--p)}
-.app-badge{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;
-  font-size:.65rem;font-weight:800;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#06b6d4,#2563eb)}
-.app-badge.happ{background:linear-gradient(135deg,#f59e0b,#ea580c)}
-.app-badge.throne{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
-.app-badge.hiddify{background:linear-gradient(135deg,#22c55e,#15803d)}
-.app-badge.v2ray{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
-.app-badge.v2box{background:linear-gradient(135deg,#ec4899,#be185d)}
-.app-badge.streisand{background:linear-gradient(135deg,#14b8a6,#0f766e)}
-.app-badge.shadow{background:linear-gradient(135deg,#64748b,#334155)}
-
-
-
-.cfg-item{display:flex;align-items:center;gap:.5rem;padding:.65rem .7rem;background:rgba(0,0,0,.14);border-radius:12px;margin-bottom:.4rem}
+/* v2.3 */
+.cfg-item{display:flex;align-items:center;gap:.5rem;padding:.65rem .7rem;background:rgba(0,0,0,.14);border-radius:12px;margin-bottom:.4rem;color:var(--tx)}
 html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
 .cfg-flag{font-size:1.35rem;line-height:1;width:1.5rem;text-align:center;flex-shrink:0}
 .cfg-info{flex:1;min-width:0}
-.cfg-name{font-size:.82rem;font-weight:700}
+.cfg-name{font-size:.82rem;font-weight:700;color:var(--tx)!important}
 .cfg-bar{height:3px;background:rgba(255,255,255,.06);border-radius:99px;margin-top:.3rem;overflow:hidden}
 .cfg-bar i{display:block;height:100%;border-radius:99px;transition:width .35s}
 .cfg-ping{font-size:.8rem;font-weight:800;min-width:48px;text-align:end;font-variant-numeric:tabular-nums}
 .cfg-ping.good{color:var(--ok)}.cfg-ping.mid{color:var(--wn)}.cfg-ping.bad{color:var(--er)}.cfg-ping.wait{color:var(--mu);font-size:.7rem}
 .cfg-acts{display:flex;gap:.3rem;flex-shrink:0}
-.app-logo{width:22px;height:22px;border-radius:6px;object-fit:contain;flex-shrink:0;background:rgba(255,255,255,.06)}
-
-
-.wave-line{position:absolute;left:-10%;right:-10%;height:120px;opacity:.18;pointer-events:none;
-  background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(34,211,238,.35) 40px,rgba(34,211,238,.35) 41px);
-  filter:blur(0.5px);animation:waveMove 12s linear infinite}
-.wave-line.w1{bottom:18%;animation-duration:14s;opacity:.14}
-.wave-line.w2{bottom:28%;animation-duration:18s;animation-direction:reverse;opacity:.1;transform:rotate(-3deg)}
-.wave-line.w3{top:22%;animation-duration:16s;opacity:.08;transform:rotate(2deg)}
-@keyframes waveMove{0%{transform:translateX(0)}100%{transform:translateX(-80px)}}
-.orb{animation-duration:12s!important}
-.orb.a{animation:float 14s ease-in-out infinite,pulseGlow 6s ease-in-out infinite}
-.orb.b{animation:float 16s ease-in-out infinite reverse,pulseGlow 7s ease-in-out infinite 1s}
-.orb.c{animation:float 11s ease-in-out infinite,pulseGlow 5s ease-in-out infinite 2s}
-@keyframes pulseGlow{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.75;transform:scale(1.08)}}
-.stars{animation:twinkle 4s ease-in-out infinite alternate}
-@keyframes twinkle{from{opacity:.35}to{opacity:.7}}
-
-/* v2.2 */
-.skel{display:none;padding:1rem 0}
-.skel.on{display:block}
-.skel .srow{height:14px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.1),rgba(255,255,255,.04));background-size:200% 100%;animation:shimmer 1.2s infinite;margin-bottom:.55rem}
-.skel .srow.lg{height:88px;border-radius:16px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.lat-int{display:flex;gap:.25rem}
+.lat-int button{border:0;background:transparent;color:var(--mu);font-family:var(--font);font-size:.62rem;font-weight:700;padding:.25rem .4rem;border-radius:7px;cursor:pointer}
+.lat-int button.on{background:var(--pg);color:var(--p)}
+.btn-all{width:100%;margin-top:.65rem;padding:.8rem 1rem!important;font-size:.88rem!important;font-weight:800!important;
+  background:linear-gradient(135deg,#06b6d4,#2563eb)!important;color:#fff!important;border:0!important}
 .home-renew{display:none;margin-bottom:.75rem}
 .home-renew.show{display:block}
-.home-renew .btn{width:100%;padding:.85rem 1rem;font-size:.9rem;box-shadow:0 8px 28px rgba(37,99,235,.35)}
-.status-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:800;padding:.3rem .75rem;border-radius:999px}
-.status-pill.ok{background:rgba(52,211,153,.15);color:var(--ok)}
-.status-pill.bad{background:rgba(248,113,113,.15);color:var(--er)}
-.status-pill.wn{background:rgba(251,191,36,.15);color:var(--wn)}
-.btn-all{width:100%;margin-top:.5rem;padding:.8rem 1rem!important;font-size:.88rem!important;font-weight:800!important;
-  background:linear-gradient(135deg,#06b6d4,#2563eb)!important;color:#fff!important;border:0!important;box-shadow:0 6px 20px rgba(37,99,235,.28)}
-#md .mbx{max-width:300px;padding:1.4rem}
-#md #qr{margin:1.1rem 0}
-#md #qr canvas,#md #qr img{width:220px!important;height:220px!important}
-.tab{transition:opacity .25s ease,transform .25s ease}
-.tab.on{animation:tabIn .28s ease}
-@keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media(min-width:960px){.app{max-width:440px!important;margin:1.25rem auto;}}
-.lat-note{font-size:.65rem;color:var(--mu);margin-top:.45rem;line-height:1.4}
-
-
-/* visibility fixes */
-.hd h1,.cfg-name,.al span,.prow b,.vol .v,.timer .n,.qi a{color:var(--tx)!important}
-.cfg-item,.al,.prow,.vol,.item{color:var(--tx)}
-.cfg-name{color:var(--tx)!important;opacity:1!important}
-.ann:empty,.ann:not(.show){display:none!important}
-#ann:not([style*="flex"]){display:none!important}
-.skel,.skel.on{display:none!important}
+.home-renew .btn{width:100%;padding:.85rem 1rem}
+.app-logo{width:22px;height:22px;border-radius:6px;object-fit:contain;flex-shrink:0;background:rgba(255,255,255,.06)}
+.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
+.warn.show{display:flex}
+.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
+.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
+.fmt{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem}
+.fmt button{flex:1;min-width:72px;padding:.55rem .5rem;border-radius:11px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-family:var(--font);font-size:.72rem;font-weight:700;cursor:pointer}
+.fmt button.hid{display:none}
+.act-row{display:flex;gap:.4rem;margin:.7rem 0;flex-wrap:wrap}
+.act-row a{flex:1;text-decoration:none;text-align:center}
+.wave-line{position:absolute;left:-10%;right:-10%;height:100px;opacity:.12;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(34,211,238,.4) 40px,rgba(34,211,238,.4) 41px);
+  animation:waveMove 14s linear infinite}
+.wave-line.w1{bottom:16%;animation-duration:14s}
+.wave-line.w2{bottom:26%;animation-duration:18s;animation-direction:reverse;opacity:.08}
+@keyframes waveMove{0%{transform:translateX(0)}100%{transform:translateX(-80px)}}
+@media(min-width:960px){.app{max-width:440px!important;margin:1.25rem auto}}
 
 </style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-  <div class="wave-line w1"></div><div class="wave-line w2"></div><div class="wave-line w3"></div>
+  <div class="wave-line w1"></div><div class="wave-line w2"></div>
   <div class="stars"></div>
 </div>
 <div class="app">
@@ -330,16 +275,12 @@ html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
   <div id="ann" class="ann"><i class="fa-solid fa-bullhorn"></i><span id="annTxt"></span></div>
   <div id="warnVol" class="warn vol"><i class="fa-solid fa-triangle-exclamation"></i><span id="warnVolTxt"></span></div>
   <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
+  <div class="home-renew" id="homeRenew">
+    <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید</span></a>
+  </div>
 
   <div id="tab-home" class="tab on">
-<div class="srow"></div>
-      <div class="srow" style="width:70%"></div>
-    </div>
-    <div class="home-renew" id="homeRenew">
-      <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
-    </div>
-
-        <div class="card period-card">
+    <div class="card period-card">
       <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
       <div class="period" id="periodBar">
         <button type="button" data-p="24h">24h</button>
@@ -348,7 +289,7 @@ html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
         <button type="button" data-p="total" class="on" id="pTotal">کل</button>
       </div>
     </div>
-<div class="card">
+    <div class="card">
       <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
         <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
       </div>
@@ -418,17 +359,16 @@ html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
           </div>
           <div class="lat-int" id="latInt">
             <button type="button" data-s="0" class="on">Off</button>
-            <button type="button" data-s="5">5s</button>
             <button type="button" data-s="10">10s</button>
             <button type="button" data-s="30">30s</button>
           </div>
-          <button class="lat-refresh" type="button" id="btnLatRefresh"><i class="fa-solid fa-rotate"></i></button>
+          <button class="lat-refresh" type="button" id="btnLatRefresh" title="Refresh"><i class="fa-solid fa-rotate"></i></button>
         </div>
       </div>
       <div id="cfgList"><div class="lat-empty">—</div></div>
       <div class="lat-meta"><span id="latUpdated">—</span></div>
-      <div class="lat-note" id="latNote">Ping from your device · flag + location · Auto recommended</div>
-      <button class="btn btn-all" type="button" id="btnAll" style="margin-top:.65rem"><i class="fa-solid fa-copy"></i> <span id="tAll">Copy all</span></button>
+      <div class="lat-note" id="latNote">Ping from your device · flag + location</div>
+      <button class="btn btn-all" type="button" id="btnAll"><i class="fa-solid fa-copy"></i> <span id="tAll">Copy all</span></button>
     </div>
   </div>
 
@@ -463,8 +403,7 @@ html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
 
 <div class="toast" id="toast"></div>
 <div id="md"><div class="mbx"><div id="qr"></div>
-<button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem"><i class="fa-solid fa-copy"></i> <span id="tQrCopy">Copy</span></button>
-<button class="btn bg" type="button" style="width:100%" onclick="document.getElementById('md').classList.remove('open')">OK</button></div></div>
+<button class="btn bp" type="button" style="width:100%" onclick="document.getElementById('md').classList.remove('open')">OK</button></div></div>
 
 <script>
 /* ===== Geo data: real-ish positions (lat, lon) ===== */
@@ -480,7 +419,7 @@ function updateWaves(){
   wavePhase+=0.05;
   const pct=window.__pctT||0;
   const y=Math.max(20,Math.min(120,120-(pct/100)*88));
-  const f=document.getElementById("liqFillT");
+  const f=document.getElementById("liqFillT");if(!f){requestAnimationFrame(updateWaves);return;}
   f.setAttribute("y",y);f.setAttribute("height",130-y);
   let d=`M 0 ${y}`;
   for(let x=0;x<=120;x+=3)d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.8+Math.sin((x/120)*Math.PI*3.5+wavePhase*1.3)*1.2}`;
@@ -522,14 +461,7 @@ function formatExpireDate(v){
 
 /* ===== Data ===== */
 /* PasarGuard injects: user, links, announce (optional) */
-
-/* ===== NexusNet CONFIG (injected by nxt-sub) ===== */
-const CONFIG={
-  profileTitle:"",
-  supportUrl:"",
-  renewUrl:"",
-};
-
+const CONFIG={profileTitle:"",supportUrl:"",renewUrl:""};
 const TV={
   sId:"{{ .sId }}",enabled:"{{ .enabled }}",isOnline:"{{ .isOnline }}",
   downloadByte:"{{ .downloadByte }}",uploadByte:"{{ .uploadByte }}",totalByte:"{{ .totalByte }}",
@@ -549,8 +481,8 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total"}
 };
 let lang=localStorage.getItem("nn_lang")||"fa";
 let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
@@ -624,22 +556,21 @@ function usageForPeriod(down,up,period){
   if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
   try{
     let arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
-    // ignore samples from the last 15s (just written this session)
     const now=Date.now(),win=periodWindowMs(period),from=now-win;
-    arr=arr.filter(s=>now-s.t>15000);
+    arr=arr.filter(s=>(now-s.t)>15000);
     if(!arr.length)return{d:down,u:up};
     let base=null;
-    for(const s of arr){ if(s.t<=from) base=s; else break; }
-    if(!base) base=arr[0];
-    let dd=Math.max(0,down-(base.d||0)), uu=Math.max(0,up-(base.u||0));
-    // if no meaningful change yet, fall back to total so UI is not empty zeros
-    if(dd===0 && uu===0) return{d:down,u:up};
+    for(const s of arr){if(s.t<=from)base=s;else break}
+    if(!base)base=arr[0];
+    const dd=Math.max(0,down-(base.d||0)),uu=Math.max(0,up-(base.u||0));
+    if(dd===0&&uu===0)return{d:down,u:up};
     return{d:dd,u:uu};
   }catch(e){return{d:down,u:up}}
 }
+
 function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
-  // IMPORTANT: compute period BEFORE writing new sample (else delta becomes 0)
+  // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
   const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
   recordUsageSample(rawD,rawU);
   const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
@@ -658,62 +589,35 @@ function renderTraffic(){
 }
 
 function data(){
-  document.getElementById("title").textContent=subTitle||"Subscription";
-
-  // warnings + formats + support (v2.1)
-  try{
-    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
-    if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
-    if(we){
-      const exp=num(TV.expire); let showE=false;
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
-      if(showE) we.classList.add("show"); else we.classList.remove("show");
-    }
-  }catch(e){}
-  const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
-  const bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
-  if(bJson){ if(jsonU){ bJson.classList.remove("hid"); bJson.textContent=t("fmtJson"); } else bJson.classList.add("hid"); }
-  if(bClash){ if(clashU){ bClash.classList.remove("hid"); bClash.textContent=t("fmtClash"); } else bClash.classList.add("hid"); }
-  const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
-  const ren=n(CONFIG.renewUrl,"")||sup;
-  const br=document.getElementById("btnRenew"), bs=document.getElementById("btnSupport");
-  if(br){ if(ren){ br.style.display=""; br.href=ren; const tr=document.getElementById("tRenew"); if(tr) tr.textContent=t("renew"); } else br.style.display="none"; }
-  if(bs){ if(sup){ bs.style.display=""; bs.href=sup; const ts=document.getElementById("tSupport"); if(ts) ts.textContent=t("support"); } else bs.style.display="none"; }
-
+  document.getElementById("title").textContent=subTitle;
   document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
-
-  // clearer status
-  try{
-    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const exp=num(TV.expire);
-    let st="ok", stTxt=t("on");
-    const en=n(TV.enabled,"true");
-    if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
-    else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
-    else if(exp){ const ms=exp<1e12?exp*1000:exp; if(ms<Date.now()){ st="bad"; stTxt=lang==="fa"?"منقضی":"Expired"; }
-      else if((ms-Date.now())/86400000<=7){ st="wn"; stTxt=lang==="fa"?"نزدیک انقضا":"Expiring"; }
-    }
-    if(st==="ok" && (n(TV.isOnline,"")==="true"||n(TV.isOnline,"")==="1")) stTxt=t("online");
-    const badge=document.getElementById("badge"), bt=document.getElementById("badgeTxt");
-    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); if(st==="wn") badge.className="badge wn"; }
-    if(bt) bt.textContent=stTxt;
-    // home renew when <=7 days or low volume
-    const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
-    const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
-    let needRenew=false;
-    if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7) needRenew=true; }
-    if(totB>0 && usedB/totB>=0.85) needRenew=true;
-    if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
-  }catch(e){}
-
   const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
   const badge=document.getElementById("badge"),bt=document.getElementById("badgeTxt"),dot=document.getElementById("statusDot");
   let stTxt=t("on");
-  if(en==="false"||en==="0"){badge.className="badge bad";stTxt=t("off");dot.className="dot off"}
-  else if(on==="true"||on==="1"){badge.className="badge ok";stTxt=t("online");dot.className="dot"}
-  else{badge.className="badge ok";stTxt=t("on");dot.className="dot"}
-  bt.textContent=stTxt;
+  if(en==="false"||en==="0"){if(badge)badge.className="badge bad";stTxt=t("off");if(dot)dot.className="dot off"}
+  else if(on==="true"||on==="1"){if(badge)badge.className="badge ok";stTxt=t("online");if(dot)dot.className="dot"}
+  else{if(badge)badge.className="badge ok";stTxt=t("on");if(dot)dot.className="dot"}
+  if(bt)bt.textContent=stTxt;
+
+
+  // home renew + format buttons
+  try{
+    const totB=num(TV.totalByte)||0,usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
+    const exp=num(TV.expire); let need=false;
+    if(exp){const ms=exp<1e12?exp*1000:exp;const days=(ms-Date.now())/86400000;if(days>=0&&days<=7)need=true}
+    if(totB>0&&usedB/totB>=0.85)need=true;
+    const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
+    const hr=document.getElementById("homeRenew"),bhr=document.getElementById("btnHomeRenew");
+    if(hr&&bhr){if(need&&ren){hr.classList.add("show");bhr.href=ren}else hr.classList.remove("show")}
+    const jsonU=n(TV.subJsonUrl,""),clashU=n(TV.subClashUrl,"");
+    const bj=document.getElementById("btnFmtJson"),bc=document.getElementById("btnFmtClash");
+    if(bj){if(jsonU){bj.classList.remove("hid");bj.textContent="JSON"}else bj.classList.add("hid")}
+    if(bc){if(clashU){bc.classList.remove("hid");bc.textContent="Clash"}else bc.classList.add("hid")}
+    const br=document.getElementById("btnRenew"),bs=document.getElementById("btnSupport");
+    const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
+    if(br){if(ren){br.style.display="";br.href=ren}else br.style.display="none"}
+    if(bs){if(sup){bs.style.display="";bs.href=sup}else bs.style.display="none"}
+  }catch(e){}
 
   renderTraffic();
 
@@ -747,207 +651,125 @@ function data(){
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
-function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
+function qr(txt){const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
 function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
   document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
 function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
   const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
-
 function locationOfLink(link){
   const name=nameOf(link);
   const loc=detectLocation(name);
-  if(loc) return {flag:loc.flag, code:loc.code, label:countryLabel(loc.code)};
-  return {flag:"🌐", code:"", label:(name||"Server").slice(0,32)};
+  if(loc)return{flag:loc.flag,code:loc.code,label:countryLabel(loc.code)};
+  return{flag:"🌐",code:"",label:(name||"Server").slice(0,36)};
 }
-
-function nameOf(link){
-  try{
-    if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return j.ps||j.add||"vmess"}
-    const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";
-    return link.split("://")[0]||"config";
-  }catch(e){return"config"}
-}
-function locationOfLink(link){
-  const name=nameOf(link);
-  const loc=detectLocation(name);
-  if(loc) return {flag:loc.flag, code:loc.code, label:countryLabel(loc.code)};
-  return {flag:"🌐", code:"", label:(name||"Server").slice(0,32)};
-}
-function renderCfgList(){
+function renderList(){
   const box=document.getElementById("cfgList")||document.getElementById("list");
-  if(!box) return;
-  if(!links.length){ box.innerHTML=`<div class="lat-empty">${t("none")}</div>`; return; }
-  const pingMap={};
-  (latServers||[]).forEach(s=>{ if(s.host) pingMap[s.host]=s.ping; });
-  const rows=links.map((l,i)=>{
-    const h=extractHost(l);
-    const loc=locationOfLink(l);
-    return {l,i,host:h.host,flag:loc.flag,label:loc.label,ping:pingMap[h.host]};
-  });
+  if(!box)return;
+  if(!links.length){box.innerHTML=`<div class="lat-empty">${t("none")}</div>`;return}
+  const pingMap={};(typeof latServers!=="undefined"?latServers:[]).forEach(s=>{if(s.host)pingMap[s.host]=s.ping});
+  const rows=links.map((l,i)=>{const h=extractHost(l);const loc=locationOfLink(l);return{i,host:h.host,flag:loc.flag,label:loc.label,ping:pingMap[h.host]}});
   rows.sort((a,b)=>(a.ping??9e9)-(b.ping??9e9));
   box.innerHTML=rows.map(r=>{
-    const pc=typeof pingClass==="function"?pingClass(r.ping):"wait";
-    const val=r.ping==null?t("wait"):(r.ping+" "+t("ms"));
-    const bw=typeof barWidth==="function"?barWidth(r.ping):0;
-    const bc=typeof barColor==="function"?barColor(r.ping):"var(--mu)";
-    return `<div class="cfg-item">
-      <div class="cfg-flag">${r.flag}</div>
-      <div class="cfg-info">
-        <div class="cfg-name">${r.label}</div>
-        <div class="cfg-bar"><i style="width:${bw}%;background:${bc}"></i></div>
-      </div>
+    const pc=pingClass(r.ping),val=r.ping==null?t("wait"):(r.ping+" "+t("ms"));
+    return `<div class="cfg-item"><div class="cfg-flag">${r.flag}</div>
+      <div class="cfg-info"><div class="cfg-name">${r.label}</div>
+      <div class="cfg-bar"><i style="width:${barWidth(r.ping)}%;background:${barColor(r.ping)}"></i></div></div>
       <div class="cfg-ping ${pc}">${val}</div>
       <div class="cfg-acts">
         <button class="mb" type="button" data-c="${r.i}"><i class="fa-solid fa-copy"></i></button>
         <button class="mb" type="button" data-q="${r.i}"><i class="fa-solid fa-qrcode"></i></button>
-      </div>
-    </div>`;
+      </div></div>`;
   }).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
 }
-function renderList(){ renderCfgList(); }
-function renderLatencyList(){ renderCfgList(); }
-async function runLatency(){
-  if(latRunning)return;latRunning=true;
-  const btn=document.getElementById("btnLatRefresh"); if(btn) btn.classList.add("spin");
-  latServers.forEach(s=>s.ping=null); renderCfgList();
-  const queue=[...latServers];
-  await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{
-    while(queue.length){const s=queue.shift(); await measureOne(s); renderCfgList(); }
-  }));
-  const upd=document.getElementById("latUpdated");
-  if(upd) upd.textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+String(latMode||"auto").toUpperCase();
-  if(btn) btn.classList.remove("spin"); latRunning=false;
-}
-function sortConfigsByPing(){ renderCfgList(); }
 
-function extractHost(link){
-  try{
-    if(link.startsWith("vmess://")){
-      const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));
-      return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""};
-    }
-    if(link.startsWith("ss://")){
-      const m=link.match(/@([^:#/?]+)/);
-      if(m)return{host:m[1],port:443,name:nameOf(link)};
-    }
-    const m=link.match(/@([^:#/?]+):?(\d+)?/);
-    if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-    const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);
-    if(m2)return{host:m2[1],port:443,name:nameOf(link)};
-  }catch(e){}
-  return{host:"",port:443,name:nameOf(link)};
-}
+function renderApps(){const cur=plat();
+  const domains={Happ:"happ.su",v2rayNG:"github.com",V2Box:"hexasoftware.com",Hiddify:"hiddify.com",Throne:"github.com",Streisand:"apps.apple.com",Shadowrocket:"apps.apple.com",v2rayN:"github.com"};
+  document.getElementById("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur?" hot":"";
+    return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
+      ${g.a.map(a=>{const src="https://www.google.com/s2/favicons?domain="+encodeURIComponent(domains[a.n]||"google.com")+"&sz=64";
+        return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><img class="app-logo" src="${src}" alt="" loading="lazy" onerror="this.style.display='none'"/><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
+function extractHost(link){try{
+  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
+  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
+  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
+  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
+}catch(e){}return{host:"",port:443,name:nameOf(link)}}
 function detectLocation(name){
-  if(!name) return null;
-  for(const [flag,code] of Object.entries(FLAG_MAP)) if(name.includes(flag)) return{flag,code};
-  const m=String(name).match(CODE_RE);
-  if(m){ let code=m[1].toUpperCase(); if(code==="UK") code="GB"; return{flag:CODE_TO_FLAG[code]||"🏳️",code}; }
+  for(const [flag,code] of Object.entries(FLAG_MAP))if(name.includes(flag))return{flag,code};
+  const m=name.match(CODE_RE);if(m){let code=m[1].toUpperCase();if(code==="UK")code="GB";return{flag:CODE_TO_FLAG[code]||"🏳️",code}}
   return null;
 }
+
+let latServers=[],latRunning=false;
 function buildLatServers(){
-  latServers=[]; const seen=new Set();
+  latServers=[];const seen=new Set();
   links.forEach(l=>{
     const {host,port,name}=extractHost(l);
-    if(!host) return;
+    if(!host)return;
     const loc=detectLocation(name)||{flag:"🌐",code:""};
-    const key=host+":"+(port||443);
-    if(seen.has(key)) return; seen.add(key);
+    const key=host+":"+(port||443);if(seen.has(key))return;seen.add(key);
     latServers.push({host,port:port||443,flag:loc.flag,code:loc.code||"",ping:null});
   });
-  renderCfgList();
 }
+
 
 function measureWS(s){
   return new Promise(resolve=>{
-    const t0=performance.now(); let done=false; let ws;
-    const finish=ms=>{ if(done)return; done=true; try{ws&&ws.close()}catch(e){} resolve(ms); };
-    const ports=[];
-    if(s.port) ports.push(s.port);
-    if(!ports.includes(443)) ports.push(443);
-    if(!ports.includes(80)) ports.push(80);
-    let pi=0;
-    const tryNext=()=>{
-      if(pi>=ports.length){ finish(null); return; }
-      const port=ports[pi++]; const portStr=(port===443||port===80)?"":(":"+port);
-      const schemes=port===80?["ws","wss"]:["wss","ws"];
-      let si=0;
-      const tryScheme=()=>{
-        if(si>=schemes.length){ tryNext(); return; }
-        const sch=schemes[si++];
-        try{
-          ws=new WebSocket(sch+"://"+s.host+portStr+"/");
-        }catch(e){ tryScheme(); return; }
-        const timer=setTimeout(()=>{ try{ws.close()}catch(e){} tryScheme(); }, 2000);
-        ws.onopen=()=>{ clearTimeout(timer); finish(Math.round(performance.now()-t0)); };
-        ws.onerror=()=>{ clearTimeout(timer); try{ws.close()}catch(e){} tryScheme(); };
-      };
-      tryScheme();
-    };
-    tryNext();
+    const t0=performance.now();let done=false;let ws;
+    const finish=ms=>{if(done)return;done=true;try{ws&&ws.close()}catch(e){}resolve(ms)};
+    try{
+      const port=(s.port&&s.port!==443&&s.port!==80)?(":"+s.port):"";
+      ws=new WebSocket("wss://"+s.host+port+"/");
+    }catch(e){resolve(null);return}
+    const timer=setTimeout(()=>finish(null),2500);
+    ws.onopen=()=>{clearTimeout(timer);finish(Math.round(performance.now()-t0))};
+    ws.onerror=()=>{clearTimeout(timer);finish(null)};
+    ws.onclose=()=>{clearTimeout(timer);if(!done)finish(null)};
   });
 }
-function measureHTTP(s){
-  return new Promise(resolve=>{
-    const t0=performance.now();
-    const ports=[];
-    if(s.port) ports.push(s.port);
-    if(!ports.includes(443)) ports.push(443);
-    let finished=false;
-    const done=ms=>{ if(finished)return; finished=true; resolve(ms); };
-    const tryFetch=(url)=>{
-      return Promise.race([
-        fetch(url,{mode:"no-cors",cache:"no-store",credentials:"omit"}).then(()=>Math.round(performance.now()-t0)).catch(()=>null),
-        new Promise(r=>setTimeout(()=>r(null),2500))
-      ]);
-    };
-    const tryImg=(url)=>{
-      return new Promise(res=>{
-        const img=new Image();
-        const t=setTimeout(()=>{ img.src=""; res(null); }, 2500);
-        img.onload=img.onerror=()=>{ clearTimeout(t); res(Math.round(performance.now()-t0)); };
-        img.src=url+(url.includes("?")?"&":"?")+"t="+Date.now();
-      });
-    };
-    (async()=>{
-      for(const port of ports){
-        const portStr=(port===443||port===80)?"":(":"+port);
-        const urls=[
-          "https://"+s.host+portStr+"/",
-          "http://"+s.host+portStr+"/",
-        ];
-        for(const u of urls){
-          let ms=await tryFetch(u);
-          if(ms!=null){ done(ms); return; }
-          ms=await tryImg(u+"favicon.ico");
-          if(ms!=null){ done(ms); return; }
-        }
-      }
-      done(null);
-    })();
-  });
+async function measureHTTP(s){
+  const t0=performance.now();
+  try{
+    await Promise.race([
+      fetch("https://"+s.host+(s.port&&s.port!==443?":"+s.port:"")+"/",{mode:"no-cors",cache:"no-store",credentials:"omit"}),
+      new Promise((_,r)=>setTimeout(()=>r(new Error("to")),2500))
+    ]);
+    return Math.round(performance.now()-t0);
+  }catch(e){
+    return new Promise(resolve=>{
+      const t1=performance.now();let done=false;
+      const fin=()=>{if(done)return;done=true;const ms=Math.round(performance.now()-t1);resolve(ms>8?ms:null)};
+      const img=new Image();img.onload=fin;img.onerror=fin;
+      img.src="https://"+s.host+"/favicon.ico?_="+Date.now();
+      setTimeout(fin,2200);
+    });
+  }
 }
 async function measureOne(s){
   let ms=null;
-  // Auto: HTTP first (works more often from browsers), then WS
-  if(latMode==="ws") ms=await measureWS(s);
-  else if(latMode==="http") ms=await measureHTTP(s);
-  else {
-    ms=await measureHTTP(s);
-    if(ms==null) ms=await measureWS(s);
-  }
+  if(latMode==="ws")ms=await measureWS(s);
+  else if(latMode==="http")ms=await measureHTTP(s);
+  else{ms=await measureWS(s);if(ms==null)ms=await measureHTTP(s)}
   s.ping=ms;
 }
-
 function pingClass(ms){if(ms==null)return"wait";if(ms<120)return"good";if(ms<280)return"mid";return"bad"}
 function barWidth(ms){if(ms==null)return 0;return Math.max(8,Math.min(100,Math.round(100-(ms/600)*100)))}
 function barColor(ms){if(ms==null)return"var(--mu)";if(ms<120)return"var(--ok)";if(ms<280)return"var(--wn)";return"var(--er)"}
-function renderLatencyList(){ renderCfgList(); }
+function renderLatencyList(){ renderList(); }
 
-
-function sortConfigsByPing(){ renderCfgList(); }
-
+async function runLatency(){
+  if(latRunning)return;latRunning=true;
+  const btn=document.getElementById("btnLatRefresh");btn.classList.add("spin");
+  latServers.forEach(s=>s.ping=null);renderLatencyList();
+  const queue=[...latServers];
+  await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{
+    while(queue.length){const s=queue.shift();await measureOne(s);renderLatencyList()}
+  }));
+  document.getElementById("latUpdated").textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+latMode.toUpperCase();
+  btn.classList.remove("spin");latRunning=false;
+}
 function setLatMode(m){latMode=m;localStorage.setItem("nn_lat_mode",m);
   document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));runLatency()}
 
@@ -965,14 +787,9 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
 });
-
 document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
-  usagePeriod=b.dataset.p||"total";
-  localStorage.setItem("nn_usage_period",usagePeriod);
-  document.querySelectorAll("#periodBar button").forEach(x=>x.classList.toggle("on",x.dataset.p===usagePeriod));
-  if(typeof renderTraffic==="function") renderTraffic();
+  usagePeriod=b.dataset.p;localStorage.setItem("nn_usage_period",usagePeriod);renderTraffic();
 });
-
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
@@ -985,28 +802,6 @@ buildLatServers();renderLatencyList();updateWaves();
 setTimeout(runLatency,500);
 // refresh expiry every minute
 setInterval(data,60000);
-
-/* v2.1 handlers */
-(function(){
-  const el=id=>document.getElementById(id);
-  if(el("btnQrCopy")) el("btnQrCopy").onclick=()=>{ if(window.__lastQr) copy(window.__lastQr); };
-  if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
-  if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
-  let pingTimer=null;
-  document.querySelectorAll("#latInt button").forEach(b=>{
-    b.onclick=()=>{
-      document.querySelectorAll("#latInt button").forEach(x=>x.classList.remove("on"));
-      b.classList.add("on");
-      const s=Number(b.dataset.s)||0;
-      if(pingTimer){ clearInterval(pingTimer); pingTimer=null; }
-      if(s>0){
-        const tick=()=>{ try{ if(typeof runLatency==="function") runLatency(); else if(el("btnLatRefresh")) el("btnLatRefresh").click(); }catch(e){} };
-        pingTimer=setInterval(tick, s*1000);
-      }
-    };
-  });
-})();
-
 </script>
 </body>
 </html>
