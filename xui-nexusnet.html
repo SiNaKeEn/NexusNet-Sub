@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306b6d4'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <title>{{ .subTitle }}</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
@@ -75,6 +76,7 @@ html[data-theme="light"] .stars{opacity:.2}
   padding:.25rem .65rem;border-radius:999px}
 .badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
 .badge.bad{background:rgba(248,113,113,.14);color:var(--er)}
+.badge.wn{background:rgba(251,191,36,.14);color:var(--wn)}
 
 /* Usage block */
 .usage{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem;flex-wrap:wrap}
@@ -236,6 +238,35 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 .app-badge.streisand{background:linear-gradient(135deg,#14b8a6,#0f766e)}
 .app-badge.shadow{background:linear-gradient(135deg,#64748b,#334155)}
 
+
+/* v2.2 */
+.skel{display:none;padding:1rem 0}
+.skel.on{display:block}
+.skel .srow{height:14px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.1),rgba(255,255,255,.04));background-size:200% 100%;animation:shimmer 1.2s infinite;margin-bottom:.55rem}
+.skel .srow.lg{height:88px;border-radius:16px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.home-renew{display:none;margin-bottom:.75rem}
+.home-renew.show{display:block}
+.home-renew .btn{width:100%;padding:.85rem 1rem;font-size:.9rem;box-shadow:0 8px 28px rgba(37,99,235,.35)}
+.status-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:800;padding:.3rem .75rem;border-radius:999px}
+.status-pill.ok{background:rgba(52,211,153,.15);color:var(--ok)}
+.status-pill.bad{background:rgba(248,113,113,.15);color:var(--er)}
+.status-pill.wn{background:rgba(251,191,36,.15);color:var(--wn)}
+.btn-all{width:100%;margin-top:.5rem;padding:.8rem 1rem!important;font-size:.88rem!important;font-weight:800!important;
+  background:linear-gradient(135deg,#06b6d4,#2563eb)!important;color:#fff!important;border:0!important;box-shadow:0 6px 20px rgba(37,99,235,.28)}
+#md .mbx{max-width:300px;padding:1.4rem}
+#md #qr{margin:1.1rem 0}
+#md #qr canvas,#md #qr img{width:220px!important;height:220px!important}
+.tab{transition:opacity .25s ease,transform .25s ease}
+.tab.on{animation:tabIn .28s ease}
+@keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@media(min-width:960px){
+  .app{max-width:920px!important;margin:1.25rem auto;padding:1.35rem 1.5rem 5.5rem}
+  .desk-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;align-items:start}
+  .desk-grid .span2{grid-column:1/-1}
+}
+.lat-note{font-size:.65rem;color:var(--mu);margin-top:.45rem;line-height:1.4}
+
 </style>
 </head>
 <body>
@@ -266,15 +297,15 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
   <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
 
   <div id="tab-home" class="tab on">
-    <div class="card period-card">
-      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
-      <div class="period" id="periodBar">
-        <button type="button" data-p="24h">24h</button>
-        <button type="button" data-p="7d">7d</button>
-        <button type="button" data-p="30d">30d</button>
-        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
-      </div>
+    <div class="skel on" id="skel">
+      <div class="srow lg"></div>
+      <div class="srow"></div>
+      <div class="srow" style="width:70%"></div>
     </div>
+    <div class="home-renew" id="homeRenew">
+      <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
+    </div>
+
     <div class="card">
       <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
         <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
@@ -312,7 +343,6 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
         <button class="btn bg" type="button" id="btnQr"><i class="fa-solid fa-qrcode"></i> QR</button>
       </div>
       <div class="fmt" id="fmtRow">
-        <button type="button" id="btnFmtSub" class="hid">Sub</button>
         <button type="button" id="btnFmtJson" class="hid">JSON</button>
         <button type="button" id="btnFmtClash" class="hid">Clash</button>
       </div>
@@ -355,12 +385,12 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
       </div>
       <div id="latList"><div class="lat-empty">—</div></div>
       <div class="lat-meta"><span id="latUpdated">—</span></div>
-      <div class="lat-note" id="latNote">پینگ مرورگر تقریبی است؛ حالت WS نزدیک‌ترین تخمین است.</div>
+      <div class="lat-note" id="latNote">پینگ از دستگاه شما تا سرور محاسبه می‌شود (کاربران ایران ≈ مسیر ایران).</div>
     </div>
     <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
     <div class="row" style="margin-top:.6rem">
-      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+      <button class="btn bg" type="button" id="btnAll" class="btn-all" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
     </div>
   </div>
 
@@ -395,7 +425,8 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 
 <div class="toast" id="toast"></div>
 <div id="md"><div class="mbx"><div id="qr"></div>
-<button class="btn bp" type="button" style="width:100%" onclick="document.getElementById('md').classList.remove('open')">OK</button></div></div>
+<button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem"><i class="fa-solid fa-copy"></i> <span id="tQrCopy">Copy</span></button>
+<button class="btn bg" type="button" style="width:100%" onclick="document.getElementById('md').classList.remove('open')">OK</button></div></div>
 
 <script>
 /* ===== Geo data: real-ish positions (lat, lon) ===== */
@@ -528,7 +559,7 @@ function uiTheme(){
 }
 
 /* usage period: client-side samples in localStorage */
-let usagePeriod=localStorage.getItem("nn_usage_period")||"total";
+let usagePeriod="total"; /* panel has no 24h/7d/30d breakdown */
 function recordUsageSample(down,up){
   try{
     const key="nn_usage_hist";
@@ -574,8 +605,8 @@ function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
   // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
   recordUsageSample(rawD,rawU);
-  const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
-  const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
+  const d=rawD,u=rawU;
+  const used=d+u, left=tot>0?Math.max(0,tot-used):0;
   const noLimit=!tot||tot<=0;
   document.getElementById("down").textContent=bytes(d);
   document.getElementById("up").textContent=bytes(u);
@@ -587,7 +618,7 @@ function renderTraffic(){
   document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
   document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
   document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
-  document.querySelectorAll("#periodBar button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
+  /* no period bar */
 }
 
 function data(){
@@ -605,8 +636,7 @@ function data(){
     }
   }catch(e){}
   const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
-  const bSub=document.getElementById("btnFmtSub"), bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
-  if(bSub){ bSub.classList.remove("hid"); bSub.textContent=t("fmtSub"); }
+  const bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
   if(bJson){ if(jsonU){ bJson.classList.remove("hid"); bJson.textContent=t("fmtJson"); } else bJson.classList.add("hid"); }
   if(bClash){ if(clashU){ bClash.classList.remove("hid"); bClash.textContent=t("fmtClash"); } else bClash.classList.add("hid"); }
   const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
@@ -616,6 +646,31 @@ function data(){
   if(bs){ if(sup){ bs.style.display=""; bs.href=sup; const ts=document.getElementById("tSupport"); if(ts) ts.textContent=t("support"); } else bs.style.display="none"; }
 
   document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
+
+  // clearer status
+  try{
+    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
+    const exp=num(TV.expire);
+    let st="ok", stTxt=t("on");
+    const en=n(TV.enabled,"true");
+    if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
+    else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
+    else if(exp){ const ms=exp<1e12?exp*1000:exp; if(ms<Date.now()){ st="bad"; stTxt=lang==="fa"?"منقضی":"Expired"; }
+      else if((ms-Date.now())/86400000<=7){ st="wn"; stTxt=lang==="fa"?"نزدیک انقضا":"Expiring"; }
+    }
+    if(st==="ok" && (n(TV.isOnline,"")==="true"||n(TV.isOnline,"")==="1")) stTxt=t("online");
+    const badge=document.getElementById("badge"), bt=document.getElementById("badgeTxt");
+    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); if(st==="wn") badge.className="badge wn"; }
+    if(bt) bt.textContent=stTxt;
+    // home renew when <=7 days or low volume
+    const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
+    const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
+    let needRenew=false;
+    if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7) needRenew=true; }
+    if(totB>0 && usedB/totB>=0.85) needRenew=true;
+    if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
+  }catch(e){}
+
   const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
   const badge=document.getElementById("badge"),bt=document.getElementById("badgeTxt"),dot=document.getElementById("statusDot");
   let stTxt=t("on");
@@ -656,7 +711,7 @@ function data(){
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
-function qr(txt){const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
+function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
 function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
   document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
 function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
@@ -759,7 +814,30 @@ async function runLatency(){
   }));
   document.getElementById("latUpdated").textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+latMode.toUpperCase();
   btn.classList.remove("spin");latRunning=false;
+  try{ sortConfigsByPing(); }catch(e){}
 }
+function sortConfigsByPing(){
+  if(!latServers.length||!links.length)return;
+  const score={};
+  latServers.forEach(s=>{ if(s.ping!=null) score[s.host]=s.ping; });
+  // rebuild list order: match link hosts
+  const ranked=links.map((l,i)=>{
+    const info=extractHost(l); const p=score[info.host];
+    return {l,i,p:p==null?9e9:p,name:info.name||nameOf(l)};
+  }).sort((a,b)=>a.p-b.p);
+  const box=document.getElementById("list");
+  if(!box)return;
+  box.innerHTML=ranked.map((x,idx)=>{
+    const name=(x.name||("Config "+(x.i+1))).slice(0,42);
+    const pingTxt=x.p<9e9?(x.p+" ms"):"";
+    return `<div class="item"><span class="n">${name}${pingTxt?' · '+pingTxt:''}</span>
+      <button class="mb" type="button" data-c="${x.i}"><i class="fa-solid fa-copy"></i></button>
+      <button class="mb" type="button" data-q="${x.i}"><i class="fa-solid fa-qrcode"></i></button></div>`;
+  }).join("");
+  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
+  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
+}
+
 function setLatMode(m){latMode=m;localStorage.setItem("nn_lat_mode",m);
   document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));runLatency()}
 
@@ -777,9 +855,7 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
 });
-document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
-  usagePeriod=b.dataset.p;localStorage.setItem("nn_usage_period",usagePeriod);renderTraffic();
-});
+/* period selector removed — panel only provides total traffic */
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
@@ -788,6 +864,7 @@ document.querySelectorAll("#latModes button").forEach(b=>b.onclick=()=>setLatMod
 document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===latMode));
 
 uiTheme();uiLang();data();renderQi();renderList();renderApps();
+try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
 buildLatServers();renderLatencyList();updateWaves();
 setTimeout(runLatency,500);
 // refresh expiry every minute
@@ -796,7 +873,7 @@ setInterval(data,60000);
 /* v2.1 handlers */
 (function(){
   const el=id=>document.getElementById(id);
-  if(el("btnFmtSub")) el("btnFmtSub").onclick=()=>copy(subUrl);
+  if(el("btnQrCopy")) el("btnQrCopy").onclick=()=>{ if(window.__lastQr) copy(window.__lastQr); };
   if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
   if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
   let pingTimer=null;
