@@ -261,8 +261,8 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 .tab.on{animation:tabIn .28s ease}
 @keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
 @media(min-width:960px){
-  .app{max-width:920px!important;margin:1.25rem auto;padding:1.35rem 1.5rem 5.5rem}
-  .desk-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:1rem;align-items:start}
+  .app{max-width:440px!important;margin:1.25rem auto}
+}
   .desk-grid .span2{grid-column:1/-1}
 }
 .lat-note{font-size:.65rem;color:var(--mu);margin-top:.45rem;line-height:1.4}
@@ -306,7 +306,16 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
       <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
     </div>
 
-    <div class="card">
+        <div class="card period-card">
+      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
+      <div class="period" id="periodBar">
+        <button type="button" data-p="24h">24h</button>
+        <button type="button" data-p="7d">7d</button>
+        <button type="button" data-p="30d">30d</button>
+        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
+      </div>
+    </div>
+<div class="card">
       <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
         <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
       </div>
@@ -385,7 +394,7 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
       </div>
       <div id="latList"><div class="lat-empty">—</div></div>
       <div class="lat-meta"><span id="latUpdated">—</span></div>
-      <div class="lat-note" id="latNote">پینگ از دستگاه شما تا سرور محاسبه می‌شود (کاربران ایران ≈ مسیر ایران).</div>
+      <div class="lat-note" id="latNote">Ping is measured from your device to each server (Iran users ≈ Iran path). Auto mode recommended.</div>
     </div>
     <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
@@ -516,7 +525,7 @@ const I={
 };
 let lang=localStorage.getItem("nn_lang")||"fa";
 let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
-let latMode=localStorage.getItem("nn_lat_mode")||"ws";
+let latMode=localStorage.getItem("nn_lat_mode")||"auto";
 const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
 const n=(v,d)=>v==null||v===""?d:v;
 const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
@@ -559,7 +568,7 @@ function uiTheme(){
 }
 
 /* usage period: client-side samples in localStorage */
-let usagePeriod="total"; /* panel has no 24h/7d/30d breakdown */
+let usagePeriod=localStorage.getItem("nn_usage_period")||"total";
 function recordUsageSample(down,up){
   try{
     const key="nn_usage_hist";
@@ -587,7 +596,7 @@ function usageForPeriod(down,up,period){
   try{
     const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
     const now=Date.now(),win=periodWindowMs(period),from=now-win;
-    if(!arr.length)return{d:0,u:0};
+    if(!arr.length)return{d:down,u:up}; /* no history yet → show total */
     // base = last sample at or before window start; else first sample
     let base=null;
     for(const s of arr){if(s.t<=from)base=s;else break}
@@ -605,8 +614,8 @@ function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
   // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
   recordUsageSample(rawD,rawU);
-  const d=rawD,u=rawU;
-  const used=d+u, left=tot>0?Math.max(0,tot-used):0;
+  const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
+  const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
   const noLimit=!tot||tot<=0;
   document.getElementById("down").textContent=bytes(d);
   document.getElementById("up").textContent=bytes(u);
@@ -618,7 +627,7 @@ function renderTraffic(){
   document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
   document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
   document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
-  /* no period bar */
+  document.querySelectorAll("#periodBar button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
 }
 
 function data(){
@@ -751,45 +760,88 @@ function buildLatServers(){
   });
 }
 
+
 function measureWS(s){
   return new Promise(resolve=>{
-    const t0=performance.now();let done=false;let ws;
-    const finish=ms=>{if(done)return;done=true;try{ws&&ws.close()}catch(e){}resolve(ms)};
-    try{
-      const port=(s.port&&s.port!==443&&s.port!==80)?(":"+s.port):"";
-      ws=new WebSocket("wss://"+s.host+port+"/");
-    }catch(e){resolve(null);return}
-    const timer=setTimeout(()=>finish(null),2500);
-    ws.onopen=()=>{clearTimeout(timer);finish(Math.round(performance.now()-t0))};
-    ws.onerror=()=>{clearTimeout(timer);finish(null)};
-    ws.onclose=()=>{clearTimeout(timer);if(!done)finish(null)};
+    const t0=performance.now(); let done=false; let ws;
+    const finish=ms=>{ if(done)return; done=true; try{ws&&ws.close()}catch(e){} resolve(ms); };
+    const ports=[];
+    if(s.port) ports.push(s.port);
+    if(!ports.includes(443)) ports.push(443);
+    if(!ports.includes(80)) ports.push(80);
+    let pi=0;
+    const tryNext=()=>{
+      if(pi>=ports.length){ finish(null); return; }
+      const port=ports[pi++]; const portStr=(port===443||port===80)?"":(":"+port);
+      const schemes=port===80?["ws","wss"]:["wss","ws"];
+      let si=0;
+      const tryScheme=()=>{
+        if(si>=schemes.length){ tryNext(); return; }
+        const sch=schemes[si++];
+        try{
+          ws=new WebSocket(sch+"://"+s.host+portStr+"/");
+        }catch(e){ tryScheme(); return; }
+        const timer=setTimeout(()=>{ try{ws.close()}catch(e){} tryScheme(); }, 2000);
+        ws.onopen=()=>{ clearTimeout(timer); finish(Math.round(performance.now()-t0)); };
+        ws.onerror=()=>{ clearTimeout(timer); try{ws.close()}catch(e){} tryScheme(); };
+      };
+      tryScheme();
+    };
+    tryNext();
   });
 }
-async function measureHTTP(s){
-  const t0=performance.now();
-  try{
-    await Promise.race([
-      fetch("https://"+s.host+(s.port&&s.port!==443?":"+s.port:"")+"/",{mode:"no-cors",cache:"no-store",credentials:"omit"}),
-      new Promise((_,r)=>setTimeout(()=>r(new Error("to")),2500))
-    ]);
-    return Math.round(performance.now()-t0);
-  }catch(e){
-    return new Promise(resolve=>{
-      const t1=performance.now();let done=false;
-      const fin=()=>{if(done)return;done=true;const ms=Math.round(performance.now()-t1);resolve(ms>8?ms:null)};
-      const img=new Image();img.onload=fin;img.onerror=fin;
-      img.src="https://"+s.host+"/favicon.ico?_="+Date.now();
-      setTimeout(fin,2200);
-    });
-  }
+function measureHTTP(s){
+  return new Promise(resolve=>{
+    const t0=performance.now();
+    const ports=[];
+    if(s.port) ports.push(s.port);
+    if(!ports.includes(443)) ports.push(443);
+    let finished=false;
+    const done=ms=>{ if(finished)return; finished=true; resolve(ms); };
+    const tryFetch=(url)=>{
+      return Promise.race([
+        fetch(url,{mode:"no-cors",cache:"no-store",credentials:"omit"}).then(()=>Math.round(performance.now()-t0)).catch(()=>null),
+        new Promise(r=>setTimeout(()=>r(null),2500))
+      ]);
+    };
+    const tryImg=(url)=>{
+      return new Promise(res=>{
+        const img=new Image();
+        const t=setTimeout(()=>{ img.src=""; res(null); }, 2500);
+        img.onload=img.onerror=()=>{ clearTimeout(t); res(Math.round(performance.now()-t0)); };
+        img.src=url+(url.includes("?")?"&":"?")+"t="+Date.now();
+      });
+    };
+    (async()=>{
+      for(const port of ports){
+        const portStr=(port===443||port===80)?"":(":"+port);
+        const urls=[
+          "https://"+s.host+portStr+"/",
+          "http://"+s.host+portStr+"/",
+        ];
+        for(const u of urls){
+          let ms=await tryFetch(u);
+          if(ms!=null){ done(ms); return; }
+          ms=await tryImg(u+"favicon.ico");
+          if(ms!=null){ done(ms); return; }
+        }
+      }
+      done(null);
+    })();
+  });
 }
 async function measureOne(s){
   let ms=null;
-  if(latMode==="ws")ms=await measureWS(s);
-  else if(latMode==="http")ms=await measureHTTP(s);
-  else{ms=await measureWS(s);if(ms==null)ms=await measureHTTP(s)}
+  // Auto: HTTP first (works more often from browsers), then WS
+  if(latMode==="ws") ms=await measureWS(s);
+  else if(latMode==="http") ms=await measureHTTP(s);
+  else {
+    ms=await measureHTTP(s);
+    if(ms==null) ms=await measureWS(s);
+  }
   s.ping=ms;
 }
+
 function pingClass(ms){if(ms==null)return"wait";if(ms<120)return"good";if(ms<280)return"mid";return"bad"}
 function barWidth(ms){if(ms==null)return 0;return Math.max(8,Math.min(100,Math.round(100-(ms/600)*100)))}
 function barColor(ms){if(ms==null)return"var(--mu)";if(ms<120)return"var(--ok)";if(ms<280)return"var(--wn)";return"var(--er)"}
@@ -855,7 +907,14 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
 });
-/* period selector removed — panel only provides total traffic */
+
+document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
+  usagePeriod=b.dataset.p||"total";
+  localStorage.setItem("nn_usage_period",usagePeriod);
+  document.querySelectorAll("#periodBar button").forEach(x=>x.classList.toggle("on",x.dataset.p===usagePeriod));
+  if(typeof renderTraffic==="function") renderTraffic();
+});
+
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
