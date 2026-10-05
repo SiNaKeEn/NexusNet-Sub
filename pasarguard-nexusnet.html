@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-<title>{{ user.username }} - Sub</title>
+<title>Subscription</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
@@ -208,6 +208,34 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 .lat-ping.good{color:var(--ok)}.lat-ping.mid{color:var(--wn)}.lat-ping.bad{color:var(--er)}.lat-ping.wait{color:var(--mu);font-size:.72rem}
 .lat-empty{text-align:center;padding:1rem;color:var(--mu);font-size:.78rem}
 .lat-meta{margin-top:.45rem;font-size:.65rem;color:var(--mu);text-align:end}
+
+/* v2.1 */
+.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
+.warn.show{display:flex}
+.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
+.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
+.warn i{margin-top:.1rem}
+.fmt{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem}
+.fmt button{flex:1 1 auto;min-width:72px;padding:.55rem .5rem;border-radius:11px;border:1px solid var(--bd);
+  background:var(--sf);color:var(--tx);font-family:var(--font);font-size:.72rem;font-weight:700;cursor:pointer}
+.fmt button:active{transform:scale(.97)}
+.fmt button.hid{display:none}
+.act-row{display:flex;gap:.4rem;margin:.7rem 0;flex-wrap:wrap}
+.act-row a{flex:1;min-width:0;text-decoration:none;text-align:center}
+.lat-int{display:flex;gap:.25rem;margin-inline-start:.25rem}
+.lat-int button{border:0;background:transparent;color:var(--mu);font-family:var(--font);font-size:.62rem;font-weight:700;
+  padding:.25rem .4rem;border-radius:7px;cursor:pointer}
+.lat-int button.on{background:var(--pg);color:var(--p)}
+.app-badge{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;
+  font-size:.65rem;font-weight:800;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#06b6d4,#2563eb)}
+.app-badge.happ{background:linear-gradient(135deg,#f59e0b,#ea580c)}
+.app-badge.throne{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
+.app-badge.hiddify{background:linear-gradient(135deg,#22c55e,#15803d)}
+.app-badge.v2ray{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
+.app-badge.v2box{background:linear-gradient(135deg,#ec4899,#be185d)}
+.app-badge.streisand{background:linear-gradient(135deg,#14b8a6,#0f766e)}
+.app-badge.shadow{background:linear-gradient(135deg,#64748b,#334155)}
+
 </style>
 </head>
 <body>
@@ -234,6 +262,8 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
   </div>
 
   <div id="ann" class="ann"><i class="fa-solid fa-bullhorn"></i><span id="annTxt"></span></div>
+  <div id="warnVol" class="warn vol"><i class="fa-solid fa-triangle-exclamation"></i><span id="warnVolTxt"></span></div>
+  <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
 
   <div id="tab-home" class="tab on">
     <div class="card period-card">
@@ -281,6 +311,11 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
         <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">Copy</span></button>
         <button class="btn bg" type="button" id="btnQr"><i class="fa-solid fa-qrcode"></i> QR</button>
       </div>
+      <div class="fmt" id="fmtRow">
+        <button type="button" id="btnFmtSub" class="hid">Sub</button>
+        <button type="button" id="btnFmtJson" class="hid">JSON</button>
+        <button type="button" id="btnFmtClash" class="hid">Clash</button>
+      </div>
     </div>
 
     <div class="card" id="expCard">
@@ -309,6 +344,12 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
             <button type="button" data-m="http">HTTP</button>
             <button type="button" data-m="auto">Auto</button>
           </div>
+          <div class="lat-int" id="latInt">
+            <button type="button" data-s="0" class="on">Off</button>
+            <button type="button" data-s="5">5s</button>
+            <button type="button" data-s="10">10s</button>
+            <button type="button" data-s="30">30s</button>
+          </div>
           <button class="lat-refresh" type="button" id="btnLatRefresh"><i class="fa-solid fa-rotate"></i></button>
         </div>
       </div>
@@ -329,6 +370,11 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
   </div>
 
   <div id="tab-profile" class="tab">
+    <div class="act-row" id="profActs">
+      <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-brands fa-telegram"></i> <span id="tRenew">Renew</span></a>
+      <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-solid fa-headset"></i> <span id="tSupport">Support</span></a>
+    </div>
+
     <div class="st"><i class="fa-solid fa-id-card"></i> <span id="tProf">Profile</span></div>
     <div class="card pinfo">
       <div class="prow"><span id="p1">Username</span><b id="pv1">—</b></div>
@@ -406,6 +452,14 @@ function formatExpireDate(v){
 }
 
 /* ===== Data ===== */
+
+/* ===== NexusNet CONFIG (injected by nxt-sub) ===== */
+const CONFIG={
+  profileTitle:"",
+  supportUrl:"",
+  renewUrl:"",
+};
+
 /* PasarGuard injects: user, links, announce (optional) */
 const _UD = {% if user %}{% set user_data = {
   'id': user.id,
@@ -440,7 +494,7 @@ const TV=(function(){
     lastOnline:u.online_at?String(u.online_at):"",
     subUrl:location.href.split("?")[0],
     subJsonUrl:"",subClashUrl:"",
-    subTitle:u.username||"{{ user.username }}",
+    subTitle:(String(CONFIG.profileTitle||"").trim())||"Subscription",
     subSupportUrl:"",
     announce:typeof _ANNOUNCE==="string"?_ANNOUNCE:(_ANNOUNCE||""),
     links:linksArr.join("\n"),
@@ -456,8 +510,8 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total"}
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
 let lang=localStorage.getItem("nn_lang")||"fa";
 let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
@@ -568,6 +622,29 @@ function renderTraffic(){
 
 function data(){
   document.getElementById("title").textContent=subTitle;
+
+  // warnings + formats + support (v2.1)
+  try{
+    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
+    const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
+    if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
+    if(we){
+      const exp=num(TV.expire); let showE=false;
+      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
+      if(showE) we.classList.add("show"); else we.classList.remove("show");
+    }
+  }catch(e){}
+  const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
+  const bSub=document.getElementById("btnFmtSub"), bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
+  if(bSub){ bSub.classList.remove("hid"); bSub.textContent=t("fmtSub"); }
+  if(bJson){ if(jsonU){ bJson.classList.remove("hid"); bJson.textContent=t("fmtJson"); } else bJson.classList.add("hid"); }
+  if(bClash){ if(clashU){ bClash.classList.remove("hid"); bClash.textContent=t("fmtClash"); } else bClash.classList.add("hid"); }
+  const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
+  const ren=n(CONFIG.renewUrl,"")||sup;
+  const br=document.getElementById("btnRenew"), bs=document.getElementById("btnSupport");
+  if(br){ if(ren){ br.style.display=""; br.href=ren; const tr=document.getElementById("tRenew"); if(tr) tr.textContent=t("renew"); } else br.style.display="none"; }
+  if(bs){ if(sup){ bs.style.display=""; bs.href=sup; const ts=document.getElementById("tSupport"); if(ts) ts.textContent=t("support"); } else bs.style.display="none"; }
+
   document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
   const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
   const badge=document.getElementById("badge"),bt=document.getElementById("badgeTxt"),dot=document.getElementById("statusDot");
@@ -625,7 +702,7 @@ function renderList(){const box=document.getElementById("list");
 function renderApps(){const cur=plat();
   document.getElementById("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur?" hot":"";
     return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
-      ${g.a.map(a=>`<a class="al" href="${a.u}" target="_blank" rel="noopener"><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`).join("")}</div>`}).join("")}
+      ${g.a.map(a=>{const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);const letter=String(a.n).slice(0,1).toUpperCase();return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
 
 function extractHost(link){try{
   if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
@@ -745,6 +822,28 @@ buildLatServers();renderLatencyList();updateWaves();
 setTimeout(runLatency,500);
 // refresh expiry every minute
 setInterval(data,60000);
+
+/* v2.1 handlers */
+(function(){
+  const el=id=>document.getElementById(id);
+  if(el("btnFmtSub")) el("btnFmtSub").onclick=()=>copy(subUrl);
+  if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
+  if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
+  let pingTimer=null;
+  document.querySelectorAll("#latInt button").forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll("#latInt button").forEach(x=>x.classList.remove("on"));
+      b.classList.add("on");
+      const s=Number(b.dataset.s)||0;
+      if(pingTimer){ clearInterval(pingTimer); pingTimer=null; }
+      if(s>0){
+        const tick=()=>{ try{ if(typeof runLatency==="function") runLatency(); else if(el("btnLatRefresh")) el("btnLatRefresh").click(); }catch(e){} };
+        pingTimer=setInterval(tick, s*1000);
+      }
+    };
+  });
+})();
+
 </script>
 </body>
 </html>
