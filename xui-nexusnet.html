@@ -756,29 +756,42 @@ function locationOfLink(link){
   if(loc) return {flag:loc.flag, code:loc.code, label:countryLabel(loc.code)};
   return {flag:"🌐", code:"", label:(name||"Server").slice(0,32)};
 }
+
+function nameOf(link){
+  try{
+    if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return j.ps||j.add||"vmess"}
+    const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";
+    return link.split("://")[0]||"config";
+  }catch(e){return"config"}
+}
+function locationOfLink(link){
+  const name=nameOf(link);
+  const loc=detectLocation(name);
+  if(loc) return {flag:loc.flag, code:loc.code, label:countryLabel(loc.code)};
+  return {flag:"🌐", code:"", label:(name||"Server").slice(0,32)};
+}
 function renderCfgList(){
   const box=document.getElementById("cfgList")||document.getElementById("list");
   if(!box) return;
   if(!links.length){ box.innerHTML=`<div class="lat-empty">${t("none")}</div>`; return; }
-  // merge ping from latServers by host
   const pingMap={};
   (latServers||[]).forEach(s=>{ if(s.host) pingMap[s.host]=s.ping; });
   const rows=links.map((l,i)=>{
     const h=extractHost(l);
     const loc=locationOfLink(l);
-    const ping=pingMap[h.host];
-    return {l,i,host:h.host,flag:loc.flag,label:loc.label,ping:ping};
+    return {l,i,host:h.host,flag:loc.flag,label:loc.label,ping:pingMap[h.host]};
   });
-  // sort by ping when available
   rows.sort((a,b)=>(a.ping??9e9)-(b.ping??9e9));
   box.innerHTML=rows.map(r=>{
-    const pc=pingClass(r.ping);
+    const pc=typeof pingClass==="function"?pingClass(r.ping):"wait";
     const val=r.ping==null?t("wait"):(r.ping+" "+t("ms"));
+    const bw=typeof barWidth==="function"?barWidth(r.ping):0;
+    const bc=typeof barColor==="function"?barColor(r.ping):"var(--mu)";
     return `<div class="cfg-item">
       <div class="cfg-flag">${r.flag}</div>
       <div class="cfg-info">
         <div class="cfg-name">${r.label}</div>
-        <div class="cfg-bar"><i style="width:${barWidth(r.ping)}%;background:${barColor(r.ping)}"></i></div>
+        <div class="cfg-bar"><i style="width:${bw}%;background:${bc}"></i></div>
       </div>
       <div class="cfg-ping ${pc}">${val}</div>
       <div class="cfg-acts">
@@ -791,26 +804,57 @@ function renderCfgList(){
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
 }
 function renderList(){ renderCfgList(); }
-function renderLatencyList(){ renderCfgList(); }catch(e){}return{host:"",port:443,name:nameOf(link)}}
+function renderLatencyList(){ renderCfgList(); }
+async function runLatency(){
+  if(latRunning)return;latRunning=true;
+  const btn=document.getElementById("btnLatRefresh"); if(btn) btn.classList.add("spin");
+  latServers.forEach(s=>s.ping=null); renderCfgList();
+  const queue=[...latServers];
+  await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{
+    while(queue.length){const s=queue.shift(); await measureOne(s); renderCfgList(); }
+  }));
+  const upd=document.getElementById("latUpdated");
+  if(upd) upd.textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+String(latMode||"auto").toUpperCase();
+  if(btn) btn.classList.remove("spin"); latRunning=false;
+}
+function sortConfigsByPing(){ renderCfgList(); }
+
+function extractHost(link){
+  try{
+    if(link.startsWith("vmess://")){
+      const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));
+      return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""};
+    }
+    if(link.startsWith("ss://")){
+      const m=link.match(/@([^:#/?]+)/);
+      if(m)return{host:m[1],port:443,name:nameOf(link)};
+    }
+    const m=link.match(/@([^:#/?]+):?(\d+)?/);
+    if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
+    const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);
+    if(m2)return{host:m2[1],port:443,name:nameOf(link)};
+  }catch(e){}
+  return{host:"",port:443,name:nameOf(link)};
+}
 function detectLocation(name){
-  for(const [flag,code] of Object.entries(FLAG_MAP))if(name.includes(flag))return{flag,code};
-  const m=name.match(CODE_RE);if(m){let code=m[1].toUpperCase();if(code==="UK")code="GB";return{flag:CODE_TO_FLAG[code]||"🏳️",code}}
+  if(!name) return null;
+  for(const [flag,code] of Object.entries(FLAG_MAP)) if(name.includes(flag)) return{flag,code};
+  const m=String(name).match(CODE_RE);
+  if(m){ let code=m[1].toUpperCase(); if(code==="UK") code="GB"; return{flag:CODE_TO_FLAG[code]||"🏳️",code}; }
   return null;
 }
-
-let latServers=[],latRunning=false;
 function buildLatServers(){
-  latServers=[];const seen=new Set();
+  latServers=[]; const seen=new Set();
   links.forEach(l=>{
     const {host,port,name}=extractHost(l);
-    if(!host)return;
+    if(!host) return;
     const loc=detectLocation(name)||{flag:"🌐",code:""};
     const key=host+":"+(port||443);
-    if(seen.has(key))return;seen.add(key);
+    if(seen.has(key)) return; seen.add(key);
     latServers.push({host,port:port||443,flag:loc.flag,code:loc.code||"",ping:null});
   });
+  renderCfgList();
 }
-
 
 function measureWS(s){
   return new Promise(resolve=>{
@@ -896,31 +940,9 @@ async function measureOne(s){
 function pingClass(ms){if(ms==null)return"wait";if(ms<120)return"good";if(ms<280)return"mid";return"bad"}
 function barWidth(ms){if(ms==null)return 0;return Math.max(8,Math.min(100,Math.round(100-(ms/600)*100)))}
 function barColor(ms){if(ms==null)return"var(--mu)";if(ms<120)return"var(--ok)";if(ms<280)return"var(--wn)";return"var(--er)"}
-function renderLatencyList(){
-  const box=document.getElementById("latList");
-  if(!latServers.length){box.innerHTML=`<div class="lat-empty">${t("noping")}</div>`;return}
-  const sorted=[...latServers].sort((a,b)=>(a.ping??9e9)-(b.ping??9e9));
-  box.innerHTML=sorted.map(s=>{
-    const pc=pingClass(s.ping);const val=s.ping==null?t("wait"):(s.ping+" "+t("ms"));
-    return `<div class="lat-item"><div class="lat-flag">${s.flag}</div>
-      <div class="lat-info"><div class="lat-name">${countryLabel(s.code)}</div>
-      <div class="lat-bar"><i style="width:${barWidth(s.ping)}%;background:${barColor(s.ping)}"></i></div></div>
-      <div class="lat-ping ${pc}">${val}</div></div>`}).join("");
-}
-async function
-  renderCfgList();
-{
-  if(latRunning)return;latRunning=true;
-  const btn=document.getElementById("btnLatRefresh");btn.classList.add("spin");
-  latServers.forEach(s=>s.ping=null);renderLatencyList();
-  const queue=[...latServers];
-  await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{
-    while(queue.length){const s=queue.shift();await measureOne(s);renderLatencyList()}
-  }));
-  document.getElementById("latUpdated").textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+latMode.toUpperCase();
-  btn.classList.remove("spin");latRunning=false;
-  try{ sortConfigsByPing(); }catch(e){}
-}
+function renderLatencyList(){ renderCfgList(); }
+
+
 function sortConfigsByPing(){ renderCfgList(); }
 
 function setLatMode(m){latMode=m;localStorage.setItem("nn_lat_mode",m);
