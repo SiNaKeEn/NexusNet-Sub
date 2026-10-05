@@ -2,7 +2,7 @@
 
 **Modern subscription page themes for 3x-ui (Sanaei) and PasarGuard.**
 
-![Version](https://img.shields.io/badge/version-2.1-cyan)
+![Version](https://img.shields.io/badge/version-2.2-cyan)
 ![License](https://img.shields.io/badge/license-MIT-blue)
 
 ---
