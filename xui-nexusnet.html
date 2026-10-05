@@ -239,6 +239,35 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 .app-badge.shadow{background:linear-gradient(135deg,#64748b,#334155)}
 
 
+
+.cfg-item{display:flex;align-items:center;gap:.5rem;padding:.65rem .7rem;background:rgba(0,0,0,.14);border-radius:12px;margin-bottom:.4rem}
+html[data-theme="light"] .cfg-item{background:rgba(0,0,0,.04)}
+.cfg-flag{font-size:1.35rem;line-height:1;width:1.5rem;text-align:center;flex-shrink:0}
+.cfg-info{flex:1;min-width:0}
+.cfg-name{font-size:.82rem;font-weight:700}
+.cfg-bar{height:3px;background:rgba(255,255,255,.06);border-radius:99px;margin-top:.3rem;overflow:hidden}
+.cfg-bar i{display:block;height:100%;border-radius:99px;transition:width .35s}
+.cfg-ping{font-size:.8rem;font-weight:800;min-width:48px;text-align:end;font-variant-numeric:tabular-nums}
+.cfg-ping.good{color:var(--ok)}.cfg-ping.mid{color:var(--wn)}.cfg-ping.bad{color:var(--er)}.cfg-ping.wait{color:var(--mu);font-size:.7rem}
+.cfg-acts{display:flex;gap:.3rem;flex-shrink:0}
+.app-logo{width:22px;height:22px;border-radius:6px;object-fit:contain;flex-shrink:0;background:rgba(255,255,255,.06)}
+
+
+.wave-line{position:absolute;left:-10%;right:-10%;height:120px;opacity:.18;pointer-events:none;
+  background:repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(34,211,238,.35) 40px,rgba(34,211,238,.35) 41px);
+  filter:blur(0.5px);animation:waveMove 12s linear infinite}
+.wave-line.w1{bottom:18%;animation-duration:14s;opacity:.14}
+.wave-line.w2{bottom:28%;animation-duration:18s;animation-direction:reverse;opacity:.1;transform:rotate(-3deg)}
+.wave-line.w3{top:22%;animation-duration:16s;opacity:.08;transform:rotate(2deg)}
+@keyframes waveMove{0%{transform:translateX(0)}100%{transform:translateX(-80px)}}
+.orb{animation-duration:12s!important}
+.orb.a{animation:float 14s ease-in-out infinite,pulseGlow 6s ease-in-out infinite}
+.orb.b{animation:float 16s ease-in-out infinite reverse,pulseGlow 7s ease-in-out infinite 1s}
+.orb.c{animation:float 11s ease-in-out infinite,pulseGlow 5s ease-in-out infinite 2s}
+@keyframes pulseGlow{0%,100%{opacity:.45;transform:scale(1)}50%{opacity:.75;transform:scale(1.08)}}
+.stars{animation:twinkle 4s ease-in-out infinite alternate}
+@keyframes twinkle{from{opacity:.35}to{opacity:.7}}
+
 /* v2.2 */
 .skel{display:none;padding:1rem 0}
 .skel.on{display:block}
@@ -272,6 +301,7 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
 <body>
 <div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="wave-line w1"></div><div class="wave-line w2"></div><div class="wave-line w3"></div>
   <div class="stars"></div>
 </div>
 <div class="app">
@@ -376,12 +406,12 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
   <div id="tab-cfg" class="tab">
     <div class="card">
       <div class="lat-head">
-        <div class="st"><i class="fa-solid fa-signal"></i> <span id="tLat">Live Latency</span></div>
-        <div style="display:flex;align-items:center;gap:.35rem">
+        <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">Configs</span></div>
+        <div style="display:flex;align-items:center;gap:.35rem;flex-wrap:wrap">
           <div class="lat-modes" id="latModes">
-            <button type="button" data-m="ws" class="on">WS</button>
+            <button type="button" data-m="ws">WS</button>
             <button type="button" data-m="http">HTTP</button>
-            <button type="button" data-m="auto">Auto</button>
+            <button type="button" data-m="auto" class="on">Auto</button>
           </div>
           <div class="lat-int" id="latInt">
             <button type="button" data-s="0" class="on">Off</button>
@@ -392,18 +422,14 @@ html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
           <button class="lat-refresh" type="button" id="btnLatRefresh"><i class="fa-solid fa-rotate"></i></button>
         </div>
       </div>
-      <div id="latList"><div class="lat-empty">—</div></div>
+      <div id="cfgList"><div class="lat-empty">—</div></div>
       <div class="lat-meta"><span id="latUpdated">—</span></div>
-      <div class="lat-note" id="latNote">Ping is measured from your device to each server (Iran users ≈ Iran path). Auto mode recommended.</div>
-    </div>
-    <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
-    <div id="list"></div>
-    <div class="row" style="margin-top:.6rem">
-      <button class="btn bg" type="button" id="btnAll" class="btn-all" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+      <div class="lat-note" id="latNote">Ping from your device · flag + location · Auto recommended</div>
+      <button class="btn btn-all" type="button" id="btnAll" style="margin-top:.65rem"><i class="fa-solid fa-copy"></i> <span id="tAll">Copy all</span></button>
     </div>
   </div>
 
-  <div id="tab-apps" class="tab">
+<div id="tab-apps" class="tab">
     <div class="st"><i class="fa-solid fa-download"></i> <span id="tApps">Clients</span></div>
     <div id="apps"></div>
   </div>
@@ -594,27 +620,25 @@ function periodWindowMs(p){
 function usageForPeriod(down,up,period){
   if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
   try{
-    const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
+    let arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
+    // ignore samples from the last 15s (just written this session)
     const now=Date.now(),win=periodWindowMs(period),from=now-win;
-    if(!arr.length)return{d:down,u:up}; /* no history yet → show total */
-    // base = last sample at or before window start; else first sample
+    arr=arr.filter(s=>now-s.t>15000);
+    if(!arr.length)return{d:down,u:up};
     let base=null;
-    for(const s of arr){if(s.t<=from)base=s;else break}
-    if(!base){
-      // history shorter than window: usage since first sample only
-      base=arr[0];
-      const span=Math.max(1,now-base.t);
-      // do not scale up to full window — show real delta only
-      return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
-    }
-    return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
+    for(const s of arr){ if(s.t<=from) base=s; else break; }
+    if(!base) base=arr[0];
+    let dd=Math.max(0,down-(base.d||0)), uu=Math.max(0,up-(base.u||0));
+    // if no meaningful change yet, fall back to total so UI is not empty zeros
+    if(dd===0 && uu===0) return{d:down,u:up};
+    return{d:dd,u:uu};
   }catch(e){return{d:down,u:up}}
 }
 function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
-  // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
-  recordUsageSample(rawD,rawU);
+  // IMPORTANT: compute period BEFORE writing new sample (else delta becomes 0)
   const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
+  recordUsageSample(rawD,rawU);
   const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
   const noLimit=!tot||tot<=0;
   document.getElementById("down").textContent=bytes(d);
@@ -725,25 +749,49 @@ function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subU
   document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
 function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
   const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
-function renderList(){const box=document.getElementById("list");
-  if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
-  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${nameOf(l)}</div>
-    <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
-    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
+
+function locationOfLink(link){
+  const name=nameOf(link);
+  const loc=detectLocation(name);
+  if(loc) return {flag:loc.flag, code:loc.code, label:countryLabel(loc.code)};
+  return {flag:"🌐", code:"", label:(name||"Server").slice(0,32)};
+}
+function renderCfgList(){
+  const box=document.getElementById("cfgList")||document.getElementById("list");
+  if(!box) return;
+  if(!links.length){ box.innerHTML=`<div class="lat-empty">${t("none")}</div>`; return; }
+  // merge ping from latServers by host
+  const pingMap={};
+  (latServers||[]).forEach(s=>{ if(s.host) pingMap[s.host]=s.ping; });
+  const rows=links.map((l,i)=>{
+    const h=extractHost(l);
+    const loc=locationOfLink(l);
+    const ping=pingMap[h.host];
+    return {l,i,host:h.host,flag:loc.flag,label:loc.label,ping:ping};
+  });
+  // sort by ping when available
+  rows.sort((a,b)=>(a.ping??9e9)-(b.ping??9e9));
+  box.innerHTML=rows.map(r=>{
+    const pc=pingClass(r.ping);
+    const val=r.ping==null?t("wait"):(r.ping+" "+t("ms"));
+    return `<div class="cfg-item">
+      <div class="cfg-flag">${r.flag}</div>
+      <div class="cfg-info">
+        <div class="cfg-name">${r.label}</div>
+        <div class="cfg-bar"><i style="width:${barWidth(r.ping)}%;background:${barColor(r.ping)}"></i></div>
+      </div>
+      <div class="cfg-ping ${pc}">${val}</div>
+      <div class="cfg-acts">
+        <button class="mb" type="button" data-c="${r.i}"><i class="fa-solid fa-copy"></i></button>
+        <button class="mb" type="button" data-q="${r.i}"><i class="fa-solid fa-qrcode"></i></button>
+      </div>
+    </div>`;
+  }).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
 }
-function renderApps(){const cur=plat();
-  document.getElementById("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur?" hot":"";
-    return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
-      ${g.a.map(a=>{const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);const letter=String(a.n).slice(0,1).toUpperCase();return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
-
-function extractHost(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
-  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
-  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
-}catch(e){}return{host:"",port:443,name:nameOf(link)}}
+function renderList(){ renderCfgList(); }
+function renderLatencyList(){ renderCfgList(); }catch(e){}return{host:"",port:443,name:nameOf(link)}}
 function detectLocation(name){
   for(const [flag,code] of Object.entries(FLAG_MAP))if(name.includes(flag))return{flag,code};
   const m=name.match(CODE_RE);if(m){let code=m[1].toUpperCase();if(code==="UK")code="GB";return{flag:CODE_TO_FLAG[code]||"🏳️",code}}
@@ -754,9 +802,12 @@ let latServers=[],latRunning=false;
 function buildLatServers(){
   latServers=[];const seen=new Set();
   links.forEach(l=>{
-    const {host,port,name}=extractHost(l);const loc=detectLocation(name);
-    if(!loc||!host)return;const key=host+":"+port+":"+loc.code;if(seen.has(key))return;seen.add(key);
-    latServers.push({host,port,flag:loc.flag,code:loc.code,ping:null});
+    const {host,port,name}=extractHost(l);
+    if(!host)return;
+    const loc=detectLocation(name)||{flag:"🌐",code:""};
+    const key=host+":"+(port||443);
+    if(seen.has(key))return;seen.add(key);
+    latServers.push({host,port:port||443,flag:loc.flag,code:loc.code||"",ping:null});
   });
 }
 
@@ -856,7 +907,9 @@ function renderLatencyList(){
       <div class="lat-bar"><i style="width:${barWidth(s.ping)}%;background:${barColor(s.ping)}"></i></div></div>
       <div class="lat-ping ${pc}">${val}</div></div>`}).join("");
 }
-async function runLatency(){
+async function
+  renderCfgList();
+{
   if(latRunning)return;latRunning=true;
   const btn=document.getElementById("btnLatRefresh");btn.classList.add("spin");
   latServers.forEach(s=>s.ping=null);renderLatencyList();
@@ -868,27 +921,7 @@ async function runLatency(){
   btn.classList.remove("spin");latRunning=false;
   try{ sortConfigsByPing(); }catch(e){}
 }
-function sortConfigsByPing(){
-  if(!latServers.length||!links.length)return;
-  const score={};
-  latServers.forEach(s=>{ if(s.ping!=null) score[s.host]=s.ping; });
-  // rebuild list order: match link hosts
-  const ranked=links.map((l,i)=>{
-    const info=extractHost(l); const p=score[info.host];
-    return {l,i,p:p==null?9e9:p,name:info.name||nameOf(l)};
-  }).sort((a,b)=>a.p-b.p);
-  const box=document.getElementById("list");
-  if(!box)return;
-  box.innerHTML=ranked.map((x,idx)=>{
-    const name=(x.name||("Config "+(x.i+1))).slice(0,42);
-    const pingTxt=x.p<9e9?(x.p+" ms"):"";
-    return `<div class="item"><span class="n">${name}${pingTxt?' · '+pingTxt:''}</span>
-      <button class="mb" type="button" data-c="${x.i}"><i class="fa-solid fa-copy"></i></button>
-      <button class="mb" type="button" data-q="${x.i}"><i class="fa-solid fa-qrcode"></i></button></div>`;
-  }).join("");
-  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
-  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
-}
+function sortConfigsByPing(){ renderCfgList(); }
 
 function setLatMode(m){latMode=m;localStorage.setItem("nn_lat_mode",m);
   document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));runLatency()}
