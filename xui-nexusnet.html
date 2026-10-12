@@ -224,16 +224,16 @@ a.btn.bp{color:#fff}
 </style>
 </head>
 <body>
-<textarea id="nn-xui-data" style="display:none" hidden aria-hidden="true">{
+<script type="application/json" id="nn-xui-data">
 {
   "sId": {{printf "%q" .sId}},
-  "enabled": {{printf "%q" .enabled}},
-  "isOnline": {{printf "%q" .isOnline}},
-  "downloadByte": {{printf "%q" .downloadByte}},
-  "uploadByte": {{printf "%q" .uploadByte}},
-  "totalByte": {{printf "%q" .totalByte}},
-  "expire": {{printf "%q" .expire}},
-  "lastOnline": {{printf "%q" .lastOnline}},
+  "enabled": {{if .enabled}}true{{else}}false{{end}},
+  "isOnline": {{if .isOnline}}true{{else}}false{{end}},
+  "downloadByte": {{printf "%d" .downloadByte}},
+  "uploadByte": {{printf "%d" .uploadByte}},
+  "totalByte": {{printf "%d" .totalByte}},
+  "expire": {{printf "%d" .expire}},
+  "lastOnline": {{printf "%d" .lastOnline}},
   "subUrl": {{printf "%q" .subUrl}},
   "subJsonUrl": {{printf "%q" .subJsonUrl}},
   "subClashUrl": {{printf "%q" .subClashUrl}},
@@ -243,7 +243,7 @@ a.btn.bp{color:#fff}
   "links": [{{range $i,$v := .links}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}],
   "emails": [{{range $i,$v := .emails}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}]
 }
-</textarea>
+</script>
 
 <div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
@@ -453,18 +453,41 @@ const CONFIG={
 const TV=(function(){
   try{
     const el=document.getElementById("nn-xui-data");
-    const raw=(el && (el.value||el.textContent))||"{}";
+    let raw=(el && (el.textContent||el.innerText||el.value))||"{}";
+    raw=String(raw).replace(/^\uFEFF/,"").trim();
+    // decode HTML entities if template escaped quotes
+    if(raw.indexOf("&")>=0){
+      const d=document.createElement("textarea");
+      d.innerHTML=raw;
+      raw=d.value;
+    }
     const o=JSON.parse(raw);
-    o.links=Array.isArray(o.links)?o.links.join("\n"):(o.links||"");
-    o.emails=Array.isArray(o.emails)?o.emails.join("\n"):(o.emails||"");
-    if(CONFIG && CONFIG.profileTitle && String(CONFIG.profileTitle).trim()){
+    const asStr=v=>v==null?"":String(v);
+    o.sId=asStr(o.sId);
+    o.enabled=(o.enabled===true||o.enabled==="true"||o.enabled===1||o.enabled==="1")?"true":"false";
+    o.isOnline=(o.isOnline===true||o.isOnline==="true"||o.isOnline===1||o.isOnline==="1")?"true":"false";
+    o.downloadByte=asStr(o.downloadByte||0);
+    o.uploadByte=asStr(o.uploadByte||0);
+    o.totalByte=asStr(o.totalByte||0);
+    o.expire=asStr(o.expire||0);
+    o.lastOnline=asStr(o.lastOnline||0);
+    o.subUrl=asStr(o.subUrl)||(location.origin+location.pathname);
+    o.subJsonUrl=asStr(o.subJsonUrl);
+    o.subClashUrl=asStr(o.subClashUrl);
+    o.subTitle=asStr(o.subTitle)||"Subscription";
+    o.subSupportUrl=asStr(o.subSupportUrl);
+    o.announce=asStr(o.announce);
+    o.links=Array.isArray(o.links)?o.links.join("\n"):asStr(o.links);
+    o.emails=Array.isArray(o.emails)?o.emails.join("\n"):asStr(o.emails);
+    if(typeof CONFIG!=="undefined" && CONFIG.profileTitle && String(CONFIG.profileTitle).trim()){
       o.subTitle=String(CONFIG.profileTitle).trim();
     }
     return o;
   }catch(e){
-    return {sId:"",enabled:"true",isOnline:"",downloadByte:"0",uploadByte:"0",totalByte:"0",
-      expire:"0",lastOnline:"0",subUrl:"",subJsonUrl:"",subClashUrl:"",subTitle:"Subscription",
-      subSupportUrl:"",announce:"",links:"",emails:""};
+    try{console.warn("NexusNet TV parse", e);}catch(_e){}
+    return {sId:"",enabled:"true",isOnline:"false",downloadByte:"0",uploadByte:"0",totalByte:"0",
+      expire:"0",lastOnline:"0",subUrl:(location.origin+location.pathname),subJsonUrl:"",subClashUrl:"",
+      subTitle:"Subscription",subSupportUrl:"",announce:"",links:"",emails:""};
   }
 })();
 const APPS=[
