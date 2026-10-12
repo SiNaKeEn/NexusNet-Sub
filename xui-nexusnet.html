@@ -219,7 +219,7 @@ html{-webkit-tap-highlight-color:transparent}
 a.btn,a.btn:hover{text-decoration:none;color:inherit}
 a.btn.bp{color:#fff}
 
-.usage-hd{display:flex;justify-content:flex-start;margin-bottom:.75rem}
+.usage-hd{display:none!important;display:flex;justify-content:flex-start;margin-bottom:.75rem}
 .usage-hd .badge{font-size:.72rem}
 
 .ring-wrap{filter:drop-shadow(0 0 18px rgba(34,211,238,.28))}
@@ -231,6 +231,21 @@ html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e
 .ring-wrap::after{content:"";position:absolute;inset:18px;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 55%);
   pointer-events:none}
+
+
+.total-strip{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  padding:.35rem .65rem;margin-bottom:.55rem;border-radius:10px;
+  background:rgba(0,0,0,.12);border:1px solid var(--bd);font-size:.78rem}
+html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
+.total-strip span{color:var(--mu);font-weight:600}
+.total-strip b{font-weight:800;color:var(--tx);font-size:.85rem}
+.usage-hd{display:none!important;height:0;margin:0;padding:0;overflow:hidden}
+.ring-center .lab{display:none!important}
+
+#liqFillT{fill:url('#liqT')!important}
+
+}
+.ring-wrap svg{overflow:visible}
 
 </style>
 </head>
@@ -289,10 +304,13 @@ html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e
     </div>
 
     <div class="card">
-      <div class="usage-hd">
-        <div class="badge ok" id="badge"><span id="badgeTxt">فعال</span></div>
-      </div>
       <div class="usage">
+
+      <div class="total-strip">
+        <span id="sTotal">حجم کل</span>
+        <b id="total">—</b>
+      </div>
+
         <div class="ring-wrap">
           <svg viewBox="0 0 120 120">
             <defs>
@@ -314,15 +332,15 @@ html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e
               </linearGradient>
             </defs>
             <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
-            <circle id="rTraffic" cx="60" cy="60" r="50" fill="none" stroke="url(#ringGrad)" stroke-width="7"
+            <circle id="rTraffic" cx="60" cy="60" r="50" fill="none" stroke="url('#ringGrad')" stroke-width="7"
               stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
-            <g clip-path="url(#clipT)">
-              <rect id="liqShine" fill="url(#liqGlow)" x="10" y="10" width="100" height="100" clip-path="url(#clipT)"></rect>
-              <rect id="liqFillT" x="0" y="120" width="120" height="120" fill="url(#liqT)" opacity=".75"/>
-              <path id="waveT" fill="url(#liqT)" opacity=".9"/>
+            <g clip-path="url('#clipT')">
+              <rect id="liqShine" fill="url('#liqGlow')" x="10" y="10" width="100" height="100" clip-path="url('#clipT')"></rect>
+              <rect id="liqFillT" x="0" y="120" width="120" height="120" fill="url('#liqT')" opacity=".75"/>
+              <path id="waveT" fill="url('#liqT')" opacity=".9"/>
             </g>
           </svg>
-          <div class="ring-center"><div class="pct" id="pctT">0%</div><div class="lab" id="lTraffic">باقی‌مانده</div></div>
+          <div class="ring-center"><div class="pct" id="pctT">0%</div></div>
         </div>
         <div class="vol-grid" style="flex:1">
           <div class="vol"><div class="k"><i class="fa-solid fa-download"></i><span id="sDown">دانلود</span></div><div class="v" id="down">—</div></div>
@@ -596,7 +614,7 @@ function uiLang(){
   document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   ["n1","n2","n3","n4"].forEach((id,i)=>set(id,t(["n1","n2","n3","n4"][i])));
-  set("sUsed",t("used"));set("sLimit",t("limit"));set("sLeft",t("left"));
+  set("sUsed",t("used"));set("sTotal",t("total")||(lang==="fa"?"حجم کل":"Total"));set("sLimit",t("limit"));set("sLeft",t("left"));
   set("sDown",t("down"));set("sUp",t("up"));
   set("pTotal",t("total"));
   set("tCopy",t("copy"));set("tQi",t("qi"));set("tCfg",t("cfg"));
@@ -621,22 +639,36 @@ function renderTraffic(){
   const used=rawD+rawU;
   const noLimit=!tot||tot<=0;
   const left=noLimit?0:Math.max(0,tot-used);
-  // remaining percent for liquid (full = lots remaining)
   const remPct=noLimit?100:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
-  const usedPct=noLimit?0:Math.min(100,Math.max(0,Math.round((used/tot)*100)));
   const el=id=>{const e=document.getElementById(id);return e;};
   if(el("down")) el("down").textContent=bytes(rawD);
   if(el("up")) el("up").textContent=bytes(rawU);
   if(el("used")) el("used").textContent=bytes(used);
   if(el("left")) el("left").textContent=noLimit?"∞":bytes(left);
+  if(el("total")) el("total").textContent=noLimit?"∞":bytes(tot);
   if(el("pctT")) el("pctT").textContent=noLimit?"∞":(remPct+"%");
-  if(el("rTraffic")) el("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*remPct/100);
-  if(el("bar")) el("bar").style.width=usedPct+"%";
   window.__pctT=remPct;
-  window.__noLimit=noLimit;
-  // ring color by remaining
-  const stroke=noLimit?"#22d3ee":(remPct<15?"#f87171":(remPct<40?"#fbbf24":"#22d3ee"));
-  if(el("rTraffic")) el("rTraffic").setAttribute("stroke",stroke);
+  // ring stroke
+  const circ=typeof CIRC==="number"?CIRC:2*Math.PI*48;
+  if(el("rTraffic")) el("rTraffic").style.strokeDashoffset=String(circ-circ*remPct/100);
+  if(el("bar")) el("bar").style.width=(noLimit?0:Math.min(100,Math.round(used/tot*100)))+"%";
+  // liquid fill — direct attrs (works on Windows Chromium/Edge)
+  const y=104-(remPct/100)*88;
+  const f=el("liqFillT");
+  if(f){
+    f.setAttribute("y", String(y));
+    f.setAttribute("height", String(Math.max(0,130-y)));
+    f.setAttribute("fill", "url('#liqT')");
+    f.style.fill="url('#liqT')";
+  }
+  const w=el("waveT");
+  if(w){
+    if(remPct<=0){ w.setAttribute("opacity","0"); }
+    else {
+      w.setAttribute("opacity","0.5");
+      w.setAttribute("d","M 0 "+(y+2)+" Q 30 "+(y-4)+" 60 "+(y+2)+" T 120 "+(y+2)+" V 120 H 0 Z");
+    }
+  }
 }
 
 function data(){
@@ -727,7 +759,7 @@ function data(){
   _setp("pv2",n(TV.sId,"—"));
   _setp("pv3",stTxt);
   _setp("pv6",formatLastOnline(TV.lastOnline));
-  if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
+  if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
@@ -766,7 +798,10 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
     btn.classList.add("on");
-    document.getElementById("tab-"+btn.dataset.t).classList.add("on");
+    const tab=document.getElementById("tab-"+btn.dataset.t);
+    if(tab) tab.classList.add("on");
+    const ann=document.getElementById("ann");
+    if(ann){ ann.style.display=(btn.dataset.t==="home" && ann.dataset.has==="1")?"flex":"none"; }
     requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
 });
