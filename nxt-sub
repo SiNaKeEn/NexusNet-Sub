@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  NexusNet Sub Manager  v2.11
+#  NexusNet Sub Manager  v3.0.0
 #  Professional subscription theme manager for 3x-ui & PasarGuard
 #  Repo: https://github.com/SiNaKeEn/NexusNet-Sub  (branch: Template)
 # =============================================================================
@@ -8,7 +8,7 @@ set -euo pipefail
 
 REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template"
 REPO_URL="https://github.com/SiNaKeEn/NexusNet-Sub"
-VERSION="2.10"
+VERSION="3.0.0"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -404,6 +404,39 @@ show_about() {
   pause
 }
 
+
+# ── update manager (CLI only) ────────────────────────────────────────────────
+do_update_manager() {
+  echo -e "${CYAN}→ Updating nxt-sub manager (CLI only, themes unchanged)...${NC}"
+  local tmp
+  tmp=$(mktemp)
+  if ! dl "${REPO_RAW}/nxt-sub" "$tmp"; then
+    echo -e "${RED}Download failed${NC}"
+    rm -f "$tmp"
+    return 1
+  fi
+  # basic sanity: must be bash script mentioning NexusNet
+  if ! head -5 "$tmp" | grep -q 'NexusNet'; then
+    echo -e "${RED}Downloaded file looks invalid${NC}"
+    rm -f "$tmp"
+    return 1
+  fi
+  chmod 755 "$tmp"
+  if [[ -f /usr/local/bin/nxt-sub ]]; then
+    backup_file /usr/local/bin/nxt-sub
+  fi
+  mv -f "$tmp" /usr/local/bin/nxt-sub
+  chmod 755 /usr/local/bin/nxt-sub
+  cp -f /usr/local/bin/nxt-sub /usr/bin/nxt-sub 2>/dev/null || true
+  chmod 755 /usr/bin/nxt-sub 2>/dev/null || true
+  local ver
+  ver=$(grep -m1 '^VERSION=' /usr/local/bin/nxt-sub | cut -d= -f2 | tr -d '"' || echo "?")
+  echo -e "${GREEN}✓ Manager updated → v${ver}${NC}"
+  echo -e "${DIM}Re-run: sudo nxt-sub${NC}"
+  # re-exec new binary so menu shows new version
+  exec /usr/local/bin/nxt-sub
+}
+
 # ── main menu ────────────────────────────────────────────────────────────────
 main_menu() {
   while true; do
@@ -413,23 +446,25 @@ main_menu() {
     echo -e "  ${GREEN}1)${NC} Install / Reinstall  →  3x-ui"
     echo -e "  ${GREEN}2)${NC} Install / Reinstall  →  PasarGuard"
     echo -e "  ${CYAN}3)${NC} Update installed themes"
-    echo -e "  ${BLUE}4)${NC} Settings (title / bot / support / renew)"
-    echo -e "  ${YELLOW}5)${NC} Restore from backup"
-    echo -e "  ${MAGENTA}6)${NC} Status"
-    echo -e "  ${RED}7)${NC} Uninstall"
-    echo -e "  ${DIM}8)${NC} About"
+    echo -e "  ${CYAN}4)${NC} Update manager (nxt-sub only)"
+    echo -e "  ${BLUE}5)${NC} Settings (title / bot / support / renew)"
+    echo -e "  ${YELLOW}6)${NC} Restore from backup"
+    echo -e "  ${MAGENTA}7)${NC} Status"
+    echo -e "  ${RED}8)${NC} Uninstall"
+    echo -e "  ${DIM}9)${NC} About"
     echo -e "  ${DIM}0)${NC} Exit"
     echo ""
-    read -rp "  Choice [0-8]: " choice
+    read -rp "  Choice [0-9]: " choice
     case "$choice" in
       1) do_install_xui; pause ;;
       2) do_install_pg;  pause ;;
       3) do_update;      pause ;;
-      4) settings_menu ;;
-      5) restore_menu ;;
-      6) show_status ;;
-      7) do_uninstall ;;
-      8) show_about ;;
+      4) do_update_manager ;;
+      5) settings_menu ;;
+      6) restore_menu ;;
+      7) show_status;    pause ;;
+      8) do_uninstall;   pause ;;
+      9) show_about;     pause ;;
       0) echo -e "${CYAN}Bye.${NC}"; exit 0 ;;
       *) echo -e "${RED}Invalid choice${NC}"; sleep 0.7 ;;
     esac
