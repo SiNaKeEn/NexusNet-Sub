@@ -224,27 +224,6 @@ a.btn.bp{color:#fff}
 </style>
 </head>
 <body>
-<script type="application/json" id="nn-xui-data">
-{
-  "sId": {{printf "%q" .sId}},
-  "enabled": {{if .enabled}}true{{else}}false{{end}},
-  "isOnline": {{if .isOnline}}true{{else}}false{{end}},
-  "downloadByte": {{printf "%d" .downloadByte}},
-  "uploadByte": {{printf "%d" .uploadByte}},
-  "totalByte": {{printf "%d" .totalByte}},
-  "expire": {{printf "%d" .expire}},
-  "lastOnline": {{printf "%d" .lastOnline}},
-  "subUrl": {{printf "%q" .subUrl}},
-  "subJsonUrl": {{printf "%q" .subJsonUrl}},
-  "subClashUrl": {{printf "%q" .subClashUrl}},
-  "subTitle": {{printf "%q" .subTitle}},
-  "subSupportUrl": {{printf "%q" .subSupportUrl}},
-  "announce": {{printf "%q" .announce}},
-  "links": [{{range $i,$v := .links}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}],
-  "emails": [{{range $i,$v := .emails}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}]
-}
-</script>
-
 <div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
   <div class="stars"></div>
@@ -449,46 +428,35 @@ const CONFIG={
   renewUrl:"",
 };
 
-/* XUI data loaded from #nn-xui-data (outside JS template context) */
+/* === XUI panel data === */
 const TV=(function(){
-  try{
-    const el=document.getElementById("nn-xui-data");
-    let raw=(el && (el.textContent||el.innerText||el.value))||"{}";
-    raw=String(raw).replace(/^\uFEFF/,"").trim();
-    // decode HTML entities if template escaped quotes
-    if(raw.indexOf("&")>=0){
-      const d=document.createElement("textarea");
-      d.innerHTML=raw;
-      raw=d.value;
-    }
-    const o=JSON.parse(raw);
-    const asStr=v=>v==null?"":String(v);
-    o.sId=asStr(o.sId);
-    o.enabled=(o.enabled===true||o.enabled==="true"||o.enabled===1||o.enabled==="1")?"true":"false";
-    o.isOnline=(o.isOnline===true||o.isOnline==="true"||o.isOnline===1||o.isOnline==="1")?"true":"false";
-    o.downloadByte=asStr(o.downloadByte||0);
-    o.uploadByte=asStr(o.uploadByte||0);
-    o.totalByte=asStr(o.totalByte||0);
-    o.expire=asStr(o.expire||0);
-    o.lastOnline=asStr(o.lastOnline||0);
-    o.subUrl=asStr(o.subUrl)||(location.origin+location.pathname);
-    o.subJsonUrl=asStr(o.subJsonUrl);
-    o.subClashUrl=asStr(o.subClashUrl);
-    o.subTitle=asStr(o.subTitle)||"Subscription";
-    o.subSupportUrl=asStr(o.subSupportUrl);
-    o.announce=asStr(o.announce);
-    o.links=Array.isArray(o.links)?o.links.join("\n"):asStr(o.links);
-    o.emails=Array.isArray(o.emails)?o.emails.join("\n"):asStr(o.emails);
-    if(typeof CONFIG!=="undefined" && CONFIG.profileTitle && String(CONFIG.profileTitle).trim()){
-      o.subTitle=String(CONFIG.profileTitle).trim();
-    }
-    return o;
-  }catch(e){
-    try{console.warn("NexusNet TV parse", e);}catch(_e){}
-    return {sId:"",enabled:"true",isOnline:"false",downloadByte:"0",uploadByte:"0",totalByte:"0",
-      expire:"0",lastOnline:"0",subUrl:(location.origin+location.pathname),subJsonUrl:"",subClashUrl:"",
-      subTitle:"Subscription",subSupportUrl:"",announce:"",links:"",emails:""};
+  const linksArr=[{{range $i,$v := .links}}{{if $i}},{{end}}"{{$v}}"{{end}}];
+  const emailsArr=[{{range $i,$v := .emails}}{{if $i}},{{end}}"{{$v}}"{{end}}];
+  const linksFallback=[{{range $i,$v := .result}}{{if $i}},{{end}}"{{$v}}"{{end}}];
+  const L=(linksArr&&linksArr.length)?linksArr:linksFallback;
+  const o={
+    sId:"{{.sId}}",
+    enabled:({{if .enabled}}true{{else}}false{{end}})?"true":"false",
+    isOnline:({{if .isOnline}}true{{else}}false{{end}})?"true":"false",
+    downloadByte:String({{.downloadByte}}),
+    uploadByte:String({{.uploadByte}}),
+    totalByte:String({{.totalByte}}),
+    expire:String({{.expire}}),
+    lastOnline:String({{.lastOnline}}),
+    subUrl:"{{.subUrl}}",
+    subJsonUrl:"{{.subJsonUrl}}",
+    subClashUrl:"{{.subClashUrl}}",
+    subTitle:"{{.subTitle}}"||"Subscription",
+    subSupportUrl:"{{.subSupportUrl}}",
+    announce:"{{.announce}}",
+    links:L.join("\n"),
+    emails:emailsArr.join("\n")
+  };
+  if(typeof CONFIG!=="undefined"&&CONFIG.profileTitle&&String(CONFIG.profileTitle).trim()){
+    o.subTitle=String(CONFIG.profileTitle).trim();
   }
+  if(!o.subUrl){try{o.subUrl=location.origin+location.pathname;}catch(e){}}
+  return o;
 })();
 const APPS=[
   {p:"Android",i:"fa-brands fa-android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
