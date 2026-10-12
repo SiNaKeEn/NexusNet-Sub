@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-#  NexusNet Sub Manager  v2.8
+#  NexusNet Sub Manager  v2.11
 #  Professional subscription theme manager for 3x-ui & PasarGuard
 #  Repo: https://github.com/SiNaKeEn/NexusNet-Sub  (branch: Template)
 # =============================================================================
@@ -8,7 +8,7 @@ set -euo pipefail
 
 REPO_RAW="https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template"
 REPO_URL="https://github.com/SiNaKeEn/NexusNet-Sub"
-VERSION="2.8"
+VERSION="2.10"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -59,33 +59,33 @@ backup_file() {
 }
 
 load_cfg() {
-  PROFILE_TITLE=""
-  SUPPORT_URL=""
-  RENEW_URL=""
-  TELEGRAM_BOT=""
-  if [[ -f "$CFG_FILE" ]]; then
-    # shellcheck source=/dev/null
-    source "$CFG_FILE" 2>/dev/null || true
-  fi
-  if [[ -z "${RENEW_URL:-}" && -n "${TELEGRAM_BOT:-}" ]]; then
-    local bot="${TELEGRAM_BOT#@}"
-    RENEW_URL="https://t.me/${bot}"
-  fi
-  if [[ -z "${SUPPORT_URL:-}" && -n "${TELEGRAM_BOT:-}" ]]; then
-    local bot2="${TELEGRAM_BOT#@}"
-    SUPPORT_URL="https://t.me/${bot2}"
-  fi
+  PROFILE_TITLE=""; SUPPORT_URL=""; RENEW_URL=""; TELEGRAM_BOT=""
+  [[ -f "$CFG_FILE" ]] || return 0
+  local key value
+  while IFS='=' read -r key value || [[ -n "${key:-}" ]]; do
+    case "$key" in
+      PROFILE_TITLE_B64) PROFILE_TITLE=$(printf '%s' "$value" | base64 -d 2>/dev/null || true) ;;
+      SUPPORT_URL_B64) SUPPORT_URL=$(printf '%s' "$value" | base64 -d 2>/dev/null || true) ;;
+      RENEW_URL_B64) RENEW_URL=$(printf '%s' "$value" | base64 -d 2>/dev/null || true) ;;
+      TELEGRAM_BOT_B64) TELEGRAM_BOT=$(printf '%s' "$value" | base64 -d 2>/dev/null || true) ;;
+      # Read legacy plain assignments as data only; never execute a config file.
+      PROFILE_TITLE|SUPPORT_URL|RENEW_URL|TELEGRAM_BOT)
+        value="${value%$'\r'}"; value="${value#\"}"; value="${value%\"}"; value="${value#\'}"; value="${value%\'}"
+        case "$key" in PROFILE_TITLE) PROFILE_TITLE="$value";; SUPPORT_URL) SUPPORT_URL="$value";; RENEW_URL) RENEW_URL="$value";; TELEGRAM_BOT) TELEGRAM_BOT="$value";; esac ;;
+    esac
+  done < "$CFG_FILE"
+  if [[ -z "${RENEW_URL:-}" && -n "${TELEGRAM_BOT:-}" ]]; then local bot="${TELEGRAM_BOT#@}"; RENEW_URL="https://t.me/${bot}"; fi
+  if [[ -z "${SUPPORT_URL:-}" && -n "${TELEGRAM_BOT:-}" ]]; then local bot2="${TELEGRAM_BOT#@}"; SUPPORT_URL="https://t.me/${bot2}"; fi
 }
 
 save_cfg() {
   mkdir -p "$CFG_DIR"
   {
-    echo "# NexusNet Sub config — managed by nxt-sub"
-    echo "# Do not edit manually if possible"
-    printf "PROFILE_TITLE=%q\n" "${PROFILE_TITLE:-}"
-    printf "SUPPORT_URL=%q\n"   "${SUPPORT_URL:-}"
-    printf "RENEW_URL=%q\n"     "${RENEW_URL:-}"
-    printf "TELEGRAM_BOT=%q\n"  "${TELEGRAM_BOT:-}"
+    echo "# NexusNet Sub config — managed by nxt-sub; values are base64 data, never shell code"
+    printf 'PROFILE_TITLE_B64=%s\n' "$(printf '%s' "${PROFILE_TITLE:-}" | base64 | tr -d '\n')"
+    printf 'SUPPORT_URL_B64=%s\n' "$(printf '%s' "${SUPPORT_URL:-}" | base64 | tr -d '\n')"
+    printf 'RENEW_URL_B64=%s\n' "$(printf '%s' "${RENEW_URL:-}" | base64 | tr -d '\n')"
+    printf 'TELEGRAM_BOT_B64=%s\n' "$(printf '%s' "${TELEGRAM_BOT:-}" | base64 | tr -d '\n')"
   } > "$CFG_FILE"
   chmod 600 "$CFG_FILE"
 }
@@ -95,26 +95,20 @@ inject_theme() {
   load_cfg
   [[ -f "$file" ]] || return 1
 
-  js_escape() {
-    local s="$1"
-    s="${s//\\/\\\\}"
-    s="${s//\"/\\\"}"
-    s="${s//$'\n'/\\n}"
-    s="${s//$'\r'/}"
-    printf '%s' "$s"
-  }
+  # Base64 is safe to inject into sed and decoded by the browser as UTF-8.
+  b64() { printf '%s' "$1" | base64 | tr -d '\n'; }
 
   local pt su ru
-  pt=$(js_escape "${PROFILE_TITLE:-}")
-  su=$(js_escape "${SUPPORT_URL:-}")
-  ru=$(js_escape "${RENEW_URL:-}")
+  pt=$(b64 "${PROFILE_TITLE:-}")
+  su=$(b64 "${SUPPORT_URL:-}")
+  ru=$(b64 "${RENEW_URL:-}")
 
   local tmp
   tmp=$(mktemp)
   sed -E \
-    -e "s|(profileTitle:[[:space:]]*\")[^\"]*(\")|\1${pt}\2|" \
-    -e "s|(supportUrl:[[:space:]]*\")[^\"]*(\")|\1${su}\2|" \
-    -e "s|(renewUrl:[[:space:]]*\")[^\"]*(\")|\1${ru}\2|" \
+    -e "s|profileTitle:decodeConfig\(\"[A-Za-z0-9+/=]*\"\)|profileTitle:decodeConfig(\"${pt}\")|" \
+    -e "s|supportUrl:decodeConfig\(\"[A-Za-z0-9+/=]*\"\)|supportUrl:decodeConfig(\"${su}\")|" \
+    -e "s|renewUrl:decodeConfig\(\"[A-Za-z0-9+/=]*\"\)|renewUrl:decodeConfig(\"${ru}\")|" \
     "$file" > "$tmp"
   mv -f "$tmp" "$file"
 }
@@ -152,7 +146,14 @@ do_install_xui() {
 
 do_install_pg() {
   echo -e "${CYAN}→ Installing theme for PasarGuard...${NC}"
-  mkdir -p /var/lib/pasarguard/templates/subscription
+  if [[ -f "$PG_ENV" ]]; then
+    local configured_root configured_template
+    configured_root=$(grep '^CUSTOM_TEMPLATES_DIRECTORY=' "$PG_ENV" | tail -n1 | cut -d= -f2- | sed 's/^"//;s/"$//;s/^\x27//;s/\x27$//')
+    configured_template=$(grep '^SUBSCRIPTION_PAGE_TEMPLATE=' "$PG_ENV" | tail -n1 | cut -d= -f2- | sed 's/^"//;s/"$//;s/^\x27//;s/\x27$//')
+    [[ -z "$configured_template" ]] && configured_template="subscription/index.html"
+    [[ -n "$configured_root" ]] && PG_THEME="${configured_root%/}/${configured_template#/}"
+  fi
+  mkdir -p "$(dirname "$PG_THEME")"
   backup_file "$PG_THEME"
   echo -e "  ${YELLOW}Downloading pasarguard-nexusnet.html...${NC}"
   if ! dl "${REPO_RAW}/pasarguard-nexusnet.html" "$PG_THEME"; then
@@ -168,13 +169,23 @@ do_install_pg() {
     echo 'CUSTOM_TEMPLATES_DIRECTORY="/var/lib/pasarguard/templates/"' >> "$PG_ENV"
   fi
   if ! grep -q '^SUBSCRIPTION_PAGE_TEMPLATE=' "$PG_ENV" 2>/dev/null; then
-    echo 'SUBSCRIPTION_PAGE_TEMPLATE="subscription/index.html"' >> "$PG_ENV"
-  else
-    sed -i 's|^SUBSCRIPTION_PAGE_TEMPLATE=.*|SUBSCRIPTION_PAGE_TEMPLATE="subscription/index.html"|' "$PG_ENV"
+    printf '%s\n' 'SUBSCRIPTION_PAGE_TEMPLATE="subscription/index.html"' >> "$PG_ENV"
   fi
 
+  local restarted=0
   if command -v pasarguard >/dev/null 2>&1; then
-    pasarguard restart 2>/dev/null || true
+    if pasarguard restart; then restarted=1; fi
+  fi
+  if [[ $restarted -eq 0 ]] && command -v docker >/dev/null 2>&1 && [[ -d /opt/pasarguard ]]; then
+    if (cd /opt/pasarguard && docker compose ps --services 2>/dev/null | grep -qx 'pasarguard'); then
+      if (cd /opt/pasarguard && docker compose restart pasarguard); then restarted=1; fi
+    fi
+  fi
+  if [[ $restarted -eq 1 ]]; then
+    echo -e "${GREEN}✓ PasarGuard restart completed${NC}"
+  else
+    echo -e "${YELLOW}! Theme file installed, but automatic restart was not confirmed.${NC}"
+    echo -e "  ${YELLOW}Verify the container mount and restart PasarGuard manually.${NC}"
   fi
   echo -e "${GREEN}✓ Theme installed → ${PG_THEME}${NC}"
 }
