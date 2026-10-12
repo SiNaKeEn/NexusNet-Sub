@@ -430,12 +430,20 @@ const CONFIG={
 
 /* PasarGuard injects: user, links, announce (optional) */
 const TV={
-  sId:"{{ .sId }}",enabled:"{{ .enabled }}",isOnline:"{{ .isOnline }}",
-  downloadByte:"{{ .downloadByte }}",uploadByte:"{{ .uploadByte }}",totalByte:"{{ .totalByte }}",
-  expire:"{{ .expire }}",lastOnline:"{{ .lastOnline }}",
-  subUrl:"{{ .subUrl }}",subJsonUrl:"{{ .subJsonUrl }}",subClashUrl:"{{ .subClashUrl }}",
-  subTitle:"{{ .subTitle }}",subSupportUrl:"{{ .subSupportUrl }}",
-  announce:`{{ .announce }}`,
-  links:`{{ range .links }}{{ . }}\n{{ end }}`,
-  emails:`{{ range .emails }}{{ . }}\n{{ end }}`,
+  sId:{{printf "%q" .sId}},
+  enabled:{{printf "%q" .enabled}},
+  isOnline:{{printf "%q" .isOnline}},
+  downloadByte:{{printf "%q" .downloadByte}},
+  uploadByte:{{printf "%q" .uploadByte}},
+  totalByte:{{printf "%q" .totalByte}},
+  expire:{{printf "%q" .expire}},
+  lastOnline:{{printf "%q" .lastOnline}},
+  subUrl:{{printf "%q" .subUrl}},
+  subJsonUrl:{{printf "%q" .subJsonUrl}},
+  subClashUrl:{{printf "%q" .subClashUrl}},
+  subTitle:{{printf "%q" .subTitle}},
+  subSupportUrl:{{printf "%q" .subSupportUrl}},
+  announce:{{printf "%q" .announce}},
+  links:[{{range $i,$v := .links}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}].join("\n"),
+  emails:[{{range $i,$v := .emails}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}].join("\n"),
 };
