@@ -224,6 +224,28 @@ a.btn.bp{color:#fff}
 </style>
 </head>
 <body>
+
+<div id="nn-data" style="display:none!important" hidden
+  data-sid="{{.sId}}"
+  data-enabled="{{.enabled}}"
+  data-online="{{.isOnline}}"
+  data-down="{{.downloadByte}}"
+  data-up="{{.uploadByte}}"
+  data-total="{{.totalByte}}"
+  data-expire="{{.expire}}"
+  data-last="{{.lastOnline}}"
+  data-sub="{{.subUrl}}"
+  data-json="{{.subJsonUrl}}"
+  data-clash="{{.subClashUrl}}"
+  data-title="{{.subTitle}}"
+  data-support="{{.subSupportUrl}}"
+  data-announce="{{.announce}}"></div>
+<textarea id="nn-links" style="display:none" hidden>{{range .links}}{{.}}
+{{end}}{{range .result}}{{.}}
+{{end}}</textarea>
+<textarea id="nn-emails" style="display:none" hidden>{{range .emails}}{{.}}
+{{end}}</textarea>
+
 <div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
   <div class="stars"></div>
@@ -428,35 +450,83 @@ const CONFIG={
   renewUrl:"",
 };
 
-/* === XUI panel data === */
+/* XUI: HTML data attrs + optional ?format=info fallback */
 const TV=(function(){
-  const linksArr=[{{range $i,$v := .links}}{{if $i}},{{end}}"{{$v}}"{{end}}];
-  const emailsArr=[{{range $i,$v := .emails}}{{if $i}},{{end}}"{{$v}}"{{end}}];
-  const linksFallback=[{{range $i,$v := .result}}{{if $i}},{{end}}"{{$v}}"{{end}}];
-  const L=(linksArr&&linksArr.length)?linksArr:linksFallback;
+  const d=document.getElementById("nn-data");
+  const g=k=>{if(!d)return"";const v=d.getAttribute("data-"+k);return v==null?"":String(v);};
+  const ta=id=>{const e=document.getElementById(id);return e?(e.value||e.textContent||"").trim():"";};
   const o={
-    sId:"{{.sId}}",
-    enabled:({{if .enabled}}true{{else}}false{{end}})?"true":"false",
-    isOnline:({{if .isOnline}}true{{else}}false{{end}})?"true":"false",
-    downloadByte:String({{.downloadByte}}),
-    uploadByte:String({{.uploadByte}}),
-    totalByte:String({{.totalByte}}),
-    expire:String({{.expire}}),
-    lastOnline:String({{.lastOnline}}),
-    subUrl:"{{.subUrl}}",
-    subJsonUrl:"{{.subJsonUrl}}",
-    subClashUrl:"{{.subClashUrl}}",
-    subTitle:"{{.subTitle}}"||"Subscription",
-    subSupportUrl:"{{.subSupportUrl}}",
-    announce:"{{.announce}}",
-    links:L.join("\n"),
-    emails:emailsArr.join("\n")
+    sId:g("sid"),
+    enabled:(g("enabled")==="true"||g("enabled")==="1")?"true":"false",
+    isOnline:(g("online")==="true"||g("online")==="1")?"true":"false",
+    downloadByte:g("down")||"0",
+    uploadByte:g("up")||"0",
+    totalByte:g("total")||"0",
+    expire:g("expire")||"0",
+    lastOnline:g("last")||"0",
+    subUrl:g("sub")||"",
+    subJsonUrl:g("json")||"",
+    subClashUrl:g("clash")||"",
+    subTitle:g("title")||"Subscription",
+    subSupportUrl:g("support")||"",
+    announce:g("announce")||"",
+    links:ta("nn-links"),
+    emails:ta("nn-emails")
   };
   if(typeof CONFIG!=="undefined"&&CONFIG.profileTitle&&String(CONFIG.profileTitle).trim()){
     o.subTitle=String(CONFIG.profileTitle).trim();
   }
-  if(!o.subUrl){try{o.subUrl=location.origin+location.pathname;}catch(e){}}
+  if(!o.subUrl){try{o.subUrl=location.href.split("#")[0].split("?")[0];}catch(e){}}
   return o;
+})();
+
+// If template injected empty traffic, hydrate from 3x-ui ?format=info
+(function hydrateInfo(){
+  const empty=!TV.downloadByte||TV.downloadByte==="0";
+  const noLinks=!TV.links||!String(TV.links).trim();
+  if(!empty&&!noLinks) return;
+  const url=(location.pathname||"/")+(location.search&&location.search.indexOf("format=")>=0?location.search:((location.search?"&":"?")+"format=info"));
+  // build clean info URL
+  let infoUrl;
+  try{
+    const u=new URL(location.href);
+    u.searchParams.set("format","info");
+    infoUrl=u.toString();
+  }catch(e){infoUrl=location.pathname+"?format=info";}
+  fetch(infoUrl,{credentials:"same-origin",headers:{"Accept":"application/json"}}).then(r=>r.ok?r.json():null).then(j=>{
+    if(!j||typeof j!=="object") return;
+    const pick=(...ks)=>{for(const k of ks){if(j[k]!=null&&j[k]!=="")return j[k];}return null;};
+    const asStr=v=>v==null?"":String(v);
+    if(pick("downloadByte","download_byte")!=null) TV.downloadByte=asStr(pick("downloadByte","download_byte"));
+    if(pick("uploadByte","upload_byte")!=null) TV.uploadByte=asStr(pick("uploadByte","upload_byte"));
+    if(pick("totalByte","total_byte")!=null) TV.totalByte=asStr(pick("totalByte","total_byte"));
+    if(pick("expire")!=null) TV.expire=asStr(pick("expire"));
+    if(pick("lastOnline","last_online")!=null) TV.lastOnline=asStr(pick("lastOnline","last_online"));
+    if(pick("sId","sid")!=null) TV.sId=asStr(pick("sId","sid"));
+    if(pick("subUrl","sub_url")!=null) TV.subUrl=asStr(pick("subUrl","sub_url"));
+    if(pick("subJsonUrl")!=null) TV.subJsonUrl=asStr(pick("subJsonUrl"));
+    if(pick("subClashUrl")!=null) TV.subClashUrl=asStr(pick("subClashUrl"));
+    if(pick("subTitle")!=null) TV.subTitle=asStr(pick("subTitle"));
+    if(pick("announce")!=null) TV.announce=asStr(pick("announce"));
+    if(pick("enabled")!=null) TV.enabled=(pick("enabled")===true||pick("enabled")==="true"||pick("enabled")===1)?"true":"false";
+    if(pick("isOnline")!=null) TV.isOnline=(pick("isOnline")===true||pick("isOnline")==="true")?"true":"false";
+    const em=pick("emails");
+    if(Array.isArray(em)) TV.emails=em.join("\n");
+    else if(em) TV.emails=asStr(em);
+    const lk=pick("links","result");
+    if(Array.isArray(lk)&&lk.length) TV.links=lk.join("\n");
+    // re-render
+    try{
+      subUrl=n(TV.subUrl,subUrl);
+      subTitle=n(TV.subTitle,subTitle);
+      links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
+      emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
+      if(typeof data==="function") data();
+      if(typeof renderTraffic==="function") renderTraffic();
+      if(typeof renderList==="function") renderList();
+      if(typeof renderQi==="function") renderQi();
+    }catch(e){}
+  }).catch(()=>{});
 })();
 const APPS=[
   {p:"Android",i:"fa-brands fa-android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
@@ -485,31 +555,29 @@ const plat=()=>{const ua=(navigator.userAgent||"").toLowerCase(),p=(navigator.pl
   if(/win/.test(p)||/windows/.test(ua))return"Windows";if(/mac/.test(p)&&!/iphone|ipad/.test(ua))return"macOS";
   if(/linux/.test(p)||/linux/.test(ua))return"Linux";return""};
 const CIRC=314.16;
-const subUrl=n(TV.subUrl,location.href.split("?")[0]);
-const subTitle=n(TV.subTitle,"Subscription");
-const links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
-const emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
+let subUrl=n(TV.subUrl,location.href.split("?")[0]);
+let subTitle=n(TV.subTitle,"Subscription");
+let links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
+let emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
 
 function countryLabel(code){const c=COUNTRY[code];return c?(lang==="fa"?c.fa:c.en):code}
 
 function uiLang(){
   document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
-  ["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=t(["n1","n2","n3","n4"][i]));
-  document.getElementById("sUsed").textContent=t("used");document.getElementById("sLimit").textContent=t("limit");
-  document.getElementById("sLeft").textContent=t("left");
-  const sd=document.getElementById("sDown"),su=document.getElementById("sUp");
-  if(sd)sd.textContent=t("down");if(su)su.textContent=t("up");
-  const pt=document.getElementById("pTotal");if(pt)pt.textContent=t("total");
-  document.getElementById("tCopy").textContent=t("copy");
-  document.getElementById("tQi").textContent=t("qi");document.getElementById("tCfg").textContent=t("cfg");
-  document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
-  document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=(lang==="fa"?"باقی‌مانده":"Left");
-  document.getElementById("tExp").textContent=t("exp");
-  const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
-  document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
-  document.getElementById("lMin").textContent=t("min");
-  ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
-  lsSet("nn_lang",lang);data();
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  ["n1","n2","n3","n4"].forEach((id,i)=>set(id,t(["n1","n2","n3","n4"][i])));
+  set("sUsed",t("used"));set("sLimit",t("limit"));set("sLeft",t("left"));
+  set("sDown",t("down"));set("sUp",t("up"));
+  set("pTotal",t("total"));
+  set("tCopy",t("copy"));set("tQi",t("qi"));set("tCfg",t("cfg"));
+  set("tAll",t("all"));set("tApps",t("apps"));set("tProf",t("prof"));
+  set("lTraffic",lang==="fa"?"باقی‌مانده":"Left");
+  set("tExp",t("exp"));set("tPeriod",t("period"));
+  set("lDay",t("day"));set("lHour",t("hour"));set("lMin",t("min"));
+  ["p1","p2","p3","p5","p6"].forEach(id=>set(id,t(id)));
+  set("tHomeRenew",t("renew"));set("tRenew",t("renew"));set("tSupport",t("support"));
+  lsSet("nn_lang",lang);
+  try{data();}catch(e){}
 }
 function uiTheme(){
   document.documentElement.setAttribute("data-theme",dark?"dark":"light");
@@ -542,7 +610,7 @@ function renderTraffic(){
 }
 
 function data(){
-  document.getElementById("title").textContent=subTitle;
+  const _tEl=document.getElementById("title");if(_tEl)_tEl.textContent=subTitle;
 
   // warnings + formats + support (v2.1)
   try{
@@ -676,7 +744,12 @@ document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
 
-uiTheme();uiLang();data();renderQi();renderList();renderApps();
+try{uiTheme();}catch(e){}
+try{uiLang();}catch(e){}
+try{data();}catch(e){}
+try{renderQi();}catch(e){}
+try{renderList();}catch(e){}
+try{renderApps();}catch(e){}
 try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
 updateWaves();
 // refresh expiry every minute
