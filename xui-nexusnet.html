@@ -796,21 +796,27 @@ document.querySelectorAll(".nav button").forEach(btn=>{
   };
 });
 
-document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
-  usagePeriod=b.dataset.p||"total";
-  LS.set("nn_usage_period",usagePeriod);
-  document.querySelectorAll("#periodBar button").forEach(x=>x.classList.toggle("on",x.dataset.p===usagePeriod));
-  if(typeof renderTraffic==="function") renderTraffic();
-});
+/* periodBar removed */
 
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
-document.getElementById("btnLatRefresh").onclick=()=>runLatency();
-document.querySelectorAll("#latModes button").forEach(b=>b.onclick=()=>setLatMode(b.dataset.m));
-document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===latMode));
 
-uiTheme();uiLang();document.getElementById("langBtn").innerHTML=ICON.lang;["icoCopy","icoQr","icoAll","icoQrCopy"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=id.includes("Qr")&&!id.includes("Copy")?ICON.qr:ICON.copy});data();renderQi();renderList();renderApps();
+uiTheme();uiLang();
+try{
+  const lb=document.getElementById("langBtn");
+  if(lb) lb.innerHTML=(typeof ICON!=="undefined"&&ICON.lang)?ICON.lang:'<i class="fa-solid fa-language"></i>';
+  ["icoCopy","icoQr","icoAll","icoQrCopy"].forEach(id=>{
+    const e=document.getElementById(id);
+    if(!e) return;
+    if(typeof ICON!=="undefined"){
+      e.innerHTML=(id.includes("Qr")&&!id.includes("Copy"))?(ICON.qr||'<i class="fa-solid fa-qrcode"></i>'):(ICON.copy||'<i class="fa-solid fa-copy"></i>');
+    } else {
+      e.innerHTML=id.includes("Qr")&&!id.includes("Copy")?'<i class="fa-solid fa-qrcode"></i>':'<i class="fa-solid fa-copy"></i>';
+    }
+  });
+}catch(e){}
+data();renderQi();renderList();renderApps();
 try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
 updateWaves();
 
