@@ -14,7 +14,7 @@
   --p:#22d3ee; --p2:#3b82f6; --pg:rgba(34,211,238,.14);
   --bg:#020617; --sf:rgba(10,18,38,.55); --sf2:rgba(8,14,28,.88);
   --bd:rgba(100,180,255,.14); --tx:#f0f9ff; --mu:#8ba3b8;
-  --ok:#34d399; --wn:#fbbf24; --er:#f87171; --r:20px;
+  --ok:#34d399; --wn:#fbbf24; --er:#f87171; --r:18px;
 }
 html[data-theme="light"]{
   --bg:#dce8f6; --sf:rgba(255,255,255,.72); --sf2:rgba(255,255,255,.92);
@@ -29,115 +29,17 @@ body{
   -webkit-overflow-scrolling:touch;
 }
 .app{-webkit-overflow-scrolling:touch;padding-bottom:0}
-.ambient{
-  position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-  background:
-    radial-gradient(ellipse 100% 80% at 50% -20%, #0c1e3d 0%, transparent 55%),
-    radial-gradient(ellipse 80% 60% at 100% 100%, #0a1628 0%, transparent 50%),
-    linear-gradient(180deg, #030712 0%, #02040a 100%);
-}
-html[data-theme="light"] .ambient{
-  background:
-    radial-gradient(ellipse 100% 80% at 50% -20%, #b8d0f0 0%, transparent 55%),
-    linear-gradient(180deg, #e8eef8 0%, #dfe8f5 100%);
-}
-.orb{
-  position:absolute;border-radius:50%;pointer-events:none;
-  filter:blur(70px);will-change:transform,opacity;
-}
-.orb.a{
-  width:420px;height:420px;background:radial-gradient(circle,#2563eb 0%,#1d4ed8 40%,transparent 70%);
-  top:-12%;left:-14%;opacity:.65;animation:driftA 22s ease-in-out infinite;
-}
-.orb.b{
-  width:360px;height:360px;background:radial-gradient(circle,#0ea5e9 0%,#0284c7 45%,transparent 70%);
-  bottom:-8%;right:-16%;opacity:.55;animation:driftB 28s ease-in-out infinite;
-}
-.orb.c{
-  width:280px;height:280px;background:radial-gradient(circle,#6366f1 0%,#4338ca 50%,transparent 70%);
-  top:38%;left:48%;opacity:.4;animation:driftC 20s ease-in-out infinite;
-}
-.orb.d{
-  width:200px;height:200px;background:radial-gradient(circle,#22d3ee 0%,#06b6d4 50%,transparent 70%);
-  top:15%;right:8%;opacity:.35;animation:driftD 16s ease-in-out infinite;
-}
-.orb.e{
-  width:160px;height:160px;background:radial-gradient(circle,#3b82f6 0%,transparent 70%);
-  bottom:22%;left:12%;opacity:.3;animation:driftE 24s ease-in-out infinite;
-}
-html[data-theme="light"] .orb{opacity:.28;filter:blur(80px)}
-@keyframes driftA{
-  0%,100%{transform:translate(0,0) scale(1)}
-  25%{transform:translate(8%,12%) scale(1.12)}
-  50%{transform:translate(-4%,18%) scale(.92)}
-  75%{transform:translate(10%,-6%) scale(1.08)}
-}
-@keyframes driftB{
-  0%,100%{transform:translate(0,0) scale(1)}
-  30%{transform:translate(-12%,-10%) scale(1.15)}
-  60%{transform:translate(6%,8%) scale(.9)}
-}
-@keyframes driftC{
-  0%,100%{transform:translate(0,0) scale(1) rotate(0deg)}
-  50%{transform:translate(-10%,-14%) scale(1.2) rotate(8deg)}
-}
-@keyframes driftD{
-  0%,100%{transform:translate(0,0) scale(1)}
-  40%{transform:translate(-15%,20%) scale(1.25)}
-  70%{transform:translate(8%,-10%) scale(.85)}
-}
-@keyframes driftE{
-  0%,100%{transform:translate(0,0) scale(1)}
-  35%{transform:translate(18%,-12%) scale(1.18)}
-  65%{transform:translate(-8%,10%) scale(.88)}
-}
-.mesh{
-  position:absolute;inset:-20%;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(56,189,248,.08) 0%, transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(99,102,241,.07) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(14,165,233,.05) 0%, transparent 50%);
-  animation:meshShift 30s ease-in-out infinite alternate;
-  pointer-events:none;
-}
-@keyframes meshShift{
-  0%{transform:translate(0,0) scale(1)}
-  100%{transform:translate(-4%,3%) scale(1.06)}
-}
-.stars{
-  position:absolute;inset:0;pointer-events:none;opacity:.85;
-  background-image:
-    radial-gradient(1.5px 1.5px at 8% 15%,rgba(255,255,255,.5),transparent),
-    radial-gradient(1px 1px at 22% 40%,rgba(255,255,255,.35),transparent),
-    radial-gradient(1.5px 1.5px at 35% 12%,rgba(147,197,253,.45),transparent),
-    radial-gradient(1px 1px at 48% 65%,rgba(255,255,255,.3),transparent),
-    radial-gradient(2px 2px at 62% 28%,rgba(125,211,252,.4),transparent),
-    radial-gradient(1px 1px at 75% 80%,rgba(255,255,255,.25),transparent),
-    radial-gradient(1.5px 1.5px at 88% 45%,rgba(165,180,252,.4),transparent),
-    radial-gradient(1px 1px at 15% 75%,rgba(255,255,255,.3),transparent),
-    radial-gradient(1px 1px at 92% 18%,rgba(255,255,255,.35),transparent),
-    radial-gradient(1.5px 1.5px at 55% 90%,rgba(56,189,248,.3),transparent);
-  animation:twinkle 7s ease-in-out infinite alternate;
-}
-html[data-theme="light"] .stars{opacity:.25}
-@keyframes twinkle{from{opacity:.45}to{opacity:.95}}
-.float-p{
-  position:absolute;width:4px;height:4px;border-radius:50%;
-  background:rgba(125,211,252,.55);box-shadow:0 0 10px rgba(56,189,248,.5);
-  pointer-events:none;animation:rise linear infinite;
-}
-.float-p:nth-child(1){left:12%;bottom:-5%;animation-duration:14s;animation-delay:0s}
-.float-p:nth-child(2){left:28%;bottom:-5%;animation-duration:18s;animation-delay:-3s;width:3px;height:3px}
-.float-p:nth-child(3){left:45%;bottom:-5%;animation-duration:12s;animation-delay:-6s}
-.float-p:nth-child(4){left:62%;bottom:-5%;animation-duration:16s;animation-delay:-2s;width:5px;height:5px}
-.float-p:nth-child(5){left:78%;bottom:-5%;animation-duration:20s;animation-delay:-8s}
-.float-p:nth-child(6){left:90%;bottom:-5%;animation-duration:15s;animation-delay:-4s;width:3px;height:3px}
-@keyframes rise{
-  0%{transform:translateY(0) translateX(0);opacity:0}
-  10%{opacity:.7}
-  90%{opacity:.5}
-  100%{transform:translateY(-100vh) translateX(20px);opacity:0}
-}to{opacity:.85}}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%)}
+html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
+.orb{position:absolute;border-radius:50%;filter:blur(64px);opacity:.6;animation:float 16s ease-in-out infinite;pointer-events:none;will-change:transform}
+.orb.a{width:380px;height:380px;background:#1e3a8a;top:-10%;left:-12%;animation-duration:20s}
+.orb.b{width:320px;height:320px;background:#0c4a6e;bottom:2%;right:-14%;animation-duration:24s;animation-delay:-5s}
+.orb.c{width:240px;height:240px;background:#312e81;top:38%;left:52%;animation-duration:18s;animation-delay:-9s;opacity:.4}
+html[data-theme="light"] .orb{opacity:.32}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(5%,8%) scale(1.08)}50%{transform:translate(-4%,12%) scale(.94)}75%{transform:translate(6%,-4%) scale(1.05)}}
+.stars{position:absolute;inset:0;opacity:.8;pointer-events:none;animation:twinkle 7s ease-in-out infinite alternate;background-image:radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.28),transparent),radial-gradient(1.5px 1.5px at 70% 30%,rgba(140,200,255,.35),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.22),transparent),radial-gradient(1px 1px at 50% 50%,rgba(100,180,255,.2),transparent)}
+html[data-theme="light"] .stars{opacity:.2}
+@keyframes twinkle{from{opacity:.4}to{opacity:.9}}
 .lat-note{font-size:.65rem;color:var(--mu);margin-top:.4rem;line-height:1.4;opacity:.85}
 
 /* Always phone-column — works on Windows too */
@@ -288,7 +190,6 @@ html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
 /* Latency */
 
 
-
 /* v2.1-opt — visual/performance only */
 @media(min-width:960px){
   .app{max-width:440px!important;margin:1.25rem auto}
@@ -303,16 +204,29 @@ html{-webkit-tap-highlight-color:transparent}
 /* readable text */
 .hd h1,.vol .v,.timer .n{color:var(--tx)}
 
+.hid{display:none!important}
+
+.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
+.warn.show{display:flex}
+.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
+.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
+.warn i{margin-top:.1rem}
+
+.home-renew{display:none;margin-bottom:.75rem}
+.home-renew.show{display:block}
+.home-renew .btn{width:100%;padding:.85rem 1rem;font-size:.9rem;box-shadow:0 8px 28px rgba(37,99,235,.35);text-decoration:none}
+
+a.btn,a.btn:hover{text-decoration:none;color:inherit}
+a.btn.bp{color:#fff}
+
+.usage-hd{display:flex;justify-content:flex-start;margin-bottom:.75rem}
+.usage-hd .badge{font-size:.72rem}
 </style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true">
-  <div class="mesh"></div>
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
-  <div class="orb d"></div><div class="orb e"></div>
   <div class="stars"></div>
-  <div class="float-p"></div><div class="float-p"></div><div class="float-p"></div>
-  <div class="float-p"></div><div class="float-p"></div><div class="float-p"></div>
 </div>
 <div class="app">
   <div class="hd">
@@ -337,27 +251,13 @@ html{-webkit-tap-highlight-color:transparent}
   <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
 
   <div id="tab-home" class="tab on">
-    <div class="skel on" id="skel">
-      <div class="srow lg"></div>
-      <div class="srow"></div>
-      <div class="srow" style="width:70%"></div>
-    </div>
     <div class="home-renew" id="homeRenew">
       <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
     </div>
 
-        <div class="card period-card">
-      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
-      <div class="period" id="periodBar">
-        <button type="button" data-p="24h">24h</button>
-        <button type="button" data-p="7d">7d</button>
-        <button type="button" data-p="30d">30d</button>
-        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
-      </div>
-    </div>
-<div class="card">
-      <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
-        <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
+    <div class="card">
+      <div class="usage-hd">
+        <div class="badge ok" id="badge"><span id="badgeTxt">فعال</span></div>
       </div>
       <div class="usage">
         <div class="ring-wrap">
@@ -376,24 +276,23 @@ html{-webkit-tap-highlight-color:transparent}
               <path id="waveT" fill="url(#liqT)" opacity=".9"/>
             </g>
           </svg>
-          <div class="ring-center"><div class="pct" id="pctT">0%</div><div class="lab" id="lTraffic">Traffic</div></div>
+          <div class="ring-center"><div class="pct" id="pctT">0%</div><div class="lab" id="lTraffic">باقی‌مانده</div></div>
         </div>
         <div class="vol-grid" style="flex:1">
-          <div class="vol accent full"><div class="k"><i class="fa-solid fa-database"></i><span id="sLimit">حجم کل</span></div><div class="v" id="limit">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-download"></i><span id="sDown">دانلود</span></div><div class="v" id="down">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-upload"></i><span id="sUp">آپلود</span></div><div class="v" id="up">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-chart-simple"></i><span id="sUsed">مصرف</span></div><div class="v" id="used">—</div></div>
-          <div class="vol"><div class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
+          <div class="vol accent"><div class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
         </div>
       </div>
       <div class="bar"><i id="bar"></i></div>
       <div class="row">
-        <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">Copy</span></button>
+        <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">کپی اشتراک</span></button>
         <button class="btn bg" type="button" id="btnQr"><i class="fa-solid fa-qrcode"></i> QR</button>
       </div>
-      <div class="fmt" id="fmtRow">
-        <button type="button" id="btnFmtJson" class="hid">JSON</button>
-        <button type="button" id="btnFmtClash" class="hid">Clash</button>
+      <div class="fmt hid" id="fmtRow">
+        <button type="button" id="btnFmtJson">JSON</button>
+        <button type="button" id="btnFmtClash">Clash</button>
       </div>
     </div>
 
@@ -409,11 +308,11 @@ html{-webkit-tap-highlight-color:transparent}
       </div>
     </div>
 
-    <div class="st"><i class="fa-solid fa-bolt"></i> <span id="tQi">Quick import</span></div>
+    <div class="st"><i class="fa-solid fa-bolt"></i> <span id="tQi">افزودن سریع</span></div>
     <div class="qi" id="qi"></div>
   </div>
 
-  <div id="tab-cfg" class="tab">
+  <div  class="tab">
     <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
     <div class="row" style="margin-top:.6rem">
@@ -466,15 +365,26 @@ const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"}
 /* ===== Liquid wave ===== */
 let wavePhase=0;
 function updateWaves(){
-  wavePhase+=0.05;
+  if(document.hidden || (document.getElementById("tab-home") && !document.getElementById("tab-home").classList.contains("on"))){
+    requestAnimationFrame(updateWaves); return;
+  }
+  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+    const pct=window.__pctT||0;
+    const y=104-(pct/100)*88;
+    const f=document.getElementById("liqFillT");
+    if(f){f.setAttribute("y",y);f.setAttribute("height",130-y);}
+    requestAnimationFrame(updateWaves); return;
+  }
+  wavePhase+=0.045;
   const pct=window.__pctT||0;
-  const y=Math.max(20,Math.min(120,120-(pct/100)*88));
-  const f=document.getElementById("liqFillT");if(!f)return;
-  f.setAttribute("y",y);f.setAttribute("height",130-y);
+  // circle interior roughly y=16 (full) to y=104 (empty)
+  const y=Math.max(16,Math.min(104,104-(pct/100)*88));
+  const f=document.getElementById("liqFillT");if(!f){requestAnimationFrame(updateWaves);return;}
+  f.setAttribute("y",y);f.setAttribute("height",120-y+20);
   let d=`M 0 ${y}`;
-  for(let x=0;x<=120;x+=3)d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.8+Math.sin((x/120)*Math.PI*3.5+wavePhase*1.3)*1.2}`;
+  for(let x=0;x<=120;x+=3)d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.6+Math.sin((x/120)*Math.PI*3.2+wavePhase*1.2)*1.1}`;
   d+=` L 120 130 L 0 130 Z`;
-  document.getElementById("waveT").setAttribute("d",d);
+  const w=document.getElementById("waveT");if(w)w.setAttribute("d",d);
   requestAnimationFrame(updateWaves);
 }
 
@@ -529,279 +439,3 @@ const TV={
   links:`{{ range .links }}{{ . }}\n{{ end }}`,
   emails:`{{ range .emails }}{{ . }}\n{{ end }}`,
 };
-const APPS=[
-  {p:"Android",i:"fa-brands fa-android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
-  {p:"iOS",i:"fa-brands fa-apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Streisand",u:"https://apps.apple.com/app/id6450534064"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"},{n:"Shadowrocket",u:"https://apps.apple.com/app/id932747118"}]},
-  {p:"Windows",i:"fa-brands fa-windows",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"v2rayN",u:"https://github.com/2dust/v2rayN/releases"}]},
-  {p:"macOS",i:"fa-brands fa-apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"}]},
-  {p:"Linux",i:"fa-brands fa-linux",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
-];
-const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
-const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
-};
-let lang=localStorage.getItem("nn_lang")||"fa";
-let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
-const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
-const n=(v,d)=>v==null||v===""?d:v;
-const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
-const bytes=b=>{if(b<=0)return"0 B";const u=["B","KB","MB","GB","TB"];let i=0;while(b>=1024&&i<u.length-1){b/=1024;i++}return b.toFixed(i?1:0)+" "+u[i]};
-const plat=()=>{const ua=(navigator.userAgent||"").toLowerCase(),p=(navigator.platform||"").toLowerCase();
-  if(/android/.test(ua))return"Android";if(/iphone|ipad|ipod/.test(ua))return"iOS";
-  if(/win/.test(p)||/windows/.test(ua))return"Windows";if(/mac/.test(p)&&!/iphone|ipad/.test(ua))return"macOS";
-  if(/linux/.test(p)||/linux/.test(ua))return"Linux";return""};
-const CIRC=314.16;
-const subUrl=n(TV.subUrl,location.href.split("?")[0]);
-const subTitle=n(TV.subTitle,"Subscription");
-const links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
-const emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
-
-function countryLabel(code){const c=COUNTRY[code];return c?(lang==="fa"?c.fa:c.en):code}
-
-function uiLang(){
-  document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
-  ["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=t(["n1","n2","n3","n4"][i]));
-  document.getElementById("sUsed").textContent=t("used");document.getElementById("sLimit").textContent=t("limit");
-  document.getElementById("sLeft").textContent=t("left");
-  const sd=document.getElementById("sDown"),su=document.getElementById("sUp");
-  if(sd)sd.textContent=t("down");if(su)su.textContent=t("up");
-  const pt=document.getElementById("pTotal");if(pt)pt.textContent=t("total");
-  document.getElementById("tCopy").textContent=t("copy");
-  document.getElementById("tQi").textContent=t("qi");document.getElementById("tCfg").textContent=t("cfg");
-  document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
-  document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=t("traffic");
-  document.getElementById("tExp").textContent=t("exp");
-  const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
-  document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
-  document.getElementById("lMin").textContent=t("min");
-  ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
-  localStorage.setItem("nn_lang",lang);data();
-}
-function uiTheme(){
-  document.documentElement.setAttribute("data-theme",dark?"dark":"light");
-  document.getElementById("themeBtn").innerHTML=dark?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem("nn_theme",dark?"dark":"light");
-}
-
-/* usage period: client-side samples in localStorage */
-let usagePeriod=localStorage.getItem("nn_usage_period")||"total";
-function recordUsageSample(down,up){
-  try{
-    const key="nn_usage_hist";
-    let arr=JSON.parse(localStorage.getItem(key)||"[]");
-    const now=Date.now();
-    arr.push({t:now,d:down,u:up});
-    // keep 40 days
-    arr=arr.filter(x=>now-x.t<40*864e5);
-    // dedupe if last sample < 10min and same totals
-    if(arr.length>1){
-      const a=arr[arr.length-2],b=arr[arr.length-1];
-      if(b.t-a.t<600000 && a.d===b.d && a.u===b.u) arr.splice(arr.length-2,1);
-    }
-    localStorage.setItem(key,JSON.stringify(arr));
-  }catch(e){}
-}
-function periodWindowMs(p){
-  if(p==="24h")return 864e5;
-  if(p==="7d")return 7*864e5;
-  if(p==="30d")return 30*864e5;
-  return null;
-}
-function usageForPeriod(down,up,period){
-  if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
-  try{
-    const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
-    const now=Date.now(),win=periodWindowMs(period),from=now-win;
-    if(!arr.length)return{d:down,u:up}; /* no history yet → show total */
-    // base = last sample at or before window start; else first sample
-    let base=null;
-    for(const s of arr){if(s.t<=from)base=s;else break}
-    if(!base){
-      // history shorter than window: usage since first sample only
-      base=arr[0];
-      const span=Math.max(1,now-base.t);
-      // do not scale up to full window — show real delta only
-      return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
-    }
-    return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
-  }catch(e){return{d:down,u:up}}
-}
-function renderTraffic(){
-  const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
-  // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
-  const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
-  recordUsageSample(rawD,rawU);
-  const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
-  const noLimit=!tot||tot<=0;
-  document.getElementById("down").textContent=bytes(d);
-  document.getElementById("up").textContent=bytes(u);
-  document.getElementById("used").textContent=bytes(used);
-  document.getElementById("limit").textContent=noLimit?"∞":bytes(tot);
-  document.getElementById("left").textContent=noLimit?"∞":bytes(left);
-  const pctBase=rawD+rawU;
-  const pct=noLimit?0:Math.min(100,Math.round(pctBase/tot*100));
-  document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
-  document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
-  document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
-  document.querySelectorAll("#periodBar button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
-}
-
-function data(){
-  document.getElementById("title").textContent=subTitle;
-
-  // warnings + formats + support (v2.1)
-  try{
-    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
-    if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
-    if(we){
-      const exp=num(TV.expire); let showE=false;
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
-      if(showE) we.classList.add("show"); else we.classList.remove("show");
-    }
-  }catch(e){}
-  const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
-  const bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
-  if(bJson){ if(jsonU){ bJson.classList.remove("hid"); bJson.textContent=t("fmtJson"); } else bJson.classList.add("hid"); }
-  if(bClash){ if(clashU){ bClash.classList.remove("hid"); bClash.textContent=t("fmtClash"); } else bClash.classList.add("hid"); }
-  const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
-  const ren=n(CONFIG.renewUrl,"")||sup;
-  const br=document.getElementById("btnRenew"), bs=document.getElementById("btnSupport");
-  if(br){ if(ren){ br.style.display=""; br.href=ren; const tr=document.getElementById("tRenew"); if(tr) tr.textContent=t("renew"); } else br.style.display="none"; }
-  if(bs){ if(sup){ bs.style.display=""; bs.href=sup; const ts=document.getElementById("tSupport"); if(ts) ts.textContent=t("support"); } else bs.style.display="none"; }
-
-  document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
-
-  // clearer status
-  try{
-    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const exp=num(TV.expire);
-    let st="ok", stTxt=t("on");
-    const en=n(TV.enabled,"true");
-    if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
-    else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
-    else if(exp){ const ms=exp<1e12?exp*1000:exp; if(ms<Date.now()){ st="bad"; stTxt=lang==="fa"?"منقضی":"Expired"; }
-      else if((ms-Date.now())/86400000<=7){ st="wn"; stTxt=lang==="fa"?"نزدیک انقضا":"Expiring"; }
-    }
-    if(st==="ok" && (n(TV.isOnline,"")==="true"||n(TV.isOnline,"")==="1")) stTxt=t("online");
-    const badge=document.getElementById("badge"), bt=document.getElementById("badgeTxt");
-    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); if(st==="wn") badge.className="badge wn"; }
-    if(bt) bt.textContent=stTxt;
-    // home renew when <=7 days or low volume
-    const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
-    const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
-    let needRenew=false;
-    if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7) needRenew=true; }
-    if(totB>0 && usedB/totB>=0.85) needRenew=true;
-    if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
-  }catch(e){}
-
-  const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
-  const badge=document.getElementById("badge"),bt=document.getElementById("badgeTxt"),dot=document.getElementById("statusDot");
-  let stTxt=t("on");
-  if(en==="false"||en==="0"){badge.className="badge bad";stTxt=t("off");dot.className="dot off"}
-  else if(on==="true"||on==="1"){badge.className="badge ok";stTxt=t("online");dot.className="dot"}
-  else{badge.className="badge ok";stTxt=t("on");dot.className="dot"}
-  bt.textContent=stTxt;
-
-  renderTraffic();
-
-  // expiry timer (precise)
-  let hasExp=false,expDate=null;
-  if(TV.expire&&TV.expire!=="0"&&TV.expire!==""){
-    expDate=new Date(isNaN(TV.expire)?TV.expire:Number(TV.expire)*1000);
-    if(!isNaN(expDate)&&expDate.getFullYear()>2000) hasExp=true;
-  }
-  if(hasExp){
-    const diff=Math.max(0,expDate-Date.now());
-    const dd=Math.floor(diff/864e5),hh=Math.floor((diff%864e5)/36e5),mm=Math.floor((diff%36e5)/6e4);
-    document.getElementById("expD").textContent=String(dd);
-    document.getElementById("expH").textContent=String(hh).padStart(2,"0");
-    document.getElementById("expM").textContent=String(mm).padStart(2,"0");
-    document.getElementById("expTag").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
-    document.getElementById("pv5").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
-  }else{
-    document.getElementById("expD").textContent="∞";
-    document.getElementById("expH").textContent="∞";
-    document.getElementById("expM").textContent="∞";
-    document.getElementById("expTag").textContent=t("unl");
-    document.getElementById("pv5").textContent=t("unl");
-  }
-
-  document.getElementById("pv1").textContent=emails[0]||"—";
-  document.getElementById("pv2").textContent=n(TV.sId,"—");
-  document.getElementById("pv3").textContent=stTxt;
-  document.getElementById("pv6").textContent=formatLastOnline(TV.lastOnline);
-  if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
-}
-function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
-function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
-function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
-function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
-  document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
-function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
-  const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
-function renderList(){const box=document.getElementById("list");
-  if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
-  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${nameOf(l)}</div>
-    <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
-    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
-  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
-  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
-}
-function renderApps(){const cur=plat();
-  document.getElementById("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur?" hot":"";
-    return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
-      ${g.a.map(a=>{const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);const letter=String(a.n).slice(0,1).toUpperCase();return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
-
-function extractHost(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
-  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
-  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
-}catch(e){}return{host:"",port:443,name:nameOf(link)}}
-
-/* Events */
-document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
-document.getElementById("langBtn").onclick=e=>{e.stopPropagation();document.getElementById("lw").classList.toggle("open")};
-document.querySelectorAll(".ld button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;uiLang();document.getElementById("lw").classList.remove("open")});
-document.addEventListener("click",()=>document.getElementById("lw").classList.remove("open"));
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
-    btn.classList.add("on");
-    document.getElementById("tab-"+btn.dataset.t).classList.add("on");
-    requestAnimationFrame(()=>{window.scrollTo(0,0)});
-  };
-});
-
-document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
-  usagePeriod=b.dataset.p||"total";
-  localStorage.setItem("nn_usage_period",usagePeriod);
-  document.querySelectorAll("#periodBar button").forEach(x=>x.classList.toggle("on",x.dataset.p===usagePeriod));
-  if(typeof renderTraffic==="function") renderTraffic();
-});
-
-document.getElementById("btnCopy").onclick=()=>copy(subUrl);
-document.getElementById("btnQr").onclick=()=>qr(subUrl);
-document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
-
-uiTheme();uiLang();data();renderQi();renderList();renderApps();
-try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
-updateWaves();
-// refresh expiry every minute
-setInterval(data,60000);
-
-/* handlers */
-(function(){
-  const el=id=>document.getElementById(id);
-  if(el("btnQrCopy")) el("btnQrCopy").onclick=()=>{ if(window.__lastQr) copy(window.__lastQr); };
-  if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
-  if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
-})();
-
-</script>
-</body>
-</html>
