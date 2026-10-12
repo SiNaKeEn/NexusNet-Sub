@@ -224,6 +224,27 @@ a.btn.bp{color:#fff}
 </style>
 </head>
 <body>
+<textarea id="nn-xui-data" style="display:none" hidden aria-hidden="true">{
+{
+  "sId": {{printf "%q" .sId}},
+  "enabled": {{printf "%q" .enabled}},
+  "isOnline": {{printf "%q" .isOnline}},
+  "downloadByte": {{printf "%q" .downloadByte}},
+  "uploadByte": {{printf "%q" .uploadByte}},
+  "totalByte": {{printf "%q" .totalByte}},
+  "expire": {{printf "%q" .expire}},
+  "lastOnline": {{printf "%q" .lastOnline}},
+  "subUrl": {{printf "%q" .subUrl}},
+  "subJsonUrl": {{printf "%q" .subJsonUrl}},
+  "subClashUrl": {{printf "%q" .subClashUrl}},
+  "subTitle": {{printf "%q" .subTitle}},
+  "subSupportUrl": {{printf "%q" .subSupportUrl}},
+  "announce": {{printf "%q" .announce}},
+  "links": [{{range $i,$v := .links}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}],
+  "emails": [{{range $i,$v := .emails}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}]
+}
+</textarea>
+
 <div class="ambient" aria-hidden="true">
   <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
   <div class="stars"></div>
@@ -428,22 +449,256 @@ const CONFIG={
   renewUrl:"",
 };
 
-/* PasarGuard injects: user, links, announce (optional) */
-const TV={
-  sId:{{printf "%q" .sId}},
-  enabled:{{printf "%q" .enabled}},
-  isOnline:{{printf "%q" .isOnline}},
-  downloadByte:{{printf "%q" .downloadByte}},
-  uploadByte:{{printf "%q" .uploadByte}},
-  totalByte:{{printf "%q" .totalByte}},
-  expire:{{printf "%q" .expire}},
-  lastOnline:{{printf "%q" .lastOnline}},
-  subUrl:{{printf "%q" .subUrl}},
-  subJsonUrl:{{printf "%q" .subJsonUrl}},
-  subClashUrl:{{printf "%q" .subClashUrl}},
-  subTitle:{{printf "%q" .subTitle}},
-  subSupportUrl:{{printf "%q" .subSupportUrl}},
-  announce:{{printf "%q" .announce}},
-  links:[{{range $i,$v := .links}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}].join("\n"),
-  emails:[{{range $i,$v := .emails}}{{if $i}},{{end}}{{printf "%q" $v}}{{end}}].join("\n"),
+/* XUI data loaded from #nn-xui-data (outside JS template context) */
+const TV=(function(){
+  try{
+    const el=document.getElementById("nn-xui-data");
+    const raw=(el && (el.value||el.textContent))||"{}";
+    const o=JSON.parse(raw);
+    o.links=Array.isArray(o.links)?o.links.join("\n"):(o.links||"");
+    o.emails=Array.isArray(o.emails)?o.emails.join("\n"):(o.emails||"");
+    if(CONFIG && CONFIG.profileTitle && String(CONFIG.profileTitle).trim()){
+      o.subTitle=String(CONFIG.profileTitle).trim();
+    }
+    return o;
+  }catch(e){
+    return {sId:"",enabled:"true",isOnline:"",downloadByte:"0",uploadByte:"0",totalByte:"0",
+      expire:"0",lastOnline:"0",subUrl:"",subJsonUrl:"",subClashUrl:"",subTitle:"Subscription",
+      subSupportUrl:"",announce:"",links:"",emails:""};
+  }
+})();
+const APPS=[
+  {p:"Android",i:"fa-brands fa-android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
+  {p:"iOS",i:"fa-brands fa-apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Streisand",u:"https://apps.apple.com/app/id6450534064"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"},{n:"Shadowrocket",u:"https://apps.apple.com/app/id932747118"}]},
+  {p:"Windows",i:"fa-brands fa-windows",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"v2rayN",u:"https://github.com/2dust/v2rayN/releases"}]},
+  {p:"macOS",i:"fa-brands fa-apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"}]},
+  {p:"Linux",i:"fa-brands fa-linux",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
+];
+const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
+const I={
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+let lang=lsGet("nn_lang","fa");
+let dark=(lsGet("nn_theme","dark")||"dark")==="dark";
+let latMode=localStorage.getItem("nn_lat_mode")||"auto";
+const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
+const n=(v,d)=>v==null||v===""?d:v;
+const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
+const esc=s=>{const d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;};
+const bytes=b=>{if(b<=0)return"0 B";const u=["B","KB","MB","GB","TB"];let i=0;while(b>=1024&&i<u.length-1){b/=1024;i++}return b.toFixed(i?1:0)+" "+u[i]};
+const plat=()=>{const ua=(navigator.userAgent||"").toLowerCase(),p=(navigator.platform||"").toLowerCase();
+  if(/android/.test(ua))return"Android";if(/iphone|ipad|ipod/.test(ua))return"iOS";
+  if(/win/.test(p)||/windows/.test(ua))return"Windows";if(/mac/.test(p)&&!/iphone|ipad/.test(ua))return"macOS";
+  if(/linux/.test(p)||/linux/.test(ua))return"Linux";return""};
+const CIRC=314.16;
+const subUrl=n(TV.subUrl,location.href.split("?")[0]);
+const subTitle=n(TV.subTitle,"Subscription");
+const links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
+const emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
+
+function countryLabel(code){const c=COUNTRY[code];return c?(lang==="fa"?c.fa:c.en):code}
+
+function uiLang(){
+  document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
+  ["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=t(["n1","n2","n3","n4"][i]));
+  document.getElementById("sUsed").textContent=t("used");document.getElementById("sLimit").textContent=t("limit");
+  document.getElementById("sLeft").textContent=t("left");
+  const sd=document.getElementById("sDown"),su=document.getElementById("sUp");
+  if(sd)sd.textContent=t("down");if(su)su.textContent=t("up");
+  const pt=document.getElementById("pTotal");if(pt)pt.textContent=t("total");
+  document.getElementById("tCopy").textContent=t("copy");
+  document.getElementById("tQi").textContent=t("qi");document.getElementById("tCfg").textContent=t("cfg");
+  document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
+  document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=(lang==="fa"?"باقی‌مانده":"Left");
+  document.getElementById("tExp").textContent=t("exp");
+  const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
+  document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
+  document.getElementById("lMin").textContent=t("min");
+  ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
+  lsSet("nn_lang",lang);data();
+}
+function uiTheme(){
+  document.documentElement.setAttribute("data-theme",dark?"dark":"light");
+  document.getElementById("themeBtn").innerHTML=dark?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
+  lsSet("nn_theme",dark?"dark":"light");
+}
+
+/* usage period: client-side samples in localStorage */
+function renderTraffic(){
+  const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
+  const used=rawD+rawU;
+  const noLimit=!tot||tot<=0;
+  const left=noLimit?0:Math.max(0,tot-used);
+  // remaining percent for liquid (full = lots remaining)
+  const remPct=noLimit?100:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
+  const usedPct=noLimit?0:Math.min(100,Math.max(0,Math.round((used/tot)*100)));
+  const el=id=>{const e=document.getElementById(id);return e;};
+  if(el("down")) el("down").textContent=bytes(rawD);
+  if(el("up")) el("up").textContent=bytes(rawU);
+  if(el("used")) el("used").textContent=bytes(used);
+  if(el("left")) el("left").textContent=noLimit?"∞":bytes(left);
+  if(el("pctT")) el("pctT").textContent=noLimit?"∞":(remPct+"%");
+  if(el("rTraffic")) el("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*remPct/100);
+  if(el("bar")) el("bar").style.width=usedPct+"%";
+  window.__pctT=remPct;
+  window.__noLimit=noLimit;
+  // ring color by remaining
+  const stroke=noLimit?"#22d3ee":(remPct<15?"#f87171":(remPct<40?"#fbbf24":"#22d3ee"));
+  if(el("rTraffic")) el("rTraffic").setAttribute("stroke",stroke);
+}
+
+function data(){
+  document.getElementById("title").textContent=subTitle;
+
+  // warnings + formats + support (v2.1)
+  try{
+    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
+    const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
+    if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
+    if(we){
+      const exp=num(TV.expire); let showE=false;
+      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
+      if(showE) we.classList.add("show"); else we.classList.remove("show");
+    }
+  }catch(e){}
+  const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
+  const bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
+  if(bJson){ if(jsonU){ bJson.classList.remove("hid"); bJson.textContent=t("fmtJson"); } else bJson.classList.add("hid"); }
+  if(bClash){ if(clashU){ bClash.classList.remove("hid"); bClash.textContent=t("fmtClash"); } else bClash.classList.add("hid"); }
+  const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
+  const ren=n(CONFIG.renewUrl,"")||sup;
+  const br=document.getElementById("btnRenew"), bs=document.getElementById("btnSupport");
+  if(br){ if(ren){ br.style.display=""; br.href=ren; const tr=document.getElementById("tRenew"); if(tr) tr.textContent=t("renew"); } else br.style.display="none"; }
+  if(bs){ if(sup){ bs.style.display=""; bs.href=sup; const ts=document.getElementById("tSupport"); if(ts) ts.textContent=t("support"); } else bs.style.display="none"; }
+
+  document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
+
+  // clearer status
+  try{
+    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
+    const exp=num(TV.expire);
+    let st="ok", stTxt=t("on");
+    const en=n(TV.enabled,"true");
+    if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
+    else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
+    else if(exp){ const ms=exp<1e12?exp*1000:exp; if(ms<Date.now()){ st="bad"; stTxt=lang==="fa"?"منقضی":"Expired"; }
+      else if((ms-Date.now())/86400000<=7){ st="wn"; stTxt=lang==="fa"?"نزدیک انقضا":"Expiring"; }
+    }
+    if(st==="ok" && (n(TV.isOnline,"")==="true"||n(TV.isOnline,"")==="1")) stTxt=t("online");
+    const badge=document.getElementById("badge"), bt=document.getElementById("badgeTxt");
+    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); }
+    if(bt) bt.textContent=stTxt;
+    const dot=document.getElementById("statusDot");
+    if(dot) dot.className=(st==="bad")?"dot off":"dot";
+    // home renew when <=7 days or low volume
+    const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
+    const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
+    let needRenew=false;
+    if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7) needRenew=true; }
+    if(totB>0 && usedB/totB>=0.85) needRenew=true;
+    if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
+  }catch(e){}
+
+  // status already set above — only update statusDot
+  try{
+    const badge=document.getElementById("badge"),dot=document.getElementById("statusDot");
+    if(dot&&badge){
+      if(badge.classList.contains("bad")) dot.className="dot off";
+      else dot.className="dot";
+    }
+  }catch(e){}
+  renderTraffic();
+
+  // expiry timer (precise)
+  let hasExp=false,expDate=null;
+  if(TV.expire&&TV.expire!=="0"&&TV.expire!==""){
+    expDate=new Date(isNaN(TV.expire)?TV.expire:Number(TV.expire)*1000);
+    if(!isNaN(expDate)&&expDate.getFullYear()>2000) hasExp=true;
+  }
+  if(hasExp){
+    const diff=Math.max(0,expDate-Date.now());
+    const dd=Math.floor(diff/864e5),hh=Math.floor((diff%864e5)/36e5),mm=Math.floor((diff%36e5)/6e4);
+    document.getElementById("expD").textContent=String(dd);
+    document.getElementById("expH").textContent=String(hh).padStart(2,"0");
+    document.getElementById("expM").textContent=String(mm).padStart(2,"0");
+    document.getElementById("expTag").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
+    document.getElementById("pv5").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
+  }else{
+    document.getElementById("expD").textContent="∞";
+    document.getElementById("expH").textContent="∞";
+    document.getElementById("expM").textContent="∞";
+    document.getElementById("expTag").textContent=t("unl");
+    document.getElementById("pv5").textContent=t("unl");
+  }
+
+  document.getElementById("pv1").textContent=emails[0]||"—";
+  document.getElementById("pv2").textContent=n(TV.sId,"—");
+  document.getElementById("pv3").textContent=stTxt;
+  document.getElementById("pv6").textContent=formatLastOnline(TV.lastOnline);
+  if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
+}
+function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
+function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
+function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
+function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
+  document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
+function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
+  const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
+function renderList(){const box=document.getElementById("list");
+  if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
+  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${esc(nameOf(l))}</div>
+    <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
+    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
+  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
+  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
+}
+function renderApps(){const cur=plat();
+  document.getElementById("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur?" hot":"";
+    return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
+      ${g.a.map(a=>{const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);const letter=String(a.n).slice(0,1).toUpperCase();return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
+
+function extractHost(link){try{
+  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
+  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
+  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
+  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
+}catch(e){}return{host:"",port:443,name:nameOf(link)}}
+
+/* Events */
+document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
+document.getElementById("langBtn").onclick=e=>{e.stopPropagation();document.getElementById("lw").classList.toggle("open")};
+document.querySelectorAll(".ld button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;uiLang();document.getElementById("lw").classList.remove("open")});
+document.addEventListener("click",()=>document.getElementById("lw").classList.remove("open"));
+document.querySelectorAll(".nav button").forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));
+    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
+    btn.classList.add("on");
+    document.getElementById("tab-"+btn.dataset.t).classList.add("on");
+    requestAnimationFrame(()=>{window.scrollTo(0,0)});
+  };
+});
+document.getElementById("btnCopy").onclick=()=>copy(subUrl);
+document.getElementById("btnQr").onclick=()=>qr(subUrl);
+document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
+
+uiTheme();uiLang();data();renderQi();renderList();renderApps();
+try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
+updateWaves();
+// refresh expiry every minute
+setInterval(data,60000);
+
+/* handlers */
+(function(){
+  const el=id=>document.getElementById(id);
+  if(el("btnQrCopy")) el("btnQrCopy").onclick=()=>{ if(window.__lastQr) copy(window.__lastQr); };
+  if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
+  if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
+})();
+
+</script>
+</body>
+</html>
