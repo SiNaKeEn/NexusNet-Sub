@@ -29,17 +29,17 @@ body{
   -webkit-overflow-scrolling:touch;
 }
 .app{-webkit-overflow-scrolling:touch;padding-bottom:0}
-.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#0b1a33 0%,#030712 55%,#02040a 100%)}
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%)}
 html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
-.orb{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:float 18s ease-in-out infinite;pointer-events:none}
-.orb.a{width:340px;height:340px;background:#1d4ed8;top:-8%;left:-10%;animation-duration:22s}
-.orb.b{width:280px;height:280px;background:#0ea5e9;bottom:5%;right:-12%;animation-duration:26s;animation-delay:-6s}
-.orb.c{width:220px;height:220px;background:#4338ca;top:40%;left:55%;animation-duration:20s;animation-delay:-10s;opacity:.35}
-html[data-theme="light"] .orb{opacity:.35}
-@keyframes float{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(4%,6%) scale(1.06)}66%{transform:translate(-5%,-3%) scale(.96)}}
-.stars{position:absolute;inset:0;opacity:.7;pointer-events:none;animation:twinkle 8s ease-in-out infinite alternate;background-image:radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.35),transparent),radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.25),transparent),radial-gradient(1.5px 1.5px at 70% 30%,rgba(255,255,255,.3),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.2),transparent)}
+.orb{position:absolute;border-radius:50%;filter:blur(64px);opacity:.6;animation:float 16s ease-in-out infinite;pointer-events:none;will-change:transform}
+.orb.a{width:380px;height:380px;background:#1e3a8a;top:-10%;left:-12%;animation-duration:20s}
+.orb.b{width:320px;height:320px;background:#0c4a6e;bottom:2%;right:-14%;animation-duration:24s;animation-delay:-5s}
+.orb.c{width:240px;height:240px;background:#312e81;top:38%;left:52%;animation-duration:18s;animation-delay:-9s;opacity:.4}
+html[data-theme="light"] .orb{opacity:.32}
+@keyframes float{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(5%,8%) scale(1.08)}50%{transform:translate(-4%,12%) scale(.94)}75%{transform:translate(6%,-4%) scale(1.05)}}
+.stars{position:absolute;inset:0;opacity:.8;pointer-events:none;animation:twinkle 7s ease-in-out infinite alternate;background-image:radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.28),transparent),radial-gradient(1.5px 1.5px at 70% 30%,rgba(140,200,255,.35),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.22),transparent),radial-gradient(1px 1px at 50% 50%,rgba(100,180,255,.2),transparent)}
 html[data-theme="light"] .stars{opacity:.2}
-@keyframes twinkle{from{opacity:.4}to{opacity:.85}}
+@keyframes twinkle{from{opacity:.4}to{opacity:.9}}
 .lat-note{font-size:.65rem;color:var(--mu);margin-top:.4rem;line-height:1.4;opacity:.85}
 
 /* Always phone-column — works on Windows too */
@@ -188,84 +188,6 @@ html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
 .ann i{color:var(--p);margin-top:.08rem}
 
 /* Latency */
-.lat-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:.65rem;flex-wrap:wrap}
-.lat-head .st{margin:0}
-.lat-modes{display:flex;gap:.25rem;background:rgba(0,0,0,.16);border-radius:10px;padding:3px}
-html[data-theme="light"] .lat-modes{background:rgba(0,0,0,.05)}
-.lat-modes button{border:0;background:transparent;color:var(--mu);font-family:var(--font);font-size:.68rem;font-weight:700;
-  padding:.32rem .52rem;border-radius:8px;cursor:pointer}
-.lat-modes button.on{background:var(--pg);color:var(--p)}
-.lat-refresh{width:32px;height:32px;border-radius:9px;border:1px solid var(--bd);background:var(--sf);
-  color:var(--p);display:grid;place-items:center;cursor:pointer;font-size:.8rem;flex-shrink:0}
-.lat-refresh.spin i{animation:spin .5s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.lat-item{display:flex;align-items:center;gap:.55rem;padding:.6rem .7rem;background:rgba(0,0,0,.12);border-radius:12px;margin-bottom:.35rem}
-html[data-theme="light"] .lat-item{background:rgba(0,0,0,.04)}
-.lat-flag{font-size:1.4rem;line-height:1;width:1.55rem;text-align:center;flex-shrink:0}
-.lat-info{flex:1;min-width:0}
-.lat-name{font-size:.8rem;font-weight:700}
-.lat-bar{height:3px;background:rgba(255,255,255,.05);border-radius:99px;margin-top:.32rem;overflow:hidden}
-.lat-bar i{display:block;height:100%;border-radius:99px;transition:width .35s}
-.lat-ping{font-size:.86rem;font-weight:800;min-width:52px;text-align:end;font-variant-numeric:tabular-nums}
-.lat-ping.good{color:var(--ok)}.lat-ping.mid{color:var(--wn)}.lat-ping.bad{color:var(--er)}.lat-ping.wait{color:var(--mu);font-size:.72rem}
-.lat-empty{text-align:center;padding:1rem;color:var(--mu);font-size:.78rem}
-.lat-meta{margin-top:.45rem;font-size:.65rem;color:var(--mu);text-align:end}
-
-/* v2.1 */
-.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
-.warn.show{display:flex}
-.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
-.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
-.warn i{margin-top:.1rem}
-.fmt{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem}
-.fmt button{flex:1 1 auto;min-width:72px;padding:.55rem .5rem;border-radius:11px;border:1px solid var(--bd);
-  background:var(--sf);color:var(--tx);font-family:var(--font);font-size:.72rem;font-weight:700;cursor:pointer}
-.fmt button:active{transform:scale(.97)}
-.fmt button.hid{display:none}
-.act-row{display:flex;gap:.4rem;margin:.7rem 0;flex-wrap:wrap}
-.act-row a{flex:1;min-width:0;text-decoration:none;text-align:center}
-.lat-int{display:flex;gap:.25rem;margin-inline-start:.25rem}
-.lat-int button{border:0;background:transparent;color:var(--mu);font-family:var(--font);font-size:.62rem;font-weight:700;
-  padding:.25rem .4rem;border-radius:7px;cursor:pointer}
-.lat-int button.on{background:var(--pg);color:var(--p)}
-.app-badge{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;
-  font-size:.65rem;font-weight:800;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#06b6d4,#2563eb)}
-.app-badge.happ{background:linear-gradient(135deg,#f59e0b,#ea580c)}
-.app-badge.throne{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}
-.app-badge.hiddify{background:linear-gradient(135deg,#22c55e,#15803d)}
-.app-badge.v2ray{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
-.app-badge.v2box{background:linear-gradient(135deg,#ec4899,#be185d)}
-.app-badge.streisand{background:linear-gradient(135deg,#14b8a6,#0f766e)}
-.app-badge.shadow{background:linear-gradient(135deg,#64748b,#334155)}
-
-
-/* v2.2 */
-.skel{display:none;padding:1rem 0}
-.skel.on{display:block}
-.skel .srow{height:14px;border-radius:8px;background:linear-gradient(90deg,rgba(255,255,255,.04),rgba(255,255,255,.1),rgba(255,255,255,.04));background-size:200% 100%;animation:shimmer 1.2s infinite;margin-bottom:.55rem}
-.skel .srow.lg{height:88px;border-radius:16px}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.home-renew{display:none;margin-bottom:.75rem}
-.home-renew.show{display:block}
-.home-renew .btn{width:100%;padding:.85rem 1rem;font-size:.9rem;box-shadow:0 8px 28px rgba(37,99,235,.35)}
-.status-pill{display:inline-flex;align-items:center;gap:.35rem;font-size:.72rem;font-weight:800;padding:.3rem .75rem;border-radius:999px}
-.status-pill.ok{background:rgba(52,211,153,.15);color:var(--ok)}
-.status-pill.bad{background:rgba(248,113,113,.15);color:var(--er)}
-.status-pill.wn{background:rgba(251,191,36,.15);color:var(--wn)}
-.btn-all{width:100%;margin-top:.5rem;padding:.8rem 1rem!important;font-size:.88rem!important;font-weight:800!important;
-  background:linear-gradient(135deg,#06b6d4,#2563eb)!important;color:#fff!important;border:0!important;box-shadow:0 6px 20px rgba(37,99,235,.28)}
-#md .mbx{max-width:300px;padding:1.4rem}
-#md #qr{margin:1.1rem 0}
-#md #qr canvas,#md #qr img{width:220px!important;height:220px!important}
-.tab{transition:opacity .25s ease,transform .25s ease}
-.tab.on{animation:tabIn .28s ease}
-@keyframes tabIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@media(min-width:960px){
-  .app{max-width:440px!important;margin:1.25rem auto}
-}
-  .desk-grid .span2{grid-column:1/-1}
-}
-.lat-note{font-size:.65rem;color:var(--mu);margin-top:.45rem;line-height:1.4}
 
 
 /* v2.1-opt — visual/performance only */
@@ -282,11 +204,112 @@ html{-webkit-tap-highlight-color:transparent}
 /* readable text */
 .hd h1,.vol .v,.timer .n{color:var(--tx)}
 
+.hid{display:none!important}
+
+.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
+.warn.show{display:flex}
+.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
+.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
+.warn i{margin-top:.1rem}
+
+.home-renew{display:none;margin-bottom:.75rem}
+.home-renew.show{display:block}
+.home-renew .btn{width:100%;padding:.85rem 1rem;font-size:.9rem;box-shadow:0 8px 28px rgba(37,99,235,.35);text-decoration:none}
+
+a.btn,a.btn:hover{text-decoration:none;color:inherit}
+a.btn.bp{color:#fff}
+
+.usage-hd{display:none!important;display:flex;justify-content:flex-start;margin-bottom:.75rem}
+.usage-hd .badge{font-size:.72rem}
+
+.ring-wrap{filter:drop-shadow(0 0 18px rgba(34,211,238,.28))}
+.ring-wrap svg circle[id="rTraffic"],.ring-wrap svg path{filter:drop-shadow(0 0 6px rgba(56,189,248,.45))}
+.ring-center .pct{background:linear-gradient(180deg,#ecfeff,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-size:1.35rem;font-weight:900;letter-spacing:-.02em}
+html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e7490,#0369a1);-webkit-background-clip:text;background-clip:text}
+.ring-center .lab{opacity:.85;letter-spacing:.02em}
+.ring-wrap::after{content:"";position:absolute;inset:18px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 55%);
+  pointer-events:none}
+
+
+.total-strip{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
+  padding:.35rem .65rem;margin-bottom:.55rem;border-radius:10px;
+  background:rgba(0,0,0,.12);border:1px solid var(--bd);font-size:.78rem}
+html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
+.total-strip span{color:var(--mu);font-weight:600}
+.total-strip b{font-weight:800;color:var(--tx);font-size:.85rem}
+.usage-hd{display:none!important;height:0;margin:0;padding:0;overflow:hidden}
+.ring-center .lab{display:none!important}
+
+#liqFillT{fill:url('#liqT')!important}
+
+}
+.ring-wrap svg{overflow:visible}
+
+
+/* ring column + liquid (CSS — works on Windows) */
+.ring-col{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex-shrink:0}
+.ring-wrap{position:relative;width:118px;height:118px;flex-shrink:0;
+  filter:drop-shadow(0 0 16px rgba(34,211,238,.35))}
+.ring-wrap svg{position:absolute;inset:0;width:118px;height:118px;display:block;z-index:2;pointer-events:none}
+.liq-ball{position:absolute;inset:14px;border-radius:50%;overflow:hidden;z-index:1;
+  background:radial-gradient(circle at 50% 30%,rgba(15,23,42,.55),rgba(2,6,23,.85));
+  box-shadow:inset 0 0 12px rgba(0,0,0,.35)}
+.liq-water{position:absolute;left:0;right:0;bottom:0;height:var(--pct,50%);
+  background:linear-gradient(180deg,#7dd3fc 0%,#22d3ee 40%,#0284c7 100%);
+  transition:height .7s cubic-bezier(.4,0,.2,1);
+  animation:liqBob 3.2s ease-in-out infinite}
+.liq-water::before{content:"";position:absolute;top:-10px;left:-40%;width:180%;height:20px;
+  background:radial-gradient(ellipse at center,rgba(255,255,255,.55) 0%,rgba(255,255,255,.12) 42%,transparent 70%);
+  animation:liqSurf 2.8s linear infinite}
+.liq-water::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,transparent 28%,rgba(0,40,80,.15) 100%)}
+@keyframes liqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes liqSurf{0%{transform:translateX(0)}100%{transform:translateX(22%)}}
+.ring-center{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  pointer-events:none}
+.ring-center .pct{font-size:1.4rem;font-weight:900;line-height:1;
+  color:#f0fdff;text-shadow:0 1px 2px rgba(0,0,0,.65),0 0 12px rgba(0,0,0,.35);
+  letter-spacing:-.02em}
+html[data-theme="light"] .ring-center .pct{color:#0c4a6e;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+html[data-theme="light"] .liq-ball{background:radial-gradient(circle at 50% 30%,rgba(224,242,254,.9),rgba(186,230,253,.95))}
+.total-under{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-width:118px;
+  padding:.28rem .45rem;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid var(--bd)}
+html[data-theme="light"] .total-under{background:rgba(255,255,255,.55)}
+.total-under span{font-size:.65rem;color:var(--mu);font-weight:600}
+.total-under b{font-size:.8rem;font-weight:800;color:var(--tx)}
+/* usage layout */
+.usage{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.usage .stats-grid{flex:1;min-width:140px;display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+/* ambient stronger motion */
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%);
+  animation:ambPulse 12s ease-in-out infinite alternate}
+html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
+@keyframes ambPulse{0%{filter:hue-rotate(0deg) brightness(1)}100%{filter:hue-rotate(12deg) brightness(1.08)}}
+.orb{position:absolute;border-radius:50%;filter:blur(56px);opacity:.65;pointer-events:none;will-change:transform}
+.orb.a{width:420px;height:420px;background:#1d4ed8;top:-14%;left:-14%;animation:floatA 14s ease-in-out infinite}
+.orb.b{width:360px;height:360px;background:#0e7490;bottom:-8%;right:-12%;animation:floatB 18s ease-in-out infinite}
+.orb.c{width:280px;height:280px;background:#4f46e5;top:40%;left:55%;animation:floatC 16s ease-in-out infinite;opacity:.45}
+@keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,30px) scale(1.08)}}
+@keyframes floatB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-25px) scale(1.12)}}
+@keyframes floatC{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,40px) scale(1.1)}}
+.orb.d{width:240px;height:240px;background:#0369a1;top:60%;left:10%;animation:floatA 22s ease-in-out infinite reverse;opacity:.35}
+.stars{position:absolute;inset:0;background:
+  radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.55),transparent),
+  radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.4),transparent),
+  radial-gradient(1.5px 1.5px at 70% 30%,rgba(255,255,255,.5),transparent),
+  radial-gradient(1px 1px at 90% 60%,rgba(255,255,255,.35),transparent),
+  radial-gradient(1px 1px at 50% 50%,rgba(255,255,255,.3),transparent);
+  animation:twinkle 6s ease-in-out infinite alternate;opacity:.7}
+@keyframes twinkle{0%{opacity:.4}100%{opacity:.85}}
+
 </style>
 </head>
 <body>
 <div class="ambient" aria-hidden="true">
-  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="orb d"></div>
   <div class="stars"></div>
 </div>
 <div class="app">
@@ -312,63 +335,52 @@ html{-webkit-tap-highlight-color:transparent}
   <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
 
   <div id="tab-home" class="tab on">
-    <div class="skel on" id="skel">
-      <div class="srow lg"></div>
-      <div class="srow"></div>
-      <div class="srow" style="width:70%"></div>
-    </div>
     <div class="home-renew" id="homeRenew">
       <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
     </div>
 
-        <div class="card period-card">
-      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
-      <div class="period" id="periodBar">
-        <button type="button" data-p="24h">24h</button>
-        <button type="button" data-p="7d">7d</button>
-        <button type="button" data-p="30d">30d</button>
-        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
-      </div>
-    </div>
-<div class="card">
-      <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
-        <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
-      </div>
+    <div class="card">
       <div class="usage">
+<div class="ring-col">
         <div class="ring-wrap">
+          <div class="liq-ball" aria-hidden="true">
+            <div class="liq-water" id="liqWater" style="--pct:100%"></div>
+          </div>
           <svg viewBox="0 0 120 120">
             <defs>
-              <clipPath id="clipT"><circle cx="60" cy="60" r="44"/></clipPath>
-              <linearGradient id="liqT" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#06b6d4"/>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#67e8f9"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#818cf8"/>
               </linearGradient>
             </defs>
-            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
-            <circle id="rTraffic" cx="60" cy="60" r="50" fill="none" stroke="#22d3ee" stroke-width="7"
-              stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
-            <g clip-path="url(#clipT)">
-              <rect id="liqFillT" x="0" y="120" width="120" height="120" fill="url(#liqT)" opacity=".75"/>
-              <path id="waveT" fill="url(#liqT)" opacity=".9"/>
-            </g>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(34,211,238,.12)" stroke-width="9"/>
+            <circle id="rTraffic" cx="60" cy="60" r="48" fill="none" stroke="url('#ringGrad')" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="301.59" stroke-dashoffset="0"
+              transform="rotate(-90 60 60)"/>
           </svg>
-          <div class="ring-center"><div class="pct" id="pctT">0%</div><div class="lab" id="lTraffic">Traffic</div></div>
+          <div class="ring-center"><div class="pct" id="pctT">∞</div></div>
         </div>
+        <div class="total-under">
+          <span id="sTotal">حجم کل</span>
+          <b id="total">—</b>
+        </div>
+      </div>
         <div class="vol-grid" style="flex:1">
-          <div class="vol accent full"><div class="k"><i class="fa-solid fa-database"></i><span id="sLimit">حجم کل</span></div><div class="v" id="limit">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-download"></i><span id="sDown">دانلود</span></div><div class="v" id="down">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-upload"></i><span id="sUp">آپلود</span></div><div class="v" id="up">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-chart-simple"></i><span id="sUsed">مصرف</span></div><div class="v" id="used">—</div></div>
-          <div class="vol"><div class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
+          <div class="vol accent"><div class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
         </div>
       </div>
       <div class="bar"><i id="bar"></i></div>
       <div class="row">
-        <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">Copy</span></button>
+        <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">کپی اشتراک</span></button>
         <button class="btn bg" type="button" id="btnQr"><i class="fa-solid fa-qrcode"></i> QR</button>
       </div>
-      <div class="fmt" id="fmtRow">
-        <button type="button" id="btnFmtJson" class="hid">JSON</button>
-        <button type="button" id="btnFmtClash" class="hid">Clash</button>
+      <div class="fmt hid" id="fmtRow">
+        <button type="button" id="btnFmtJson">JSON</button>
+        <button type="button" id="btnFmtClash">Clash</button>
       </div>
     </div>
 
@@ -384,37 +396,15 @@ html{-webkit-tap-highlight-color:transparent}
       </div>
     </div>
 
-    <div class="st"><i class="fa-solid fa-bolt"></i> <span id="tQi">Quick import</span></div>
+    <div class="st"><i class="fa-solid fa-bolt"></i> <span id="tQi">افزودن سریع</span></div>
     <div class="qi" id="qi"></div>
   </div>
 
   <div id="tab-cfg" class="tab">
-    <div class="card">
-      <div class="lat-head">
-        <div class="st"><i class="fa-solid fa-signal"></i> <span id="tLat">Live Latency</span></div>
-        <div style="display:flex;align-items:center;gap:.35rem">
-          <div class="lat-modes" id="latModes">
-            <button type="button" data-m="ws" class="on">WS</button>
-            <button type="button" data-m="http">HTTP</button>
-            <button type="button" data-m="auto">Auto</button>
-          </div>
-          <div class="lat-int" id="latInt">
-            <button type="button" data-s="0" class="on">Off</button>
-            <button type="button" data-s="5">5s</button>
-            <button type="button" data-s="10">10s</button>
-            <button type="button" data-s="30">30s</button>
-          </div>
-          <button class="lat-refresh" type="button" id="btnLatRefresh"><i class="fa-solid fa-rotate"></i></button>
-        </div>
-      </div>
-      <div id="latList"><div class="lat-empty">—</div></div>
-      <div class="lat-meta"><span id="latUpdated">—</span></div>
-      <div class="lat-note" id="latNote">Ping is measured from your device to each server (Iran users ≈ Iran path). Auto mode recommended.</div>
-    </div>
     <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
     <div class="row" style="margin-top:.6rem">
-      <button class="btn bg" type="button" id="btnAll" class="btn-all" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
     </div>
   </div>
 
@@ -462,18 +452,8 @@ const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"}
 /* ===== Background: real map positions for panel servers ===== */
 /* ===== Liquid wave ===== */
 let wavePhase=0;
-function updateWaves(){
-  wavePhase+=0.05;
-  const pct=window.__pctT||0;
-  const y=Math.max(20,Math.min(120,120-(pct/100)*88));
-  const f=document.getElementById("liqFillT");if(!f)return;
-  f.setAttribute("y",y);f.setAttribute("height",130-y);
-  let d=`M 0 ${y}`;
-  for(let x=0;x<=120;x+=3)d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.8+Math.sin((x/120)*Math.PI*3.5+wavePhase*1.3)*1.2}`;
-  d+=` L 120 130 L 0 130 Z`;
-  document.getElementById("waveT").setAttribute("d",d);
-  requestAnimationFrame(updateWaves);
-}
+function updateWaves(){ /* CSS liquid */ }
+
 
 /* ===== Jalali ===== */
 function toJalaliParts(gy,gm,gd){
@@ -568,12 +548,15 @@ const I={
   fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
   en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
-let lang=localStorage.getItem("nn_lang")||"fa";
-let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
+function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+let lang=lsGet("nn_lang","fa");
+let dark=(lsGet("nn_theme","dark")||"dark")==="dark";
 let latMode=localStorage.getItem("nn_lat_mode")||"auto";
 const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
 const n=(v,d)=>v==null||v===""?d:v;
 const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
+const esc=s=>{const d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;};
 const bytes=b=>{if(b<=0)return"0 B";const u=["B","KB","MB","GB","TB"];let i=0;while(b>=1024&&i<u.length-1){b/=1024;i++}return b.toFixed(i?1:0)+" "+u[i]};
 const plat=()=>{const ua=(navigator.userAgent||"").toLowerCase(),p=(navigator.platform||"").toLowerCase();
   if(/android/.test(ua))return"Android";if(/iphone|ipad|ipod/.test(ua))return"iOS";
@@ -589,94 +572,56 @@ function countryLabel(code){const c=COUNTRY[code];return c?(lang==="fa"?c.fa:c.e
 
 function uiLang(){
   document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
-  ["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=t(["n1","n2","n3","n4"][i]));
-  document.getElementById("sUsed").textContent=t("used");document.getElementById("sLimit").textContent=t("limit");
-  document.getElementById("sLeft").textContent=t("left");
-  const sd=document.getElementById("sDown"),su=document.getElementById("sUp");
-  if(sd)sd.textContent=t("down");if(su)su.textContent=t("up");
-  const pt=document.getElementById("pTotal");if(pt)pt.textContent=t("total");
-  document.getElementById("tCopy").textContent=t("copy");
-  document.getElementById("tQi").textContent=t("qi");document.getElementById("tCfg").textContent=t("cfg");
-  document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
-  document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=t("traffic");
-  document.getElementById("tLat").textContent=t("lat");document.getElementById("tExp").textContent=t("exp");
-  const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
-  document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
-  document.getElementById("lMin").textContent=t("min");
-  ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
-  localStorage.setItem("nn_lang",lang);renderLatencyList();data();
+  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  ["n1","n2","n3","n4"].forEach((id,i)=>set(id,t(["n1","n2","n3","n4"][i])));
+  set("sUsed",t("used"));set("sTotal",t("total")||(lang==="fa"?"حجم کل":"Total"));set("sLimit",t("limit"));set("sLeft",t("left"));
+  set("sDown",t("down"));set("sUp",t("up"));
+  set("pTotal",t("total"));
+  set("tCopy",t("copy"));set("tQi",t("qi"));set("tCfg",t("cfg"));
+  set("tAll",t("all"));set("tApps",t("apps"));set("tProf",t("prof"));
+  set("lTraffic",lang==="fa"?"باقی‌مانده":"Left");
+  set("tExp",t("exp"));set("tPeriod",t("period"));
+  set("lDay",t("day"));set("lHour",t("hour"));set("lMin",t("min"));
+  ["p1","p2","p3","p5","p6"].forEach(id=>set(id,t(id)));
+  set("tHomeRenew",t("renew"));set("tRenew",t("renew"));set("tSupport",t("support"));
+  lsSet("nn_lang",lang);
+  try{data();}catch(e){}
 }
 function uiTheme(){
   document.documentElement.setAttribute("data-theme",dark?"dark":"light");
   document.getElementById("themeBtn").innerHTML=dark?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem("nn_theme",dark?"dark":"light");
+  lsSet("nn_theme",dark?"dark":"light");
 }
 
 /* usage period: client-side samples in localStorage */
-let usagePeriod=localStorage.getItem("nn_usage_period")||"total";
-function recordUsageSample(down,up){
-  try{
-    const key="nn_usage_hist";
-    let arr=JSON.parse(localStorage.getItem(key)||"[]");
-    const now=Date.now();
-    arr.push({t:now,d:down,u:up});
-    // keep 40 days
-    arr=arr.filter(x=>now-x.t<40*864e5);
-    // dedupe if last sample < 10min and same totals
-    if(arr.length>1){
-      const a=arr[arr.length-2],b=arr[arr.length-1];
-      if(b.t-a.t<600000 && a.d===b.d && a.u===b.u) arr.splice(arr.length-2,1);
-    }
-    localStorage.setItem(key,JSON.stringify(arr));
-  }catch(e){}
-}
-function periodWindowMs(p){
-  if(p==="24h")return 864e5;
-  if(p==="7d")return 7*864e5;
-  if(p==="30d")return 30*864e5;
-  return null;
-}
-function usageForPeriod(down,up,period){
-  if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
-  try{
-    const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
-    const now=Date.now(),win=periodWindowMs(period),from=now-win;
-    if(!arr.length)return{d:down,u:up}; /* no history yet → show total */
-    // base = last sample at or before window start; else first sample
-    let base=null;
-    for(const s of arr){if(s.t<=from)base=s;else break}
-    if(!base){
-      // history shorter than window: usage since first sample only
-      base=arr[0];
-      const span=Math.max(1,now-base.t);
-      // do not scale up to full window — show real delta only
-      return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
-    }
-    return{d:Math.max(0,down-(base.d||0)),u:Math.max(0,up-(base.u||0))};
-  }catch(e){return{d:down,u:up}}
-}
 function renderTraffic(){
   const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
-  // if panel only gives used_traffic as downloadByte, split unknown upload stays 0
-  const {d,u}=usageForPeriod(rawD,rawU,usagePeriod);
-  recordUsageSample(rawD,rawU);
-  const used=d+u, left=tot>0?Math.max(0,tot-(rawD+rawU)):0;
+  const used=rawD+rawU;
   const noLimit=!tot||tot<=0;
-  document.getElementById("down").textContent=bytes(d);
-  document.getElementById("up").textContent=bytes(u);
-  document.getElementById("used").textContent=bytes(used);
-  document.getElementById("limit").textContent=noLimit?"∞":bytes(tot);
-  document.getElementById("left").textContent=noLimit?"∞":bytes(left);
-  const pctBase=rawD+rawU;
-  const pct=noLimit?0:Math.min(100,Math.round(pctBase/tot*100));
-  document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
-  document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
-  document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
-  document.querySelectorAll("#periodBar button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
+  const left=noLimit?0:Math.max(0,tot-used);
+  const remPct=noLimit?100:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
+  const el=id=>{const e=document.getElementById(id);return e;};
+  if(el("down")) el("down").textContent=bytes(rawD);
+  if(el("up")) el("up").textContent=bytes(rawU);
+  if(el("used")) el("used").textContent=bytes(used);
+  if(el("left")) el("left").textContent=noLimit?"∞":bytes(left);
+  if(el("total")) el("total").textContent=noLimit?"∞":bytes(tot);
+  if(el("pctT")) el("pctT").textContent=noLimit?"∞":(remPct+"%");
+  window.__pctT=remPct;
+  const circ=typeof CIRC==="number"?CIRC:(2*Math.PI*48);
+  if(el("rTraffic")) el("rTraffic").style.strokeDashoffset=String(circ-circ*remPct/100);
+  if(el("bar")) el("bar").style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
+  // CSS liquid (Windows-friendly)
+  const w=el("liqWater");
+  if(w){ w.style.setProperty("--pct", (noLimit?100:remPct)+"%"); }
+  // legacy SVG fill if present
+  const y=104-(remPct/100)*88;
+  const f=el("liqFillT");
+  if(f){ f.setAttribute("y",String(y)); f.setAttribute("height",String(Math.max(0,130-y))); }
 }
 
 function data(){
-  document.getElementById("title").textContent=subTitle;
+  const _tEl=document.getElementById("title");if(_tEl)_tEl.textContent=subTitle;
 
   // warnings + formats + support (v2.1)
   try{
@@ -702,10 +647,10 @@ function data(){
   document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
 
   // clearer status
+  let st="ok", stTxt=t("on");
   try{
     const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
     const exp=num(TV.expire);
-    let st="ok", stTxt=t("on");
     const en=n(TV.enabled,"true");
     if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
     else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
@@ -714,9 +659,10 @@ function data(){
     }
     if(st==="ok" && (n(TV.isOnline,"")==="true"||n(TV.isOnline,"")==="1")) stTxt=t("online");
     const badge=document.getElementById("badge"), bt=document.getElementById("badgeTxt");
-    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); if(st==="wn") badge.className="badge wn"; }
+    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); }
     if(bt) bt.textContent=stTxt;
-    // home renew when <=7 days or low volume
+    const dot=document.getElementById("statusDot");
+    if(dot) dot.className=(st==="bad")?"dot off":"dot";
     const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
     const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
     let needRenew=false;
@@ -725,14 +671,14 @@ function data(){
     if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
   }catch(e){}
 
-  const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
-  const badge=document.getElementById("badge"),bt=document.getElementById("badgeTxt"),dot=document.getElementById("statusDot");
-  let stTxt=t("on");
-  if(en==="false"||en==="0"){badge.className="badge bad";stTxt=t("off");dot.className="dot off"}
-  else if(on==="true"||on==="1"){badge.className="badge ok";stTxt=t("online");dot.className="dot"}
-  else{badge.className="badge ok";stTxt=t("on");dot.className="dot"}
-  bt.textContent=stTxt;
-
+  // status already set above — only update statusDot
+  try{
+    const badge=document.getElementById("badge"),dot=document.getElementById("statusDot");
+    if(dot&&badge){
+      if(badge.classList.contains("bad")) dot.className="dot off";
+      else dot.className="dot";
+    }
+  }catch(e){}
   renderTraffic();
 
   // expiry timer (precise)
@@ -757,11 +703,12 @@ function data(){
     document.getElementById("pv5").textContent=t("unl");
   }
 
-  document.getElementById("pv1").textContent=emails[0]||"—";
-  document.getElementById("pv2").textContent=n(TV.sId,"—");
-  document.getElementById("pv3").textContent=stTxt;
-  document.getElementById("pv6").textContent=formatLastOnline(TV.lastOnline);
-  if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
+  const _setp=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  _setp("pv1",emails[0]||"—");
+  _setp("pv2",n(TV.sId,"—"));
+  _setp("pv3",stTxt);
+  _setp("pv6",formatLastOnline(TV.lastOnline));
+  if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
@@ -772,7 +719,7 @@ function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(ato
   const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
 function renderList(){const box=document.getElementById("list");
   if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
-  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${nameOf(l)}</div>
+  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${esc(nameOf(l))}</div>
     <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
     <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
@@ -789,154 +736,6 @@ function extractHost(link){try{
   const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
   const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
 }catch(e){}return{host:"",port:443,name:nameOf(link)}}
-function detectLocation(name){
-  for(const [flag,code] of Object.entries(FLAG_MAP))if(name.includes(flag))return{flag,code};
-  const m=name.match(CODE_RE);if(m){let code=m[1].toUpperCase();if(code==="UK")code="GB";return{flag:CODE_TO_FLAG[code]||"🏳️",code}}
-  return null;
-}
-
-let latServers=[],latRunning=false;
-function buildLatServers(){
-  latServers=[];const seen=new Set();
-  links.forEach(l=>{
-    const {host,port,name}=extractHost(l);const loc=detectLocation(name);
-    if(!loc||!host)return;const key=host+":"+port+":"+loc.code;if(seen.has(key))return;seen.add(key);
-    latServers.push({host,port,flag:loc.flag,code:loc.code,ping:null});
-  });
-}
-
-
-function measureWS(s){
-  return new Promise(resolve=>{
-    const t0=performance.now(); let done=false; let ws;
-    const finish=ms=>{ if(done)return; done=true; try{ws&&ws.close()}catch(e){} resolve(ms); };
-    const ports=[];
-    if(s.port) ports.push(s.port);
-    if(!ports.includes(443)) ports.push(443);
-    if(!ports.includes(80)) ports.push(80);
-    let pi=0;
-    const tryNext=()=>{
-      if(pi>=ports.length){ finish(null); return; }
-      const port=ports[pi++]; const portStr=(port===443||port===80)?"":(":"+port);
-      const schemes=port===80?["ws","wss"]:["wss","ws"];
-      let si=0;
-      const tryScheme=()=>{
-        if(si>=schemes.length){ tryNext(); return; }
-        const sch=schemes[si++];
-        try{
-          ws=new WebSocket(sch+"://"+s.host+portStr+"/");
-        }catch(e){ tryScheme(); return; }
-        const timer=setTimeout(()=>{ try{ws.close()}catch(e){} tryScheme(); }, 2000);
-        ws.onopen=()=>{ clearTimeout(timer); finish(Math.round(performance.now()-t0)); };
-        ws.onerror=()=>{ clearTimeout(timer); try{ws.close()}catch(e){} tryScheme(); };
-      };
-      tryScheme();
-    };
-    tryNext();
-  });
-}
-function measureHTTP(s){
-  return new Promise(resolve=>{
-    const t0=performance.now();
-    const ports=[];
-    if(s.port) ports.push(s.port);
-    if(!ports.includes(443)) ports.push(443);
-    let finished=false;
-    const done=ms=>{ if(finished)return; finished=true; resolve(ms); };
-    const tryFetch=(url)=>{
-      return Promise.race([
-        fetch(url,{mode:"no-cors",cache:"no-store",credentials:"omit"}).then(()=>Math.round(performance.now()-t0)).catch(()=>null),
-        new Promise(r=>setTimeout(()=>r(null),2500))
-      ]);
-    };
-    const tryImg=(url)=>{
-      return new Promise(res=>{
-        const img=new Image();
-        const t=setTimeout(()=>{ img.src=""; res(null); }, 2500);
-        img.onload=img.onerror=()=>{ clearTimeout(t); res(Math.round(performance.now()-t0)); };
-        img.src=url+(url.includes("?")?"&":"?")+"t="+Date.now();
-      });
-    };
-    (async()=>{
-      for(const port of ports){
-        const portStr=(port===443||port===80)?"":(":"+port);
-        const urls=[
-          "https://"+s.host+portStr+"/",
-          "http://"+s.host+portStr+"/",
-        ];
-        for(const u of urls){
-          let ms=await tryFetch(u);
-          if(ms!=null){ done(ms); return; }
-          ms=await tryImg(u+"favicon.ico");
-          if(ms!=null){ done(ms); return; }
-        }
-      }
-      done(null);
-    })();
-  });
-}
-async function measureOne(s){
-  let ms=null;
-  // Auto: HTTP first (works more often from browsers), then WS
-  if(latMode==="ws") ms=await measureWS(s);
-  else if(latMode==="http") ms=await measureHTTP(s);
-  else {
-    ms=await measureHTTP(s);
-    if(ms==null) ms=await measureWS(s);
-  }
-  s.ping=ms;
-}
-
-function pingClass(ms){if(ms==null)return"wait";if(ms<120)return"good";if(ms<280)return"mid";return"bad"}
-function barWidth(ms){if(ms==null)return 0;return Math.max(8,Math.min(100,Math.round(100-(ms/600)*100)))}
-function barColor(ms){if(ms==null)return"var(--mu)";if(ms<120)return"var(--ok)";if(ms<280)return"var(--wn)";return"var(--er)"}
-function renderLatencyList(){
-  const box=document.getElementById("latList");
-  if(!latServers.length){box.innerHTML=`<div class="lat-empty">${t("noping")}</div>`;return}
-  const sorted=[...latServers].sort((a,b)=>(a.ping??9e9)-(b.ping??9e9));
-  box.innerHTML=sorted.map(s=>{
-    const pc=pingClass(s.ping);const val=s.ping==null?t("wait"):(s.ping+" "+t("ms"));
-    return `<div class="lat-item"><div class="lat-flag">${s.flag}</div>
-      <div class="lat-info"><div class="lat-name">${countryLabel(s.code)}</div>
-      <div class="lat-bar"><i style="width:${barWidth(s.ping)}%;background:${barColor(s.ping)}"></i></div></div>
-      <div class="lat-ping ${pc}">${val}</div></div>`}).join("");
-}
-async function runLatency(){
-  if(latRunning)return;latRunning=true;
-  const btn=document.getElementById("btnLatRefresh");btn.classList.add("spin");
-  latServers.forEach(s=>s.ping=null);renderLatencyList();
-  const queue=[...latServers];
-  await Promise.all(Array.from({length:Math.min(4,queue.length)},async()=>{
-    while(queue.length){const s=queue.shift();await measureOne(s);renderLatencyList()}
-  }));
-  document.getElementById("latUpdated").textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+latMode.toUpperCase();
-  btn.classList.remove("spin");latRunning=false;
-  try{ sortConfigsByPing(); }catch(e){}
-}
-function sortConfigsByPing(){
-  if(!latServers.length||!links.length)return;
-  const score={};
-  latServers.forEach(s=>{ if(s.ping!=null) score[s.host]=s.ping; });
-  // rebuild list order: match link hosts
-  const ranked=links.map((l,i)=>{
-    const info=extractHost(l); const p=score[info.host];
-    return {l,i,p:p==null?9e9:p,name:info.name||nameOf(l)};
-  }).sort((a,b)=>a.p-b.p);
-  const box=document.getElementById("list");
-  if(!box)return;
-  box.innerHTML=ranked.map((x,idx)=>{
-    const name=(x.name||("Config "+(x.i+1))).slice(0,42);
-    const pingTxt=x.p<9e9?(x.p+" ms"):"";
-    return `<div class="item"><span class="n">${name}${pingTxt?' · '+pingTxt:''}</span>
-      <button class="mb" type="button" data-c="${x.i}"><i class="fa-solid fa-copy"></i></button>
-      <button class="mb" type="button" data-q="${x.i}"><i class="fa-solid fa-qrcode"></i></button></div>`;
-  }).join("");
-  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
-  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
-}
-
-function setLatMode(m){latMode=m;localStorage.setItem("nn_lat_mode",m);
-  document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));runLatency()}
 
 /* Events */
 document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
@@ -948,51 +747,61 @@ document.querySelectorAll(".nav button").forEach(btn=>{
     document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));
     document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
     btn.classList.add("on");
-    document.getElementById("tab-"+btn.dataset.t).classList.add("on");
+    const tab=document.getElementById("tab-"+btn.dataset.t);
+    if(tab) tab.classList.add("on");
+    const ann=document.getElementById("ann");
+    if(ann){ ann.style.display=(btn.dataset.t==="home" && ann.dataset.has==="1")?"flex":"none"; }
     requestAnimationFrame(()=>{window.scrollTo(0,0)});
   };
 });
-
-document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
-  usagePeriod=b.dataset.p||"total";
-  localStorage.setItem("nn_usage_period",usagePeriod);
-  document.querySelectorAll("#periodBar button").forEach(x=>x.classList.toggle("on",x.dataset.p===usagePeriod));
-  if(typeof renderTraffic==="function") renderTraffic();
-});
-
 document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
-document.getElementById("btnLatRefresh").onclick=()=>runLatency();
-document.querySelectorAll("#latModes button").forEach(b=>b.onclick=()=>setLatMode(b.dataset.m));
-document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===latMode));
 
-uiTheme();uiLang();data();renderQi();renderList();renderApps();
+
+function loadLinksFallback(){
+  if(links && links.length) return;
+  const url=n(TV.subUrl,subUrl)||(location.origin+location.pathname);
+  if(!url) return;
+  fetch(url,{credentials:"same-origin",headers:{"Accept":"text/plain,*/*"}}).then(r=>{
+    const ct=(r.headers.get("content-type")||"").toLowerCase();
+    if(ct.indexOf("text/html")>=0) return null;
+    return r.text();
+  }).then(txt=>{
+    if(!txt||!String(txt).trim()) return;
+    let raw=String(txt).trim();
+    // base64 subscription?
+    try{
+      if(!/^vless:|^vmess:|^trojan:|^ss:|^hysteria/i.test(raw) && /^[A-Za-z0-9+/=\s]+$/.test(raw.replace(/\s/g,""))){
+        raw=atob(raw.replace(/\s/g,""));
+      }
+    }catch(e){}
+    const arr=raw.split(/\r?\n/).map(s=>s.trim()).filter(s=>/^(vless|vmess|trojan|ss|ssr|hysteria|hy2|tuic|wireguard):\/\//i.test(s));
+    if(!arr.length) return;
+    links=arr;
+    TV.links=arr.join("\n");
+    try{renderList();renderQi();}catch(e){}
+  }).catch(()=>{});
+}
+
+try{uiTheme();}catch(e){}
+try{uiLang();}catch(e){}
+try{data();}catch(e){}
+try{renderQi();}catch(e){}
+try{renderList();}catch(e){}
+try{renderApps();}catch(e){}
+try{loadLinksFallback();}catch(e){}
 try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
-buildLatServers();renderLatencyList();updateWaves();
-setTimeout(runLatency,500);
+updateWaves();
 // refresh expiry every minute
 setInterval(data,60000);
 
-/* v2.1 handlers */
+/* handlers */
 (function(){
   const el=id=>document.getElementById(id);
   if(el("btnQrCopy")) el("btnQrCopy").onclick=()=>{ if(window.__lastQr) copy(window.__lastQr); };
   if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
   if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
-  let pingTimer=null;
-  document.querySelectorAll("#latInt button").forEach(b=>{
-    b.onclick=()=>{
-      document.querySelectorAll("#latInt button").forEach(x=>x.classList.remove("on"));
-      b.classList.add("on");
-      const s=Number(b.dataset.s)||0;
-      if(pingTimer){ clearInterval(pingTimer); pingTimer=null; }
-      if(s>0){
-        const tick=()=>{ try{ if(typeof runLatency==="function") runLatency(); else if(el("btnLatRefresh")) el("btnLatRefresh").click(); }catch(e){} };
-        pingTimer=setInterval(tick, s*1000);
-      }
-    };
-  });
 })();
 
 </script>
