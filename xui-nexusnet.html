@@ -5,12 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306b6d4'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <title>{{ .subTitle }}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
-  --font:"Inter","Vazirmatn",system-ui,sans-serif;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Vazirmatn",Tahoma,sans-serif;
   --p:#22d3ee; --p2:#3b82f6; --pg:rgba(34,211,238,.14);
   --bg:#020617; --sf:rgba(10,18,38,.55); --sf2:rgba(8,14,28,.88);
   --bd:rgba(100,180,255,.14); --tx:#f0f9ff; --mu:#8ba3b8;
@@ -299,13 +296,13 @@ html{-webkit-tap-highlight-color:transparent}
     </div>
     <div class="tools">
       <div class="lw" id="lw">
-        <button class="ib" type="button" id="langBtn"><i class="fa-solid fa-language"></i></button>
+        <button class="ib" type="button" id="langBtn" aria-label="Language"></button>
         <div class="ld">
           <button type="button" data-l="fa">فارسی</button>
           <button type="button" data-l="en">English</button>
         </div>
       </div>
-      <button class="ib" type="button" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
+      <button class="ib" type="button" id="themeBtn" aria-label="Theme"></button>
     </div>
   </div>
 
@@ -323,15 +320,7 @@ html{-webkit-tap-highlight-color:transparent}
       <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
     </div>
 
-        <div class="card period-card">
-      <div class="st"><i class="fa-solid fa-calendar-days"></i> <span id="tPeriod">بازه مصرف</span></div>
-      <div class="period" id="periodBar">
-        <button type="button" data-p="24h">24h</button>
-        <button type="button" data-p="7d">7d</button>
-        <button type="button" data-p="30d">30d</button>
-        <button type="button" data-p="total" class="on" id="pTotal">کل</button>
-      </div>
-    </div>
+        
 <div class="card">
       <div style="display:flex;justify-content:flex-end;margin-bottom:.65rem">
         <div class="badge ok" id="badge"><span id="badgeTxt">Active</span></div>
@@ -365,8 +354,8 @@ html{-webkit-tap-highlight-color:transparent}
       </div>
       <div class="bar"><i id="bar"></i></div>
       <div class="row">
-        <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">Copy</span></button>
-        <button class="btn bg" type="button" id="btnQr"><i class="fa-solid fa-qrcode"></i> QR</button>
+        <button class="btn bp" type="button" id="btnCopy">${ICON.copy} <span id="tCopy">Copy</span></button>
+        <button class="btn bg" type="button" id="btnQr"><span id="icoQr"></span> QR</button>
       </div>
       <div class="fmt" id="fmtRow">
         <button type="button" id="btnFmtJson" class="hid">JSON</button>
@@ -416,7 +405,7 @@ html{-webkit-tap-highlight-color:transparent}
     <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
     <div class="row" style="margin-top:.6rem">
-      <button class="btn bg" type="button" id="btnAll" class="btn-all" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+      <button class="btn bg btn-all" type="button" id="btnAll" style="grid-column:1/-1"><span id="icoAll"></span> <span id="tAll">کپی همه</span></button>
     </div>
   </div>
 
@@ -451,7 +440,7 @@ html{-webkit-tap-highlight-color:transparent}
 
 <div class="toast" id="toast"></div>
 <div id="md"><div class="mbx"><div id="qr"></div>
-<button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem"><i class="fa-solid fa-copy"></i> <span id="tQrCopy">Copy</span></button>
+<button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem"><span id="icoQrCopy"></span> <span id="tQrCopy">Copy</span></button>
 <button class="btn bg" type="button" style="width:100%" onclick="document.getElementById('md').classList.remove('open')">OK</button></div></div>
 
 <script>
@@ -462,20 +451,31 @@ const CODE_RE=/\b(DE|US|GB|UK|FR|NL|TR|AE|SG|JP|KR|IN|CA|AU|BR|RU|PL|IT|ES|SE|FI
 const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"},GB:{fa:"انگلستان",en:"UK"},FR:{fa:"فرانسه",en:"France"},NL:{fa:"هلند",en:"Netherlands"},TR:{fa:"ترکیه",en:"Turkey"},AE:{fa:"امارات",en:"UAE"},SG:{fa:"سنگاپور",en:"Singapore"},JP:{fa:"ژاپن",en:"Japan"},KR:{fa:"کره",en:"Korea"},IN:{fa:"هند",en:"India"},CA:{fa:"کانادا",en:"Canada"},AU:{fa:"استرالیا",en:"Australia"},BR:{fa:"برزیل",en:"Brazil"},RU:{fa:"روسیه",en:"Russia"},PL:{fa:"لهستان",en:"Poland"},IT:{fa:"ایتالیا",en:"Italy"},ES:{fa:"اسپانیا",en:"Spain"},SE:{fa:"سوئد",en:"Sweden"},FI:{fa:"فنلاند",en:"Finland"},NO:{fa:"نروژ",en:"Norway"},DK:{fa:"دانمارک",en:"Denmark"},CH:{fa:"سوئیس",en:"Switzerland"},AT:{fa:"اتریش",en:"Austria"},BE:{fa:"بلژیک",en:"Belgium"},PT:{fa:"پرتغال",en:"Portugal"},IE:{fa:"ایرلند",en:"Ireland"},HK:{fa:"هنگ‌کنگ",en:"Hong Kong"},TW:{fa:"تایوان",en:"Taiwan"},VN:{fa:"ویتنام",en:"Vietnam"},TH:{fa:"تایلند",en:"Thailand"},MY:{fa:"مالزی",en:"Malaysia"},ID:{fa:"اندونزی",en:"Indonesia"},PH:{fa:"فیلیپین",en:"Philippines"},IL:{fa:"اسرائیل",en:"Israel"},SA:{fa:"عربستان",en:"Saudi"},ZA:{fa:"آفریقای جنوبی",en:"S.Africa"},MX:{fa:"مکزیک",en:"Mexico"},AR:{fa:"آرژانتین",en:"Argentina"},UA:{fa:"اوکراین",en:"Ukraine"},RO:{fa:"رومانی",en:"Romania"},CZ:{fa:"چک",en:"Czechia"},HU:{fa:"مجارستان",en:"Hungary"},GR:{fa:"یونان",en:"Greece"},BG:{fa:"بلغارستان",en:"Bulgaria"},HR:{fa:"کرواسی",en:"Croatia"},RS:{fa:"صربستان",en:"Serbia"},SK:{fa:"اسلواکی",en:"Slovakia"},LT:{fa:"لیتوانی",en:"Lithuania"},LV:{fa:"لتونی",en:"Latvia"},EE:{fa:"استونی",en:"Estonia"},IS:{fa:"ایسلند",en:"Iceland"},NZ:{fa:"نیوزیلند",en:"New Zealand"},CL:{fa:"شیلی",en:"Chile"},CO:{fa:"کلمبیا",en:"Colombia"},PE:{fa:"پرو",en:"Peru"},IR:{fa:"ایران",en:"Iran"},CN:{fa:"چین",en:"China"}};
 
 /* ===== Background: real map positions for panel servers ===== */
-/* ===== Liquid wave ===== */
-let wavePhase=0;
+/* ===== Liquid wave (remaining-based, correct geometry) ===== */
+let wavePhase=0, waveRaf=0;
 function updateWaves(){
-  wavePhase+=0.05;
-  const pct=window.__pctT||0;
-  const y=Math.max(20,Math.min(120,120-(pct/100)*88));
-  const f=document.getElementById("liqFillT");if(!f)return;
-  f.setAttribute("y",y);f.setAttribute("height",130-y);
+  if(document.hidden){ waveRaf=0; return; }
+  wavePhase+=0.04;
+  const rem=window.__remPct!=null?window.__remPct:100; // remaining %
+  // clip circle r=44 at cy=60 => visible y ~16..104, height span 88
+  const y = rem>=99.5 ? 14 : Math.max(16, Math.min(104, 104 - 88*(rem/100)));
+  const f=document.getElementById("liqFillT"); if(!f) return;
+  f.setAttribute("y", y); f.setAttribute("height", 130-y);
   let d=`M 0 ${y}`;
-  for(let x=0;x<=120;x+=3)d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.8+Math.sin((x/120)*Math.PI*3.5+wavePhase*1.3)*1.2}`;
+  for(let x=0;x<=120;x+=3) d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.5+Math.sin((x/120)*Math.PI*3.2+wavePhase*1.4)*1.1}`;
   d+=` L 120 130 L 0 130 Z`;
-  document.getElementById("waveT").setAttribute("d",d);
-  requestAnimationFrame(updateWaves);
+  const w=document.getElementById("waveT"); if(w) w.setAttribute("d",d);
+  // color by remaining
+  const g=document.getElementById("liqT");
+  if(g){
+    const stops=g.querySelectorAll("stop");
+    if(rem>40){ stops[0].setAttribute("stop-color","#67e8f9"); stops[1].setAttribute("stop-color","#06b6d4"); }
+    else if(rem>15){ stops[0].setAttribute("stop-color","#fbbf24"); stops[1].setAttribute("stop-color","#d97706"); }
+    else { stops[0].setAttribute("stop-color","#f87171"); stops[1].setAttribute("stop-color","#dc2626"); }
+  }
+  waveRaf=requestAnimationFrame(updateWaves);
 }
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden && !waveRaf) waveRaf=requestAnimationFrame(updateWaves); });
 
 /* ===== Jalali ===== */
 function toJalaliParts(gy,gm,gd){
@@ -540,11 +540,26 @@ const I={
   fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
   en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
-let lang=localStorage.getItem("nn_lang")||"fa";
-let dark=(localStorage.getItem("nn_theme")||"dark")==="dark";
-let latMode=localStorage.getItem("nn_lat_mode")||"auto";
+const LS={get(k,d){try{return localStorage.getItem(k)||d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+const ICON={
+  lang:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`,
+  sun:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`,
+  moon:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+  copy:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  qr:`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM17 17h3v3h-3zM14 17h3"/></svg>`,
+  house:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  server:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>`,
+  apps:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>`,
+  user:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+};
+
+let lang=LS.get("nn_lang","fa");
+let dark=(LS.get("nn_theme","dark")==="dark");
+let latMode=LS.get("nn_lat_mode","auto");
 const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
 const n=(v,d)=>v==null||v===""?d:v;
+const esc=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
 const bytes=b=>{if(b<=0)return"0 B";const u=["B","KB","MB","GB","TB"];let i=0;while(b>=1024&&i<u.length-1){b/=1024;i++}return b.toFixed(i?1:0)+" "+u[i]};
 const plat=()=>{const ua=(navigator.userAgent||"").toLowerCase(),p=(navigator.platform||"").toLowerCase();
@@ -576,20 +591,20 @@ function uiLang(){
   document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
   document.getElementById("lMin").textContent=t("min");
   ["p1","p2","p3","p5","p6"].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=t(id)});
-  localStorage.setItem("nn_lang",lang);renderLatencyList();data();
+  LS.set("nn_lang",lang);renderLatencyList();data();
 }
-function uiTheme(){
+function uiTheme(){ document.getElementById("langBtn").innerHTML=ICON.lang;
   document.documentElement.setAttribute("data-theme",dark?"dark":"light");
-  document.getElementById("themeBtn").innerHTML=dark?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
-  localStorage.setItem("nn_theme",dark?"dark":"light");
+  document.getElementById("themeBtn").innerHTML=dark?ICON.sun:ICON.moon;
+  LS.set("nn_theme",dark?"dark":"light");
 }
 
 /* usage period: client-side samples in localStorage */
-let usagePeriod=localStorage.getItem("nn_usage_period")||"total";
+let usagePeriod="total"; // only real total from panel
 function recordUsageSample(down,up){
   try{
     const key="nn_usage_hist";
-    let arr=JSON.parse(localStorage.getItem(key)||"[]");
+    let arr=JSON.parse(LS.get(key,"[]"));
     const now=Date.now();
     arr.push({t:now,d:down,u:up});
     // keep 40 days
@@ -599,7 +614,7 @@ function recordUsageSample(down,up){
       const a=arr[arr.length-2],b=arr[arr.length-1];
       if(b.t-a.t<600000 && a.d===b.d && a.u===b.u) arr.splice(arr.length-2,1);
     }
-    localStorage.setItem(key,JSON.stringify(arr));
+    LS.set(key,JSON.stringify(arr));
   }catch(e){}
 }
 function periodWindowMs(p){
@@ -611,7 +626,7 @@ function periodWindowMs(p){
 function usageForPeriod(down,up,period){
   if(period==="total"||!periodWindowMs(period))return{d:down,u:up};
   try{
-    const arr=JSON.parse(localStorage.getItem("nn_usage_hist")||"[]");
+    const arr=JSON.parse(LS.get("nn_usage_hist","[]"));
     const now=Date.now(),win=periodWindowMs(period),from=now-win;
     if(!arr.length)return{d:down,u:up}; /* no history yet → show total */
     // base = last sample at or before window start; else first sample
@@ -640,11 +655,16 @@ function renderTraffic(){
   document.getElementById("limit").textContent=noLimit?"∞":bytes(tot);
   document.getElementById("left").textContent=noLimit?"∞":bytes(left);
   const pctBase=rawD+rawU;
-  const pct=noLimit?0:Math.min(100,Math.round(pctBase/tot*100));
-  document.getElementById("pctT").textContent=noLimit?"∞":(pct+"%");
-  document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:pct)/100);
-  document.getElementById("bar").style.width=(noLimit?0:pct)+"%";window.__pctT=noLimit?0:pct;
-  document.querySelectorAll("#periodBar button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
+  const usedPct=noLimit?0:Math.min(100,Math.round(pctBase/tot*100));
+  const remPct=noLimit?100:Math.max(0,100-usedPct);
+  document.getElementById("pctT").textContent=noLimit?"∞":(usedPct+"%");
+  document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:usedPct)/100);
+  document.getElementById("bar").style.width=(noLimit?0:usedPct)+"%";
+  window.__remPct=remPct; // liquid uses remaining
+  // color ring stroke by remaining
+  const rt=document.getElementById("rTraffic");
+  if(rt){ rt.style.stroke = remPct>40 ? "#22d3ee" : remPct>15 ? "#fbbf24" : "#f87171"; }
+  const pb=document.getElementById("periodBar"); if(pb) pb.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.p===usagePeriod));
 }
 
 function data(){
@@ -697,23 +717,33 @@ function data(){
     if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
   }catch(e){}
 
-  const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
-  const badge=document.getElementById("badge"),bt=document.getElementById("badgeTxt"),dot=document.getElementById("statusDot");
-  let stTxt=t("on");
-  if(en==="false"||en==="0"){badge.className="badge bad";stTxt=t("off");dot.className="dot off"}
-  else if(on==="true"||on==="1"){badge.className="badge ok";stTxt=t("online");dot.className="dot"}
-  else{badge.className="badge ok";stTxt=t("on");dot.className="dot"}
-  bt.textContent=stTxt;
-
+  // badge already set in try block above (expired/quota/expiring/online/off)
+  const dot=document.getElementById("statusDot");
+  if(dot){
+    const en=n(TV.enabled,"true"),on=n(TV.isOnline,"");
+    if(en==="false"||en==="0") dot.className="dot off";
+    else if(on==="true"||on==="1") dot.className="dot";
+    else dot.className="dot";
+  }
   renderTraffic();
 
-  // expiry timer (precise)
-  let hasExp=false,expDate=null;
+  // expiry timer (precise); negative = start on first use
+  let hasExp=false,expDate=null, startOnFirst=false;
   if(TV.expire&&TV.expire!=="0"&&TV.expire!==""){
-    expDate=new Date(isNaN(TV.expire)?TV.expire:Number(TV.expire)*1000);
-    if(!isNaN(expDate)&&expDate.getFullYear()>2000) hasExp=true;
+    const rawE=Number(TV.expire);
+    if(!isNaN(rawE) && rawE<0){ startOnFirst=true; }
+    else {
+      expDate=new Date(isNaN(TV.expire)?TV.expire:rawE*1000);
+      if(!isNaN(expDate)&&expDate.getFullYear()>2000) hasExp=true;
+    }
   }
-  if(hasExp){
+  if(startOnFirst){
+    document.getElementById("expD").textContent="—";
+    document.getElementById("expH").textContent="—";
+    document.getElementById("expM").textContent="—";
+    document.getElementById("expTag").textContent=lang==="fa"?"از اولین استفاده":"On first use";
+    document.getElementById("pv5").textContent=lang==="fa"?"از اولین استفاده":"On first use";
+  } else if(hasExp){
     const diff=Math.max(0,expDate-Date.now());
     const dd=Math.floor(diff/864e5),hh=Math.floor((diff%864e5)/36e5),mm=Math.floor((diff%36e5)/6e4);
     document.getElementById("expD").textContent=String(dd);
@@ -731,22 +761,25 @@ function data(){
 
   document.getElementById("pv1").textContent=emails[0]||"—";
   document.getElementById("pv2").textContent=n(TV.sId,"—");
-  document.getElementById("pv3").textContent=stTxt;
+  document.getElementById("pv3").textContent=document.getElementById("badgeTxt")?document.getElementById("badgeTxt").textContent:"—";
   document.getElementById("pv6").textContent=formatLastOnline(TV.lastOnline);
   if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
-function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
+function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";
+  if(typeof QRCode!=="undefined"){ try{ new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M}); }catch(e){ box.textContent="QR error"; } }
+  else { box.innerHTML='<div style="padding:1rem;text-align:center;color:var(--mu);font-size:.85rem">QR offline mode<br><small>Use Copy button</small></div>'; }
+  document.getElementById("md").classList.add("open"); }
 function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
   document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
 function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
   const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
 function renderList(){const box=document.getElementById("list");
   if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
-  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${nameOf(l)}</div>
-    <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
-    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
+  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${esc(nameOf(l))}</div>
+    <button class="mb" type="button" data-c="${i}">${ICON.copy}</button>
+    <button class="mb" type="button" data-q="${i}">${ICON.qr}</button></div>`).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
 }
@@ -825,7 +858,8 @@ function measureHTTP(s){
       return new Promise(res=>{
         const img=new Image();
         const t=setTimeout(()=>{ img.src=""; res(null); }, 2500);
-        img.onload=img.onerror=()=>{ clearTimeout(t); res(Math.round(performance.now()-t0)); };
+        img.onload=()=>{ clearTimeout(t); res(Math.round(performance.now()-t0)); };
+        img.onerror=()=>{ clearTimeout(t); res(null); };
         img.src=url+(url.includes("?")?"&":"?")+"t="+Date.now();
       });
     };
@@ -834,7 +868,6 @@ function measureHTTP(s){
         const portStr=(port===443||port===80)?"":(":"+port);
         const urls=[
           "https://"+s.host+portStr+"/",
-          "http://"+s.host+portStr+"/",
         ];
         for(const u of urls){
           let ms=await tryFetch(u);
@@ -883,7 +916,7 @@ async function runLatency(){
   }));
   document.getElementById("latUpdated").textContent=t("updated")+": "+new Date().toLocaleTimeString()+" · "+latMode.toUpperCase();
   btn.classList.remove("spin");latRunning=false;
-  try{ sortConfigsByPing(); }catch(e){}
+  // sort disabled to avoid list jump under finger; latency still shown in lat panel
 }
 function sortConfigsByPing(){
   if(!latServers.length||!links.length)return;
@@ -897,17 +930,17 @@ function sortConfigsByPing(){
   const box=document.getElementById("list");
   if(!box)return;
   box.innerHTML=ranked.map((x,idx)=>{
-    const name=(x.name||("Config "+(x.i+1))).slice(0,42);
+    const name=esc((x.name||("Config "+(x.i+1))).slice(0,42));
     const pingTxt=x.p<9e9?(x.p+" ms"):"";
     return `<div class="item"><span class="n">${name}${pingTxt?' · '+pingTxt:''}</span>
-      <button class="mb" type="button" data-c="${x.i}"><i class="fa-solid fa-copy"></i></button>
-      <button class="mb" type="button" data-q="${x.i}"><i class="fa-solid fa-qrcode"></i></button></div>`;
+      <button class="mb" type="button" data-c="${x.i}">${ICON.copy}</button>
+      <button class="mb" type="button" data-q="${x.i}">${ICON.qr}</button></div>`;
   }).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
 }
 
-function setLatMode(m){latMode=m;localStorage.setItem("nn_lat_mode",m);
+function setLatMode(m){latMode=m;LS.set("nn_lat_mode",m);
   document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===m));runLatency()}
 
 /* Events */
@@ -927,7 +960,7 @@ document.querySelectorAll(".nav button").forEach(btn=>{
 
 document.querySelectorAll("#periodBar button").forEach(b=>b.onclick=()=>{
   usagePeriod=b.dataset.p||"total";
-  localStorage.setItem("nn_usage_period",usagePeriod);
+  LS.set("nn_usage_period",usagePeriod);
   document.querySelectorAll("#periodBar button").forEach(x=>x.classList.toggle("on",x.dataset.p===usagePeriod));
   if(typeof renderTraffic==="function") renderTraffic();
 });
@@ -939,7 +972,7 @@ document.getElementById("btnLatRefresh").onclick=()=>runLatency();
 document.querySelectorAll("#latModes button").forEach(b=>b.onclick=()=>setLatMode(b.dataset.m));
 document.querySelectorAll("#latModes button").forEach(b=>b.classList.toggle("on",b.dataset.m===latMode));
 
-uiTheme();uiLang();data();renderQi();renderList();renderApps();
+uiTheme();uiLang();document.getElementById("langBtn").innerHTML=ICON.lang;["icoCopy","icoQr","icoAll","icoQrCopy"].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=id.includes("Qr")&&!id.includes("Copy")?ICON.qr:ICON.copy});data();renderQi();renderList();renderApps();
 try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
 buildLatServers();renderLatencyList();updateWaves();
 setTimeout(runLatency,500);
