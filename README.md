@@ -1,22 +1,50 @@
 # NexusNet Sub Theme
 
-Professional dual-panel subscription page for **3x-ui** and **PasarGuard**.
+**Version 3.0.0** — subscription page themes for **3x-ui (Sanaei)** and **PasarGuard**.
 
-Clean dark/light UI • No external CDN • Offline-friendly • CLI managed
+Based on the stable **2.1-opt** UI (fonts, layout, buttons) with renew/support and without live latency.
 
 ---
 
-## Quick Install
+## Quick install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
 ```
 
-After install, manage everything with:
+Then:
 
 ```bash
 sudo nxt-sub
 ```
+
+---
+
+## CLI menu (`sudo nxt-sub`)
+
+```
+1) Install / Reinstall  →  3x-ui
+2) Install / Reinstall  →  PasarGuard
+3) Update installed themes
+4) Update manager (nxt-sub only)
+5) Settings (title / bot / support / renew)
+6) Restore from backup
+7) Status
+8) Uninstall
+9) About
+0) Exit
+```
+
+### Injectable settings
+
+| Setting | Description |
+|---------|-------------|
+| Profile Title | Header title on the sub page |
+| Telegram Bot | `@username` |
+| Support URL | Support button link |
+| Renew URL | Renew button (home + profile) |
+
+Values are stored as base64 and injected safely into the theme `CONFIG` object.
 
 ---
 
@@ -25,94 +53,46 @@ sudo nxt-sub
 | Feature | Detail |
 |---------|--------|
 | Dual panel | 3x-ui / Sanaei + PasarGuard |
-| No CDN | System fonts + inline SVG icons |
-| Offline QR | Works without external libraries |
-| Safe storage | localStorage wrapped (private mode safe) |
-| XSS safe | Config names escaped |
-| Status badges | Expired / Quota full / Expiring / Online / Off |
-| Liquid ring | Remaining-based level + color |
-| Privacy ping | HTTPS only, onerror = fail |
-| Expire handling | Negative = "On first use" |
-| CLI | Full interactive menu |
-
----
-
-## CLI Menu (`sudo nxt-sub`)
-
-```
-1) Install / Reinstall  →  3x-ui
-2) Install / Reinstall  →  PasarGuard
-3) Update installed themes
-4) Settings (title / bot / support / renew)
-5) Restore from backup
-6) Status
-7) Uninstall
-8) About
-0) Exit
-```
-
-### Settings you can inject
-
-- Profile Title
-- Telegram Bot (`@username`)
-- Support URL
-- Renew URL
-
-Settings are written safely (`printf %q`) and injected into the theme CONFIG object.
+| UI | Inter + Vazirmatn, glass cards, bottom nav |
+| Background | Dark blue ambient orbs + stars |
+| Dark / Light | Theme toggle |
+| Traffic | Liquid ring (remaining) + down / up / used / left |
+| Expire | Day / hour / minute + Jalali |
+| Renew & Support | From `nxt-sub` settings |
+| Quick import | Happ, Hiddify, v2rayNG, V2Box |
+| Apps list | Android, iOS, Windows, macOS, Linux |
+| Language | Persian / English |
 
 ---
 
 ## Manual paths
 
-| Panel | Theme path |
-|-------|------------|
+| Panel | Path |
+|-------|------|
 | 3x-ui | `/etc/x-ui/sub/sub.html` |
 | PasarGuard | `/var/lib/pasarguard/templates/subscription/index.html` |
 
-**3x-ui panel setting:**  
-`Sub Theme Directory = /etc/x-ui/sub/`
-
-**PasarGuard:**  
-Installer writes `CUSTOM_TEMPLATES_DIRECTORY` and `SUBSCRIPTION_PAGE_TEMPLATE` into `/opt/pasarguard/.env` (only if missing).
+**3x-ui:** if available, set `Sub Theme Directory = /etc/x-ui/sub/`.  
+Older panels: copy `sub.html` to the default sub folder and restart x-ui.
 
 ---
 
-## Update
+## Update / Uninstall
 
 ```bash
 sudo nxt-sub
-# → choose 3) Update
+# 3) Update themes
+# 4) Update manager only (no bash install needed)
+# 8) Uninstall
 ```
-
-Or re-run the one-liner installer.
 
 ---
 
-## Uninstall
-
-```bash
-sudo nxt-sub
-# → 7) Uninstall
-```
-
-Backups of previous theme files are kept automatically.
-
----
-
-## Files in this repo
+## Package files
 
 | File | Purpose |
 |------|---------|
 | `xui-nexusnet.html` | 3x-ui theme |
 | `pasarguard-nexusnet.html` | PasarGuard theme |
-| `nxt-sub` | Interactive CLI manager |
+| `nxt-sub` | Interactive CLI |
 | `install.sh` | One-line installer |
-
----
-
-## Version
-
-**2.8** — stable core from 2.1 + safety & UX fixes
-
-Repo: https://github.com/SiNaKeEn/NexusNet-Sub  
-Branch: `Template`
