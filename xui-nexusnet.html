@@ -221,6 +221,17 @@ a.btn.bp{color:#fff}
 
 .usage-hd{display:flex;justify-content:flex-start;margin-bottom:.75rem}
 .usage-hd .badge{font-size:.72rem}
+
+.ring-wrap{filter:drop-shadow(0 0 18px rgba(34,211,238,.28))}
+.ring-wrap svg circle[id="rTraffic"],.ring-wrap svg path{filter:drop-shadow(0 0 6px rgba(56,189,248,.45))}
+.ring-center .pct{background:linear-gradient(180deg,#ecfeff,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-size:1.35rem;font-weight:900;letter-spacing:-.02em}
+html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e7490,#0369a1);-webkit-background-clip:text;background-clip:text}
+.ring-center .lab{opacity:.85;letter-spacing:.02em}
+.ring-wrap::after{content:"";position:absolute;inset:18px;border-radius:50%;
+  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 55%);
+  pointer-events:none}
+
 </style>
 </head>
 <body>
@@ -287,13 +298,26 @@ a.btn.bp{color:#fff}
             <defs>
               <clipPath id="clipT"><circle cx="60" cy="60" r="44"/></clipPath>
               <linearGradient id="liqT" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#67e8f9"/><stop offset="100%" stop-color="#06b6d4"/>
+                <stop offset="0%" stop-color="#a5f3fc"/>
+                <stop offset="45%" stop-color="#22d3ee"/>
+                <stop offset="100%" stop-color="#0284c7"/>
+              </linearGradient>
+              <radialGradient id="liqGlow" cx="50%" cy="35%" r="60%">
+                <stop offset="0%" stop-color="rgba(255,255,255,.55)"/>
+                <stop offset="55%" stop-color="rgba(103,232,249,.15)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+              </radialGradient>
+              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#67e8f9"/>
+                <stop offset="50%" stop-color="#38bdf8"/>
+                <stop offset="100%" stop-color="#6366f1"/>
               </linearGradient>
             </defs>
             <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
-            <circle id="rTraffic" cx="60" cy="60" r="50" fill="none" stroke="#22d3ee" stroke-width="7"
+            <circle id="rTraffic" cx="60" cy="60" r="50" fill="none" stroke="url(#ringGrad)" stroke-width="7"
               stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
             <g clip-path="url(#clipT)">
+              <rect id="liqShine" fill="url(#liqGlow)" x="10" y="10" width="100" height="100" clip-path="url(#clipT)"></rect>
               <rect id="liqFillT" x="0" y="120" width="120" height="120" fill="url(#liqT)" opacity=".75"/>
               <path id="waveT" fill="url(#liqT)" opacity=".9"/>
             </g>
@@ -390,23 +414,29 @@ function updateWaves(){
   if(document.hidden || (document.getElementById("tab-home") && !document.getElementById("tab-home").classList.contains("on"))){
     requestAnimationFrame(updateWaves); return;
   }
+  const pct=window.__pctT||0;
+  const yBase=104-(pct/100)*88;
   if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    const pct=window.__pctT||0;
-    const y=104-(pct/100)*88;
     const f=document.getElementById("liqFillT");
-    if(f){f.setAttribute("y",y);f.setAttribute("height",130-y);}
+    if(f){f.setAttribute("y",yBase);f.setAttribute("height",Math.max(0,130-yBase));}
     requestAnimationFrame(updateWaves); return;
   }
-  wavePhase+=0.045;
-  const pct=window.__pctT||0;
-  // circle interior roughly y=16 (full) to y=104 (empty)
-  const y=Math.max(16,Math.min(104,104-(pct/100)*88));
-  const f=document.getElementById("liqFillT");if(!f){requestAnimationFrame(updateWaves);return;}
-  f.setAttribute("y",y);f.setAttribute("height",120-y+20);
-  let d=`M 0 ${y}`;
-  for(let x=0;x<=120;x+=3)d+=` L ${x} ${y+Math.sin((x/120)*Math.PI*2+wavePhase)*2.6+Math.sin((x/120)*Math.PI*3.2+wavePhase*1.2)*1.1}`;
-  d+=` L 120 130 L 0 130 Z`;
-  const w=document.getElementById("waveT");if(w)w.setAttribute("d",d);
+  wavePhase+=0.055;
+  const amp=2.8;
+  const y=yBase+Math.sin(wavePhase)*amp;
+  const f=document.getElementById("liqFillT");
+  if(f){
+    f.setAttribute("y",y);
+    f.setAttribute("height",Math.max(0,130-y));
+  }
+  // animate wave path if present
+  const w=document.getElementById("waveT");
+  if(w){
+    const y1=y+1, y2=y+4;
+    const d=`M 0 ${y1} Q 30 ${y1-6*Math.sin(wavePhase)} 60 ${y1} T 120 ${y1} V 120 H 0 Z`;
+    w.setAttribute("d",d);
+    w.setAttribute("opacity", pct<=0?0:0.55);
+  }
   requestAnimationFrame(updateWaves);
 }
 
@@ -636,10 +666,10 @@ function data(){
   document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
 
   // clearer status
+  let st="ok", stTxt=t("on");
   try{
     const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
     const exp=num(TV.expire);
-    let st="ok", stTxt=t("on");
     const en=n(TV.enabled,"true");
     if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
     else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
@@ -652,7 +682,6 @@ function data(){
     if(bt) bt.textContent=stTxt;
     const dot=document.getElementById("statusDot");
     if(dot) dot.className=(st==="bad")?"dot off":"dot";
-    // home renew when <=7 days or low volume
     const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
     const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
     let needRenew=false;
@@ -693,10 +722,11 @@ function data(){
     document.getElementById("pv5").textContent=t("unl");
   }
 
-  document.getElementById("pv1").textContent=emails[0]||"—";
-  document.getElementById("pv2").textContent=n(TV.sId,"—");
-  document.getElementById("pv3").textContent=stTxt;
-  document.getElementById("pv6").textContent=formatLastOnline(TV.lastOnline);
+  const _setp=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  _setp("pv1",emails[0]||"—");
+  _setp("pv2",n(TV.sId,"—"));
+  _setp("pv3",stTxt);
+  _setp("pv6",formatLastOnline(TV.lastOnline));
   if(TV.announce){document.getElementById("ann").style.display="flex";document.getElementById("annTxt").textContent=TV.announce}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
@@ -744,12 +774,39 @@ document.getElementById("btnCopy").onclick=()=>copy(subUrl);
 document.getElementById("btnQr").onclick=()=>qr(subUrl);
 document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
 
+
+function loadLinksFallback(){
+  if(links && links.length) return;
+  const url=n(TV.subUrl,subUrl)||(location.origin+location.pathname);
+  if(!url) return;
+  fetch(url,{credentials:"same-origin",headers:{"Accept":"text/plain,*/*"}}).then(r=>{
+    const ct=(r.headers.get("content-type")||"").toLowerCase();
+    if(ct.indexOf("text/html")>=0) return null;
+    return r.text();
+  }).then(txt=>{
+    if(!txt||!String(txt).trim()) return;
+    let raw=String(txt).trim();
+    // base64 subscription?
+    try{
+      if(!/^vless:|^vmess:|^trojan:|^ss:|^hysteria/i.test(raw) && /^[A-Za-z0-9+/=\s]+$/.test(raw.replace(/\s/g,""))){
+        raw=atob(raw.replace(/\s/g,""));
+      }
+    }catch(e){}
+    const arr=raw.split(/\r?\n/).map(s=>s.trim()).filter(s=>/^(vless|vmess|trojan|ss|ssr|hysteria|hy2|tuic|wireguard):\/\//i.test(s));
+    if(!arr.length) return;
+    links=arr;
+    TV.links=arr.join("\n");
+    try{renderList();renderQi();}catch(e){}
+  }).catch(()=>{});
+}
+
 try{uiTheme();}catch(e){}
 try{uiLang();}catch(e){}
 try{data();}catch(e){}
 try{renderQi();}catch(e){}
 try{renderList();}catch(e){}
 try{renderApps();}catch(e){}
+try{loadLinksFallback();}catch(e){}
 try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
 updateWaves();
 // refresh expiry every minute
