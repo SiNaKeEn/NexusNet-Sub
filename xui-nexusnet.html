@@ -2,10 +2,10 @@
 <html lang="fa" dir="rtl" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306b6d4'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <title>{{ .subTitle }}</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<!-- Fonts fall back to local system fonts; no remote font request required. -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 <style>
 :root{
@@ -245,6 +245,28 @@ html{-webkit-tap-highlight-color:transparent}
 /* readable text */
 .hd h1,.vol .v,.timer .n{color:var(--tx)}
 
+
+/* v2.9 responsive polish */
+.card,.grp{box-shadow:0 14px 36px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.035);transition:border-color .22s,box-shadow .22s,transform .22s;animation:nnCardIn .48s both}
+.card:nth-child(2){animation-delay:.04s}.card:nth-child(3){animation-delay:.08s}.card:nth-child(4){animation-delay:.12s}
+@keyframes nnCardIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+.card:hover,.grp:hover{border-color:rgba(34,211,238,.24);box-shadow:0 18px 42px rgba(0,0,0,.2),inset 0 1px 0 rgba(255,255,255,.045)}
+#rTraffic{transition:stroke-dashoffset .65s cubic-bezier(.2,.75,.2,1),stroke .35s}
+@media(min-width:900px){
+ .app{max-width:1120px!important;padding:1.6rem 1.5rem 6rem;margin:1.2rem auto}
+ #tab-home.on{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(300px,.85fr);align-items:start;gap:1rem}
+ #tab-home>.skel,#tab-home>.home-renew,#tab-home>#warnVol,#tab-home>#warnExp{grid-column:1/-1}
+ #tab-home>.card:first-of-type{grid-column:1}
+ #tab-home>#expCard{grid-column:2}
+ #tab-home>.st,#tab-home>#qi{grid-column:2}
+ #tab-cfg>#list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.55rem}
+ #tab-apps.on #apps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem}
+ #tab-profile.on{max-width:850px;margin-inline:auto}
+ .nav{max-width:560px}
+}
+@media(max-width:520px){.app{padding-inline:.8rem}.usage{gap:.7rem}.ring-wrap,.ring-wrap svg{width:98px;height:98px}.vol .v{font-size:.84rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.orb,.stars{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -318,7 +340,7 @@ html{-webkit-tap-highlight-color:transparent}
       </div>
       <div class="bar"><i id="bar"></i></div>
       <div class="row">
-        <button class="btn bp" type="button" id="btnCopy">${ICON.copy} <span id="tCopy">Copy</span></button>
+        <button class="btn bp" type="button" id="btnCopy"><span id="icoCopy"></span> <span id="tCopy">Copy</span></button>
         <button class="btn bg" type="button" id="btnQr"><span id="icoQr"></span> QR</button>
       </div>
       <div class="fmt" id="fmtRow">
@@ -396,7 +418,7 @@ const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"}
 /* ===== Liquid wave (remaining-based, correct geometry) ===== */
 let wavePhase=0, waveRaf=0;
 function updateWaves(){
-  if(document.hidden){ waveRaf=null; return; }
+  if(document.hidden || (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)){ waveRaf=null; return; }
   wavePhase += 0.055;
   const rem = window.__pctT || 0;
   // clip circle r=44 @ cy=60 → liquid surface from y≈16 (full) to y≈104 (empty)
@@ -439,7 +461,7 @@ function updateWaves(){
   }
   waveRaf = requestAnimationFrame(updateWaves);
 }
-document.addEventListener("visibilitychange",()=>{ if(!document.hidden && !waveRaf) waveRaf=requestAnimationFrame(updateWaves); });
+document.addEventListener("visibilitychange",()=>{ if(!document.hidden && !waveRaf && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) waveRaf=requestAnimationFrame(updateWaves); });
 
 /* ===== Jalali ===== */
 function toJalaliParts(gy,gm,gd){
@@ -484,7 +506,7 @@ const CONFIG={
 
 const TV={
   sId:"{{ .sId }}",enabled:"{{ .enabled }}",isOnline:"{{ .isOnline }}",
-  downloadByte:"{{ .downloadByte }}",uploadByte:"{{ .uploadByte }}",totalByte:"{{ .totalByte }}",
+  downloadByte:"{{ .downloadByte }}",uploadByte:"{{ .uploadByte }}",totalByte:"{{ .totalByte }}",trafficSplitAvailable:"true",
   expire:"{{ .expire }}",lastOnline:"{{ .lastOnline }}",
   subUrl:"{{ .subUrl }}",subJsonUrl:"{{ .subJsonUrl }}",subClashUrl:"{{ .subClashUrl }}",
   subTitle:"{{ .subTitle }}",subSupportUrl:"{{ .subSupportUrl }}",
@@ -520,7 +542,6 @@ const ICON={
 
 let lang=LS.get("nn_lang","fa");
 let dark=(LS.get("nn_theme","dark")==="dark");
-let latMode="off";
 const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
 const n=(v,d)=>v==null||v===""?d:v;
 const esc=s=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
@@ -536,8 +557,6 @@ const subTitle=(String(CONFIG.profileTitle||"").trim())||n(TV.subTitle,"Subscrip
 const links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
 const emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
 
-function countryLabel(){}
-
 function uiLang(){
   document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
   ["n1","n2","n3","n4"].forEach((id,i)=>document.getElementById(id).textContent=t(["n1","n2","n3","n4"][i]));
@@ -550,7 +569,7 @@ function uiLang(){
   document.getElementById("tQi").textContent=t("qi");document.getElementById("tCfg").textContent=t("cfg");
   document.getElementById("tAll").textContent=t("all");document.getElementById("tApps").textContent=t("apps");
   document.getElementById("tProf").textContent=t("prof");document.getElementById("lTraffic").textContent=t("traffic");
-  document.getElementById("tLat").textContent=t("lat");document.getElementById("tExp").textContent=t("exp");
+  const te=document.getElementById("tExp");if(te)te.textContent=t("exp");
   const tp=document.getElementById("tPeriod");if(tp)tp.textContent=t("period");
   document.getElementById("lDay").textContent=t("day");document.getElementById("lHour").textContent=t("hour");
   document.getElementById("lMin").textContent=t("min");
@@ -624,7 +643,8 @@ function renderTraffic(){
   document.getElementById("pctT").textContent=noLimit?"∞":(usedPct+"%");
   document.getElementById("rTraffic").style.strokeDashoffset=String(CIRC-CIRC*(noLimit?0:usedPct)/100);
   document.getElementById("bar").style.width=(noLimit?0:usedPct)+"%";
-  window.__remPct=remPct; // liquid uses remaining
+  window.__pctT=noLimit?0:usedPct;
+  window.__remPct=remPct;
   // color ring stroke by remaining
   const rt=document.getElementById("rTraffic");
   if(rt){ rt.style.stroke = remPct>40 ? "#22d3ee" : remPct>15 ? "#fbbf24" : "#f87171"; }
@@ -752,34 +772,7 @@ function renderApps(){const cur=plat();
     return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
       ${g.a.map(a=>{const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);const letter=String(a.n).slice(0,1).toUpperCase();return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
 
-function extractHost(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
-  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
-  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
-}catch(e){}return{host:"",port:443,name:nameOf(link)}}
-function detectLocation(name){
-  for(const [flag,code] of Object.entries(FLAG_MAP))if(name.includes(flag))return{flag,code};
-  const m=name.match(CODE_RE);if(m){let code=m[1].toUpperCase();if(code==="UK")code="GB";return{flag:CODE_TO_FLAG[code]||"🏳️",code}}
-  return null;
-}
 
-let latServers=[],latRunning=false;
-function buildLatServers(){}
-
-
-function measureWS(){}
-function measureHTTP(){}
-async function measureOne(){}
-
-function pingClass(ms){if(ms==null)return"wait";if(ms<120)return"good";if(ms<280)return"mid";return"bad"}
-function barWidth(){}
-function barColor(ms){if(ms==null)return"var(--mu)";if(ms<120)return"var(--ok)";if(ms<280)return"var(--wn)";return"var(--er)"}
-function renderLatencyList(){}
-async function runLatency(){}
-function sortConfigsByPing(){}
-
-function setLatMode(){}
 
 /* Events */
 document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
