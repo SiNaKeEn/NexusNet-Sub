@@ -247,6 +247,64 @@ html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
 }
 .ring-wrap svg{overflow:visible}
 
+
+/* ring column + liquid (CSS — works on Windows) */
+.ring-col{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex-shrink:0}
+.ring-wrap{position:relative;width:118px;height:118px;flex-shrink:0;
+  filter:drop-shadow(0 0 16px rgba(34,211,238,.35))}
+.ring-wrap svg{position:absolute;inset:0;width:118px;height:118px;display:block;z-index:2;pointer-events:none}
+.liq-ball{position:absolute;inset:14px;border-radius:50%;overflow:hidden;z-index:1;
+  background:radial-gradient(circle at 50% 30%,rgba(15,23,42,.55),rgba(2,6,23,.85));
+  box-shadow:inset 0 0 12px rgba(0,0,0,.35)}
+.liq-water{position:absolute;left:0;right:0;bottom:0;height:var(--pct,50%);
+  background:linear-gradient(180deg,#7dd3fc 0%,#22d3ee 40%,#0284c7 100%);
+  transition:height .7s cubic-bezier(.4,0,.2,1);
+  animation:liqBob 3.2s ease-in-out infinite}
+.liq-water::before{content:"";position:absolute;top:-10px;left:-40%;width:180%;height:20px;
+  background:radial-gradient(ellipse at center,rgba(255,255,255,.55) 0%,rgba(255,255,255,.12) 42%,transparent 70%);
+  animation:liqSurf 2.8s linear infinite}
+.liq-water::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,transparent 28%,rgba(0,40,80,.15) 100%)}
+@keyframes liqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes liqSurf{0%{transform:translateX(0)}100%{transform:translateX(22%)}}
+.ring-center{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
+  pointer-events:none}
+.ring-center .pct{font-size:1.4rem;font-weight:900;line-height:1;
+  color:#f0fdff;text-shadow:0 1px 2px rgba(0,0,0,.65),0 0 12px rgba(0,0,0,.35);
+  letter-spacing:-.02em}
+html[data-theme="light"] .ring-center .pct{color:#0c4a6e;text-shadow:0 1px 0 rgba(255,255,255,.8)}
+html[data-theme="light"] .liq-ball{background:radial-gradient(circle at 50% 30%,rgba(224,242,254,.9),rgba(186,230,253,.95))}
+.total-under{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-width:118px;
+  padding:.28rem .45rem;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid var(--bd)}
+html[data-theme="light"] .total-under{background:rgba(255,255,255,.55)}
+.total-under span{font-size:.65rem;color:var(--mu);font-weight:600}
+.total-under b{font-size:.8rem;font-weight:800;color:var(--tx)}
+/* usage layout */
+.usage{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
+.usage .stats-grid{flex:1;min-width:140px;display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+/* ambient stronger motion */
+.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
+  background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%);
+  animation:ambPulse 12s ease-in-out infinite alternate}
+html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
+@keyframes ambPulse{0%{filter:hue-rotate(0deg) brightness(1)}100%{filter:hue-rotate(12deg) brightness(1.08)}}
+.orb{position:absolute;border-radius:50%;filter:blur(56px);opacity:.65;pointer-events:none;will-change:transform}
+.orb.a{width:420px;height:420px;background:#1d4ed8;top:-14%;left:-14%;animation:floatA 14s ease-in-out infinite}
+.orb.b{width:360px;height:360px;background:#0e7490;bottom:-8%;right:-12%;animation:floatB 18s ease-in-out infinite}
+.orb.c{width:280px;height:280px;background:#4f46e5;top:40%;left:55%;animation:floatC 16s ease-in-out infinite;opacity:.45}
+@keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,30px) scale(1.08)}}
+@keyframes floatB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-25px) scale(1.12)}}
+@keyframes floatC{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,40px) scale(1.1)}}
+.orb.d{width:240px;height:240px;background:#0369a1;top:60%;left:10%;animation:floatA 22s ease-in-out infinite reverse;opacity:.35}
+.stars{position:absolute;inset:0;background:
+  radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.55),transparent),
+  radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.4),transparent),
+  radial-gradient(1.5px 1.5px at 70% 30%,rgba(255,255,255,.5),transparent),
+  radial-gradient(1px 1px at 90% 60%,rgba(255,255,255,.35),transparent),
+  radial-gradient(1px 1px at 50% 50%,rgba(255,255,255,.3),transparent);
+  animation:twinkle 6s ease-in-out infinite alternate;opacity:.7}
+@keyframes twinkle{0%{opacity:.4}100%{opacity:.85}}
+
 </style>
 </head>
 <body>
@@ -273,7 +331,7 @@ html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
 {{end}}</textarea>
 
 <div class="ambient" aria-hidden="true">
-  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div>
+  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="orb d"></div>
   <div class="stars"></div>
 </div>
 <div class="app">
@@ -305,43 +363,31 @@ html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
 
     <div class="card">
       <div class="usage">
-
-      <div class="total-strip">
-        <span id="sTotal">حجم کل</span>
-        <b id="total">—</b>
-      </div>
-
+<div class="ring-col">
         <div class="ring-wrap">
+          <div class="liq-ball" aria-hidden="true">
+            <div class="liq-water" id="liqWater" style="--pct:100%"></div>
+          </div>
           <svg viewBox="0 0 120 120">
             <defs>
-              <clipPath id="clipT"><circle cx="60" cy="60" r="44"/></clipPath>
-              <linearGradient id="liqT" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#a5f3fc"/>
-                <stop offset="45%" stop-color="#22d3ee"/>
-                <stop offset="100%" stop-color="#0284c7"/>
-              </linearGradient>
-              <radialGradient id="liqGlow" cx="50%" cy="35%" r="60%">
-                <stop offset="0%" stop-color="rgba(255,255,255,.55)"/>
-                <stop offset="55%" stop-color="rgba(103,232,249,.15)"/>
-                <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
-              </radialGradient>
               <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
                 <stop offset="0%" stop-color="#67e8f9"/>
                 <stop offset="50%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#6366f1"/>
+                <stop offset="100%" stop-color="#818cf8"/>
               </linearGradient>
             </defs>
-            <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
-            <circle id="rTraffic" cx="60" cy="60" r="50" fill="none" stroke="url('#ringGrad')" stroke-width="7"
-              stroke-linecap="round" stroke-dasharray="314.16" stroke-dashoffset="314.16" transform="rotate(-90 60 60)"/>
-            <g clip-path="url('#clipT')">
-              <rect id="liqShine" fill="url('#liqGlow')" x="10" y="10" width="100" height="100" clip-path="url('#clipT')"></rect>
-              <rect id="liqFillT" x="0" y="120" width="120" height="120" fill="url('#liqT')" opacity=".75"/>
-              <path id="waveT" fill="url('#liqT')" opacity=".9"/>
-            </g>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(34,211,238,.12)" stroke-width="9"/>
+            <circle id="rTraffic" cx="60" cy="60" r="48" fill="none" stroke="url('#ringGrad')" stroke-width="9"
+              stroke-linecap="round" stroke-dasharray="301.59" stroke-dashoffset="0"
+              transform="rotate(-90 60 60)"/>
           </svg>
-          <div class="ring-center"><div class="pct" id="pctT">0%</div></div>
+          <div class="ring-center"><div class="pct" id="pctT">∞</div></div>
         </div>
+        <div class="total-under">
+          <span id="sTotal">حجم کل</span>
+          <b id="total">—</b>
+        </div>
+      </div>
         <div class="vol-grid" style="flex:1">
           <div class="vol"><div class="k"><i class="fa-solid fa-download"></i><span id="sDown">دانلود</span></div><div class="v" id="down">—</div></div>
           <div class="vol"><div class="k"><i class="fa-solid fa-upload"></i><span id="sUp">آپلود</span></div><div class="v" id="up">—</div></div>
@@ -428,35 +474,8 @@ const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"}
 /* ===== Background: real map positions for panel servers ===== */
 /* ===== Liquid wave ===== */
 let wavePhase=0;
-function updateWaves(){
-  if(document.hidden || (document.getElementById("tab-home") && !document.getElementById("tab-home").classList.contains("on"))){
-    requestAnimationFrame(updateWaves); return;
-  }
-  const pct=window.__pctT||0;
-  const yBase=104-(pct/100)*88;
-  if(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    const f=document.getElementById("liqFillT");
-    if(f){f.setAttribute("y",yBase);f.setAttribute("height",Math.max(0,130-yBase));}
-    requestAnimationFrame(updateWaves); return;
-  }
-  wavePhase+=0.055;
-  const amp=2.8;
-  const y=yBase+Math.sin(wavePhase)*amp;
-  const f=document.getElementById("liqFillT");
-  if(f){
-    f.setAttribute("y",y);
-    f.setAttribute("height",Math.max(0,130-y));
-  }
-  // animate wave path if present
-  const w=document.getElementById("waveT");
-  if(w){
-    const y1=y+1, y2=y+4;
-    const d=`M 0 ${y1} Q 30 ${y1-6*Math.sin(wavePhase)} 60 ${y1} T 120 ${y1} V 120 H 0 Z`;
-    w.setAttribute("d",d);
-    w.setAttribute("opacity", pct<=0?0:0.55);
-  }
-  requestAnimationFrame(updateWaves);
-}
+function updateWaves(){ /* CSS liquid */ }
+
 
 /* ===== Jalali ===== */
 function toJalaliParts(gy,gm,gd){
@@ -648,27 +667,16 @@ function renderTraffic(){
   if(el("total")) el("total").textContent=noLimit?"∞":bytes(tot);
   if(el("pctT")) el("pctT").textContent=noLimit?"∞":(remPct+"%");
   window.__pctT=remPct;
-  // ring stroke
-  const circ=typeof CIRC==="number"?CIRC:2*Math.PI*48;
+  const circ=typeof CIRC==="number"?CIRC:(2*Math.PI*48);
   if(el("rTraffic")) el("rTraffic").style.strokeDashoffset=String(circ-circ*remPct/100);
-  if(el("bar")) el("bar").style.width=(noLimit?0:Math.min(100,Math.round(used/tot*100)))+"%";
-  // liquid fill — direct attrs (works on Windows Chromium/Edge)
+  if(el("bar")) el("bar").style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
+  // CSS liquid (Windows-friendly)
+  const w=el("liqWater");
+  if(w){ w.style.setProperty("--pct", (noLimit?100:remPct)+"%"); }
+  // legacy SVG fill if present
   const y=104-(remPct/100)*88;
   const f=el("liqFillT");
-  if(f){
-    f.setAttribute("y", String(y));
-    f.setAttribute("height", String(Math.max(0,130-y)));
-    f.setAttribute("fill", "url('#liqT')");
-    f.style.fill="url('#liqT')";
-  }
-  const w=el("waveT");
-  if(w){
-    if(remPct<=0){ w.setAttribute("opacity","0"); }
-    else {
-      w.setAttribute("opacity","0.5");
-      w.setAttribute("d","M 0 "+(y+2)+" Q 30 "+(y-4)+" 60 "+(y+2)+" T 120 "+(y+2)+" V 120 H 0 Z");
-    }
-  }
+  if(f){ f.setAttribute("y",String(y)); f.setAttribute("height",String(Math.max(0,130-y))); }
 }
 
 function data(){
