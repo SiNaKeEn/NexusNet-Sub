@@ -139,6 +139,30 @@ body[data-mood="bad"] .ambient{
 /* cfg tab title spacing like 3.0.1 */
 #tab-cfg > .st{margin-bottom:.65rem}
 
+
+/*layout-301*/
+.usage{display:flex!important;align-items:center!important;gap:.75rem!important;flex-wrap:nowrap!important}
+.ring-col{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex-shrink:0}
+.ring-wrap{width:118px;height:118px}
+.total-under{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-width:110px;
+  padding:.28rem .45rem;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid var(--bd)}
+.total-under span{font-size:.65rem;color:var(--mu);font-weight:600}
+.total-under b{font-size:.85rem;font-weight:800;color:var(--tx)}
+.usage .vol-grid{flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.vol.full{grid-column:auto} /* no full-width total in grid */
+.vol.accent.full{grid-column:auto}
+
+/* apps accordion like 3.0.1 */
+.grp{margin-bottom:.55rem;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:var(--sf)}
+.grp > h4{display:flex;align-items:center;gap:.45rem;padding:.7rem .85rem;margin:0;cursor:pointer;
+  font-size:.88rem;font-weight:700;user-select:none}
+.grp .chev{margin-inline-start:auto;opacity:.55;transition:transform .2s;font-size:.75rem}
+.grp.collapsed .chev{transform:rotate(-90deg)}
+.grp .grp-body{padding:0 .65rem .65rem}
+.grp.collapsed .grp-body{display:none}
+.grp.hot{border-color:rgba(34,211,238,.35);box-shadow:0 0 0 1px rgba(34,211,238,.12)}
+.grp.hot > h4{color:var(--p)}
+
 </style>
 </head>
 <body data-mood="ok">
@@ -170,7 +194,8 @@ body[data-mood="bad"] .ambient{
     <div class="card">
       <div style="display:flex;justify-content:flex-end;margin-bottom:.4rem"><div class="badge ok" id="badge"><span id="badgeTxt">—</span></div></div>
       <div class="usage">
-        <div class="ring-wrap" id="ringWrap">
+        <div class="ring-col">
+          <div class="ring-wrap" id="ringWrap">
           <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
             <defs>
               <clipPath id="clipT"><circle cx="60" cy="60" r="43"/></clipPath>
@@ -190,15 +215,18 @@ body[data-mood="bad"] .ambient{
             <path d="M 27 46 A 36 36 0 0 1 50 26" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round" fill="none"/>
             <circle cx="33" cy="58" r="1.6" fill="#fff" fill-opacity=".55"/>
           </svg>
-          <div class="ring-center"><div class="pct" id="pctT">—</div><div class="lab" id="lTraffic">—</div></div>
+          <div class="ring-center"><div class="pct" id="pctT">—</div></div><div class="lab" id="lTraffic">—</div></div>
         </div>
-        <div class="vol-grid">
-          <div class="vol accent full"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-database"/></svg><span data-i18n="limit"></span></div><div class="v" id="limit">—</div></div>
-          <div class="vol" id="cDown"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="down"></span></div><div class="v" id="down">—</div></div>
-          <div class="vol" id="cUp"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-upload"/></svg><span data-i18n="up"></span></div><div class="v" id="up">—</div></div>
-          <div class="vol" id="cUsed"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-chart-simple"/></svg><span data-i18n="used"></span></div><div class="v" id="used">—</div></div>
-          <div class="vol" id="cLeft"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-battery-three-quarters"/></svg><span data-i18n="left"></span></div><div class="v" id="left">—</div></div>
-          <div class="vol full" id="cLife" style="display:none"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-signal"/></svg><span data-i18n="life"></span></div><div class="v" id="life">—</div></div>
+          <div class="total-under">
+            <span id="sTotal" data-i18n="limit">Total</span>
+            <b id="total">—</b>
+          </div>
+        </div>
+        <div class="vol-grid" style="flex:1">
+          <div class="vol" id="cDown"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="down">Down</span></div><div class="v" id="down">—</div></div>
+          <div class="vol" id="cUp"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-upload"/></svg><span data-i18n="up">Up</span></div><div class="v" id="up">—</div></div>
+          <div class="vol" id="cUsed"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-chart-simple"/></svg><span data-i18n="used">Used</span></div><div class="v" id="used">—</div></div>
+          <div class="vol accent" id="cLeft"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-battery-three-quarters"/></svg><span data-i18n="left">Left</span></div><div class="v" id="left">—</div></div>
         </div>
       </div>
       <div class="bar"><i id="bar"></i></div>
@@ -1412,18 +1440,30 @@ function renderList(){
       +'<button class="mb" type="button" data-c="'+i+'" aria-label="'+esc(t("copy"))+'">'+ic("copy")+'</button><button class="mb" type="button" data-q="'+i+'" aria-label="'+esc(t("qr"))+'">'+ic("qrcode")+"</button></div>"}).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]))}
-function renderApps(){const cur=plat();
-  $("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur;
-    return'<div class="grp'+(hot?" hot":"")+'"><h4>'+ic(g.i)+" "+esc(g.p)+(hot?' <span class="t" style="color:var(--p)">★</span>':"")+"</h4>"
-    +g.a.map(a=>{let c=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"");c=({v2rayng:"v2ray",v2rayn:"v2ray",shadowrocket:"shadow"})[c]||c;
-      return'<a class="al" href="'+esc(a.u)+'" target="_blank" rel="noopener"><span class="app-badge '+esc(c)+'">'+esc(String(a.n).slice(0,1).toUpperCase())+"</span><span>"+esc(a.n)+"</span>"+(a.r?'<span class="t">REC</span>':"")+'<span class="d">'+ic("arrow-up-right-from-square")+"</span></a>"}).join("")+"</div>"}).join("")}
-
-/* ---------- ping (manual only, no img/http probes) ---------- */
-function extractHost(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
-  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
-  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
+function renderApps(){
+  const cur=plat();
+  const order=["iOS","Android","Windows","macOS","Linux"];
+  const sorted=[...APPS].sort((a,b)=>{
+    if(a.p===cur) return -1;
+    if(b.p===cur) return 1;
+    return order.indexOf(a.p)-order.indexOf(b.p);
+  });
+  const box=$("apps");
+  if(!box) return;
+  box.innerHTML=sorted.map(g=>{
+    const isCur=g.p===cur;
+    const hot=isCur?" hot":"";
+    const collapsed=isCur?"":" collapsed";
+    const body=g.a.map(a=>{
+      let c=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"");
+      c=({v2rayng:"v2ray",v2rayn:"v2ray",shadowrocket:"shadow"})[c]||c;
+      return'<a class="al" href="'+esc(a.u)+'" target="_blank" rel="noopener"><span class="app-badge '+esc(c)+'">'+esc(String(a.n).slice(0,1).toUpperCase())+"</span><span>"+esc(a.n)+"</span>"+(a.r?'<span class="t">REC</span>':"")+'<span class="d">'+ic("arrow-up-right-from-square")+"</span></a>";
+    }).join("");
+    return '<div class="grp'+hot+collapsed+'" data-plat="'+g.p+'"><h4 type="button">'+ic(g.i||"download")+" "+g.p+(isCur?' <span class="t">★</span>':"")+'<span class="chev">▾</span></h4><div class="grp-body">'+body+"</div></div>";
+  }).join("");
+  box.querySelectorAll(".grp > h4").forEach(h=>{
+    h.onclick=()=>{ h.parentElement.classList.toggle("collapsed"); };
+  });
 }catch(e){}return{host:"",port:443,name:nameOf(link)}}
 function pingClass(ms){return ms==null?"wait":ms<120?"good":ms<280?"mid":"bad"}
 function measureFetch(){}
