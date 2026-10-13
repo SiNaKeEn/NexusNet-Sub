@@ -207,7 +207,7 @@ html{-webkit-tap-highlight-color:transparent}
 .hid{display:none!important}
 
 .warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
-.warn.show{display:flex}.warn.show span:empty{display:none}.warn:not(.show){display:none!important}
+.warn.show{display:flex}.warn:not(.show){display:none!important}
 .warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
 .warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
 .warn i{margin-top:.1rem}
@@ -224,8 +224,9 @@ a.btn.bp{color:#fff}
 
 .ring-wrap{filter:drop-shadow(0 0 18px rgba(34,211,238,.28))}
 .ring-wrap svg circle[id="rTraffic"],.ring-wrap svg path{filter:drop-shadow(0 0 6px rgba(56,189,248,.45))}
-.ring-center .pct{/* solid visible */
-html[data-theme="light"] .ring-center .pct{/* solid visible */
+.ring-center .pct{background:linear-gradient(180deg,#ecfeff,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent;
+  font-size:1.35rem;font-weight:900;letter-spacing:-.02em}
+html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e7490,#0369a1);-webkit-background-clip:text;background-clip:text}
 .ring-center .lab{opacity:.85;letter-spacing:.02em}
 .ring-wrap::after{content:"";position:absolute;inset:18px;border-radius:50%;
   background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 55%);
@@ -441,59 +442,42 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!impo
 .liq-ball.overflowing .liq-water::before{animation-duration:1.6s}
 .liq-ball.overflowing .liq-water::after{animation-duration:2s}
 
-/* === pct always visible === */
+/*pct-fix*/
 .ring-center{z-index:5!important}
 .ring-center .pct{
-  font-size:1.35rem!important;font-weight:900!important;line-height:1!important;
   color:#ecfeff!important;
-  background:none!important;-webkit-background-clip:unset!important;background-clip:unset!important;
-  text-shadow:0 1px 3px rgba(0,0,0,.75),0 0 14px rgba(0,0,0,.4)!important;
-  letter-spacing:-.02em;
+  background:none!important;
+  -webkit-background-clip:border-box!important;
+  background-clip:border-box!important;
+  -webkit-text-fill-color:#ecfeff!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.7)!important;
+  font-size:1.3rem!important;font-weight:900!important;
 }
 html[data-theme="light"] .ring-center .pct{
-  color:#0c4a6e!important;text-shadow:0 1px 0 rgba(255,255,255,.9)!important;
+  color:#0c4a6e!important;
+  -webkit-text-fill-color:#0c4a6e!important;
+  text-shadow:0 1px 0 rgba(255,255,255,.85)!important;
 }
 
-
-/* === liquid ball improved === */
-.liq-ball{position:absolute;inset:14px;border-radius:50%;overflow:hidden;z-index:1;
-  background:radial-gradient(circle at 50% 20%,rgba(15,23,42,.35),rgba(2,6,23,.85));
-  box-shadow:inset 0 0 20px rgba(0,0,0,.35)}
-.liq-water{position:absolute;left:-20%;right:-20%;bottom:0;height:var(--pct,50%);
-  background:linear-gradient(180deg,#a5f3fc 0%,#22d3ee 35%,#0891b2 70%,#0e7490 100%);
-  transition:height .7s cubic-bezier(.4,0,.2,1);min-height:12%;
-  animation:liqBob 3.5s ease-in-out infinite}
-.liq-water::before,.liq-water::after{content:"";position:absolute;left:-10%;width:120%;height:18px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C200,100 400,20 600,60 C800,100 1000,20 1200,60 L1200,120 L0,120 Z' fill='%23a5f3fc'/%3E%3C/svg%3E") repeat-x;
-  background-size:600px 18px;opacity:.95}
-.liq-water::before{top:-12px;animation:waveMove 2.8s linear infinite}
-.liq-water::after{top:-8px;opacity:.55;animation:waveMove 4.2s linear infinite reverse;background-size:400px 14px}
+/*liq-fix*/
+.liq-water{animation:liqBob 3.2s ease-in-out infinite}
+.liq-water::before{animation:waveMove 2.6s linear infinite}
+.liq-water::after{animation:waveMove 4s linear infinite reverse;opacity:.5}
 @keyframes waveMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes liqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-.liq-ball.overflowing .liq-water{height:100%!important;animation:liqBob 2s ease-in-out infinite}
+@keyframes liqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
 
-
-/* === embedded flags === */
-.flag-svg{display:inline-flex;width:28px;height:19px;border-radius:3px;overflow:hidden;
-  box-shadow:0 1px 4px rgba(0,0,0,.35);flex-shrink:0}
+/*flag-css*/
+.flag-svg{display:inline-flex;width:26px;height:17px;border-radius:3px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.35);flex-shrink:0;vertical-align:middle}
 .flag-svg svg{width:100%;height:100%;display:block}
-.flag-emoji{font-size:1.25rem;line-height:1}
-.loc-card{flex:0 0 118px;height:88px;border-radius:14px;position:relative;overflow:hidden;
-  border:1px solid rgba(148,163,184,.18);background:rgba(15,23,42,.75);
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.35rem;
-  box-shadow:0 8px 24px rgba(0,0,0,.35)}
-.loc-card .loc-flag{width:42px;height:28px;border-radius:4px;overflow:hidden;
-  box-shadow:0 2px 8px rgba(0,0,0,.4)}
-.loc-card .loc-flag .flag-svg{width:42px;height:28px}
-.loc-card .loc-name{font-size:.75rem;font-weight:800;color:#f1f5f9;text-align:center;
-  text-shadow:0 1px 4px rgba(0,0,0,.6);padding:0 .3rem;z-index:2}
-.loc-card .loc-count{position:absolute;top:6px;inset-inline-end:7px;font-size:.62rem;font-weight:700;
-  color:var(--mu);background:rgba(0,0,0,.35);padding:.1rem .35rem;border-radius:6px}
-.item-flag{flex-shrink:0;margin-inline-end:.35rem}
-.item-flag .flag-svg{width:24px;height:16px}
-.item{display:flex;align-items:center;gap:.2rem}
+.flag-emoji{font-size:1.15rem;line-height:1}
+.loc-card .loc-flag{width:40px;height:27px;margin:0 auto 4px;border-radius:4px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.4)}
+.loc-card .loc-flag .flag-svg{width:40px;height:27px}
+.loc-card{display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(15,23,42,.8)!important}
+.loc-card .loc-bg,.loc-card .loc-fade{display:none!important}
+.item-flag{flex-shrink:0;display:inline-flex;margin-inline-end:.4rem}
+.item-flag .flag-svg{width:22px;height:15px}
+.item{display:flex;align-items:center}
 .item .n{flex:1;min-width:0}
-
 </style>
 </head>
 <body>
@@ -648,33 +632,33 @@ html[data-theme="light"] .ring-center .pct{
 /* ===== Geo data: real-ish positions (lat, lon) ===== */
 const FLAG_MAP={"🇩🇪":"DE","🇺🇸":"US","🇬🇧":"GB","🇫🇷":"FR","🇳🇱":"NL","🇹🇷":"TR","🇦🇪":"AE","🇸🇬":"SG","🇯🇵":"JP","🇰🇷":"KR","🇮🇳":"IN","🇨🇦":"CA","🇦🇺":"AU","🇧🇷":"BR","🇷🇺":"RU","🇵🇱":"PL","🇮🇹":"IT","🇪🇸":"ES","🇸🇪":"SE","🇫🇮":"FI","🇳🇴":"NO","🇩🇰":"DK","🇨🇭":"CH","🇦🇹":"AT","🇧🇪":"BE","🇵🇹":"PT","🇮🇪":"IE","🇭🇰":"HK","🇹🇼":"TW","🇻🇳":"VN","🇹🇭":"TH","🇲🇾":"MY","🇮🇩":"ID","🇵🇭":"PH","🇮🇱":"IL","🇸🇦":"SA","🇿🇦":"ZA","🇲🇽":"MX","🇦🇷":"AR","🇺🇦":"UA","🇷🇴":"RO","🇨🇿":"CZ","🇭🇺":"HU","🇬🇷":"GR","🇧🇬":"BG","🇭🇷":"HR","🇷🇸":"RS","🇸🇰":"SK","🇱🇹":"LT","🇱🇻":"LV","🇪🇪":"EE","🇮🇸":"IS","🇳🇿":"NZ","🇨🇱":"CL","🇨🇴":"CO","🇵🇪":"PE","🇮🇷":"IR","🇨🇳":"CN"};
 const CODE_TO_FLAG=Object.fromEntries(Object.entries(FLAG_MAP).map(([f,c])=>[c,f]));
+
 const FLAGS_SVG={
-  TR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#E30A17"/><circle cx="16" cy="12" r="6" fill="#fff"/><circle cx="17.5" cy="12" r="4.8" fill="#E30A17"/><polygon fill="#fff" points="21,12 24.2,13.1 22.1,10.2 22.1,13.8 24.2,10.9"/><\/svg>`,
-  DE:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" y="0" fill="#000"/><rect width="36" height="8" y="8" fill="#D00"/><rect width="36" height="8" y="16" fill="#FFCE00"/><\/svg>`,
-  US:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#bf0a30"/><rect y="1.85" width="36" height="1.85" fill="#fff"/><rect y="5.54" width="36" height="1.85" fill="#fff"/><rect y="9.23" width="36" height="1.85" fill="#fff"/><rect y="12.92" width="36" height="1.85" fill="#fff"/><rect y="16.62" width="36" height="1.85" fill="#fff"/><rect y="20.31" width="36" height="1.85" fill="#fff"/><rect width="14.4" height="12.92" fill="#002868"/><\/svg>`,
-  FR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="12" height="24" fill="#002395"/><rect x="12" width="12" height="24" fill="#fff"/><rect x="24" width="12" height="24" fill="#ED2939"/><\/svg>`,
-  NL:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#AE1C28"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#21468B"/><\/svg>`,
-  GB:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#012169"/><path d="M0,0 L36,24 M36,0 L0,24" stroke="#fff" stroke-width="4"/><path d="M0,0 L36,24 M36,0 L0,24" stroke="#C8102E" stroke-width="2"/><path d="M18,0 V24 M0,12 H36" stroke="#fff" stroke-width="6"/><path d="M18,0 V24 M0,12 H36" stroke="#C8102E" stroke-width="3"/><\/svg>`,
-  AE:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#00732F"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#000"/><rect width="9" height="24" fill="#FF0000"/><\/svg>`,
-  JP:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><circle cx="18" cy="12" r="6.5" fill="#BC002D"/><\/svg>`,
-  SG:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="12" fill="#ED2939"/><rect y="12" width="36" height="12" fill="#fff"/><circle cx="8" cy="6" r="3.2" fill="#fff"/><circle cx="9.2" cy="6" r="2.6" fill="#ED2939"/><\/svg>`,
-  CA:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="9" height="24" fill="#FF0000"/><rect x="9" width="18" height="24" fill="#fff"/><rect x="27" width="9" height="24" fill="#FF0000"/><path fill="#FF0000" d="M18,5 L19.5,10 L24.5,9.5 L21,13 L23,18 L18,15 L13,18 L15,13 L11.5,9.5 L16.5,10 Z"/><\/svg>`,
-  IR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#239f40"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#da0000"/><circle cx="18" cy="12" r="2.2" fill="#da0000"/><\/svg>`,
-  PL:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="12" fill="#fff"/><rect y="12" width="36" height="12" fill="#DC143C"/><\/svg>`,
-  IT:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="12" height="24" fill="#009246"/><rect x="12" width="12" height="24" fill="#fff"/><rect x="24" width="12" height="24" fill="#CE2B37"/><\/svg>`,
-  ES:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="6" fill="#AA151B"/><rect y="6" width="36" height="12" fill="#F1BF00"/><rect y="18" width="36" height="6" fill="#AA151B"/><\/svg>`,
-  SE:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#006AA7"/><rect x="10" width="4" height="24" fill="#FECC00"/><rect y="10" width="36" height="4" fill="#FECC00"/><\/svg>`,
-  FI:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><rect x="10" width="4" height="24" fill="#003580"/><rect y="10" width="36" height="4" fill="#003580"/><\/svg>`,
-  RU:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#fff"/><rect y="8" width="36" height="8" fill="#0039A6"/><rect y="16" width="36" height="8" fill="#D52B1E"/><\/svg>`,
-  AU:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#012169"/><rect width="14" height="12" fill="#012169"/><path d="M0,0 L14,12 M14,0 L0,12" stroke="#fff" stroke-width="1.5"/><circle cx="25" cy="14" r="2" fill="#fff"/><\/svg>`,
-  KR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><circle cx="18" cy="12" r="5" fill="#CD2E3A"/><path d="M18,12 a5,5 0 0,1 0,0.01" fill="#0047A0"/><path d="M13,12 a5,5 0 0,0 10,0" fill="#0047A0"/><\/svg>`,
-  HK:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#DE2910"/><circle cx="18" cy="12" r="5" fill="#fff"/><\/svg>`,
-  IN:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#FF9933"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#138808"/><circle cx="18" cy="12" r="2.5" fill="#000080"/><\/svg>`
+TR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#E30A17"/><circle cx="16" cy="12" r="6" fill="#fff"/><circle cx="17.5" cy="12" r="4.8" fill="#E30A17"/><polygon fill="#fff" points="21,12 24.2,13.1 22.1,10.2 22.1,13.8 24.2,10.9"/></svg>`,
+DE:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#000"/><rect y="8" width="36" height="8" fill="#D00"/><rect y="16" width="36" height="8" fill="#FFCE00"/></svg>`,
+US:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#bf0a30"/><rect y="2" width="36" height="2" fill="#fff"/><rect y="6" width="36" height="2" fill="#fff"/><rect y="10" width="36" height="2" fill="#fff"/><rect y="14" width="36" height="2" fill="#fff"/><rect y="18" width="36" height="2" fill="#fff"/><rect y="22" width="36" height="2" fill="#fff"/><rect width="14" height="13" fill="#002868"/></svg>`,
+FR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="12" height="24" fill="#002395"/><rect x="12" width="12" height="24" fill="#fff"/><rect x="24" width="12" height="24" fill="#ED2939"/></svg>`,
+NL:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#AE1C28"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#21468B"/></svg>`,
+GB:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#012169"/><path d="M0,0 L36,24 M36,0 L0,24" stroke="#fff" stroke-width="4"/><path d="M0,0 L36,24 M36,0 L0,24" stroke="#C8102E" stroke-width="2"/><path d="M18,0 V24 M0,12 H36" stroke="#fff" stroke-width="6"/><path d="M18,0 V24 M0,12 H36" stroke="#C8102E" stroke-width="3"/></svg>`,
+AE:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#00732F"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#000"/><rect width="9" height="24" fill="#FF0000"/></svg>`,
+JP:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><circle cx="18" cy="12" r="6.5" fill="#BC002D"/></svg>`,
+SG:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="12" fill="#ED2939"/><rect y="12" width="36" height="12" fill="#fff"/><circle cx="8" cy="6" r="3" fill="#fff"/></svg>`,
+CA:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="9" height="24" fill="#FF0000"/><rect x="9" width="18" height="24" fill="#fff"/><rect x="27" width="9" height="24" fill="#FF0000"/><path fill="#FF0000" d="M18,5 L19.5,10 L24,9.5 L21,13 L23,18 L18,15 L13,18 L15,13 L12,9.5 L16.5,10 Z"/></svg>`,
+PL:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="12" fill="#fff"/><rect y="12" width="36" height="12" fill="#DC143C"/></svg>`,
+IT:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="12" height="24" fill="#009246"/><rect x="12" width="12" height="24" fill="#fff"/><rect x="24" width="12" height="24" fill="#CE2B37"/></svg>`,
+ES:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="6" fill="#AA151B"/><rect y="6" width="36" height="12" fill="#F1BF00"/><rect y="18" width="36" height="6" fill="#AA151B"/></svg>`,
+RU:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#fff"/><rect y="8" width="36" height="8" fill="#0039A6"/><rect y="16" width="36" height="8" fill="#D52B1E"/></svg>`,
+KR:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><circle cx="18" cy="12" r="5" fill="#CD2E3A"/></svg>`,
+HK:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#DE2910"/><circle cx="18" cy="12" r="4.5" fill="#fff"/></svg>`,
+IN:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="8" fill="#FF9933"/><rect y="8" width="36" height="8" fill="#fff"/><rect y="16" width="36" height="8" fill="#138808"/><circle cx="18" cy="12" r="2.2" fill="#000080"/></svg>`,
+SE:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#006AA7"/><rect x="10" width="4" height="24" fill="#FECC00"/><rect y="10" width="36" height="4" fill="#FECC00"/></svg>`,
+FI:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#fff"/><rect x="10" width="4" height="24" fill="#003580"/><rect y="10" width="36" height="4" fill="#003580"/></svg>`,
+AU:`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24"><rect width="36" height="24" fill="#012169"/><circle cx="26" cy="14" r="2" fill="#fff"/></svg>`
 };
 function flagSvg(cc){
   const s=FLAGS_SVG[cc];
-  if(!s) return '<span class="flag-emoji">'+(CODE_TO_FLAG[cc]||"🏳️")+'</span>';
-  return '<span class="flag-svg">'+s+'</span>';
+  if(s) return '<span class="flag-svg">'+s+'</span>';
+  return '<span class="flag-emoji">'+(CODE_TO_FLAG[cc]||"🏳️")+'</span>';
 }
 const CODE_RE=/\b(DE|US|GB|UK|FR|NL|TR|AE|SG|JP|KR|IN|CA|AU|BR|RU|PL|IT|ES|SE|FI|NO|DK|CH|AT|BE|PT|IE|HK|TW|VN|TH|MY|ID|PH|IL|SA|ZA|MX|AR|UA|RO|CZ|HU|GR|BG|HR|RS|SK|LT|LV|EE|IS|NZ|CL|CO|PE|IR|CN)\b/i;
 const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"},GB:{fa:"انگلستان",en:"UK"},FR:{fa:"فرانسه",en:"France"},NL:{fa:"هلند",en:"Netherlands"},TR:{fa:"ترکیه",en:"Turkey"},AE:{fa:"امارات",en:"UAE"},SG:{fa:"سنگاپور",en:"Singapore"},JP:{fa:"ژاپن",en:"Japan"},KR:{fa:"کره",en:"Korea"},IN:{fa:"هند",en:"India"},CA:{fa:"کانادا",en:"Canada"},AU:{fa:"استرالیا",en:"Australia"},BR:{fa:"برزیل",en:"Brazil"},RU:{fa:"روسیه",en:"Russia"},PL:{fa:"لهستان",en:"Poland"},IT:{fa:"ایتالیا",en:"Italy"},ES:{fa:"اسپانیا",en:"Spain"},SE:{fa:"سوئد",en:"Sweden"},FI:{fa:"فنلاند",en:"Finland"},NO:{fa:"نروژ",en:"Norway"},DK:{fa:"دانمارک",en:"Denmark"},CH:{fa:"سوئیس",en:"Switzerland"},AT:{fa:"اتریش",en:"Austria"},BE:{fa:"بلژیک",en:"Belgium"},PT:{fa:"پرتغال",en:"Portugal"},IE:{fa:"ایرلند",en:"Ireland"},HK:{fa:"هنگ‌کنگ",en:"Hong Kong"},TW:{fa:"تایوان",en:"Taiwan"},VN:{fa:"ویتنام",en:"Vietnam"},TH:{fa:"تایلند",en:"Thailand"},MY:{fa:"مالزی",en:"Malaysia"},ID:{fa:"اندونزی",en:"Indonesia"},PH:{fa:"فیلیپین",en:"Philippines"},IL:{fa:"اسرائیل",en:"Israel"},SA:{fa:"عربستان",en:"Saudi"},ZA:{fa:"آفریقای جنوبی",en:"S.Africa"},MX:{fa:"مکزیک",en:"Mexico"},AR:{fa:"آرژانتین",en:"Argentina"},UA:{fa:"اوکراین",en:"Ukraine"},RO:{fa:"رومانی",en:"Romania"},CZ:{fa:"چک",en:"Czechia"},HU:{fa:"مجارستان",en:"Hungary"},GR:{fa:"یونان",en:"Greece"},BG:{fa:"بلغارستان",en:"Bulgaria"},HR:{fa:"کرواسی",en:"Croatia"},RS:{fa:"صربستان",en:"Serbia"},SK:{fa:"اسلواکی",en:"Slovakia"},LT:{fa:"لیتوانی",en:"Lithuania"},LV:{fa:"لتونی",en:"Latvia"},EE:{fa:"استونی",en:"Estonia"},IS:{fa:"ایسلند",en:"Iceland"},NZ:{fa:"نیوزیلند",en:"New Zealand"},CL:{fa:"شیلی",en:"Chile"},CO:{fa:"کلمبیا",en:"Colombia"},PE:{fa:"پرو",en:"Peru"},IR:{fa:"ایران",en:"Iran"},CN:{fa:"چین",en:"China"}};
@@ -942,20 +926,11 @@ function data(){
   try{
     const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
     const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
-    if(wv){
-      const te=document.getElementById("warnVolTxt");
-      if(totB>0 && usedB/totB>=0.8){
-        const txt=(t("warnVol")||"")+" ("+Math.round(usedB/totB*100)+"%)";
-        if(te) te.textContent=txt;
-        if(txt && txt.trim()) wv.classList.add("show"); else { wv.classList.remove("show"); if(te) te.textContent=""; }
-      } else { wv.classList.remove("show"); if(te) te.textContent=""; }
-    }
+    if(wv){ const _wt=document.getElementById("warnVolTxt"); if(totB>0 && usedB/totB>=0.8){ const _tx=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; if(_wt)_wt.textContent=_tx; if(_tx&&_tx.trim()) wv.classList.add("show"); else wv.classList.remove("show"); } else { wv.classList.remove("show"); if(_wt)_wt.textContent=""; } }
     if(we){
-      const te2=document.getElementById("warnExpTxt");
-      const exp=num(TV.expire); let showE=false; let etxt="";
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; etxt=(t("warnExp")||"")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
-      if(te2) te2.textContent=etxt;
-      if(showE && etxt.trim()) we.classList.add("show"); else { we.classList.remove("show"); if(te2) te2.textContent=""; }
+      const exp=num(TV.expire); let showE=false;
+      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; const _et=document.getElementById("warnExpTxt"); const _ex=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; if(_et)_et.textContent=_ex; }}
+      if(showE){ const _et2=document.getElementById("warnExpTxt"); if(_et2&&_et2.textContent.trim()) we.classList.add("show"); else we.classList.remove("show"); } else we.classList.remove("show");
     }
   }catch(e){}
   const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
@@ -1030,7 +1005,7 @@ function data(){
   _setp("pv2",subIdFromUrl());
   _setp("pv3",stTxt);
   _setp("pv6",formatLastOnline(TV.lastOnline));
-  if(TV.announce&&String(TV.announce).trim()&&!String(TV.announce).includes("{{.")){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
+  if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
@@ -1066,24 +1041,16 @@ function renderLocCards(){
   row.style.display="flex";
   row.innerHTML=top.map(cc=>{
     const label=countryLabel(cc);
-    return `<div class="loc-card" data-cc="${cc}">
-      <div class="loc-flag">${flagSvg(cc)}</div>
-      <div class="loc-name">${esc(label)}</div>
-      <div class="loc-count">${counts[cc]}</div>
-    </div>`;
+    return `<div class="loc-card" data-cc="${cc}"><div class="loc-flag">${flagSvg(cc)}</div><div class="loc-name">${esc(label)}</div></div>`;
   }).join("");
 }
 
 function renderList(){const box=document.getElementById("list");if(!box)return;
   if((!links||!links.length)&&TV&&TV.links){links=String(TV.links).split(/\r?\n/).filter(Boolean);}
   if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
-  box.innerHTML=links.map((l,i)=>{
-    const nm=nameOf(l); const cc=detectCC(nm);
-    const fl=cc?`<span class="item-flag">${flagSvg(cc)}</span>`:"";
-    return `<div class="item">${fl}<div class="n">${esc(nm)}</div>
+  box.innerHTML=links.map((l,i)=>{const _nm=nameOf(l),_cc=detectCC(_nm),_fl=_cc?`<span class="item-flag">${flagSvg(_cc)}</span>`:"";return `<div class="item">${_fl}<div class="n">${esc(_nm)}</div>
     <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
-    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`;
-  }).join("");
+    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`}).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
   try{renderLocCards();}catch(e){}
