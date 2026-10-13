@@ -438,7 +438,7 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!impo
   background-size:600px 20px;animation:waveX 2.5s linear infinite;opacity:.95}
 .liq-water::after{top:-6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C200,10 400,90 600,50 C800,10 1000,90 1200,50 L1200,120 L0,120 Z' fill='%2322d3ee'/%3E%3C/svg%3E") repeat-x;
   background-size:500px 18px;animation:waveX 3.2s linear infinite reverse;opacity:.7}
-@keyframes waveX{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+100%{transform:translateX(-50%)}}
 .liq-ball.overflowing .liq-water::before{animation-duration:1.6s}
 .liq-ball.overflowing .liq-water::after{animation-duration:2s}
 
@@ -477,10 +477,85 @@ body[data-mood="bad"] .orb.c{background:#b91c1c!important}
 .ring-center .pct{color:#ecfeff!important;-webkit-text-fill-color:#ecfeff!important;
   background:none!important;text-shadow:0 1px 3px rgba(0,0,0,.75)!important;
   font-size:1.3rem!important;font-weight:900!important}
-.liq-water{transform:none!important;animation:none!important;min-height:14%!important}
-.liq-water::before{animation:waveX 3s linear infinite!important}
-.liq-water::after{animation:waveX 4.5s linear infinite reverse!important}
-@keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+to{transform:translateX(-50%)}}
+
+
+/*liq-pro — soft multi-layer surface only, body fixed*/
+.liq-ball{
+  overflow:hidden!important;
+  border-radius:50%!important;
+  background:radial-gradient(circle at 50% 18%,rgba(15,23,42,.25),rgba(2,6,23,.9))!important;
+  box-shadow:inset 0 -8px 24px rgba(8,145,178,.15),inset 0 0 20px rgba(0,0,0,.4)!important;
+}
+.liq-water{
+  position:absolute!important;
+  left:-30%!important;right:-30%!important;bottom:0!important;
+  height:var(--pct,50%)!important;
+  min-height:16%!important;
+  transform:none!important;
+  animation:none!important;
+  transition:height .9s cubic-bezier(.4,0,.2,1)!important;
+  background:linear-gradient(180deg,
+    rgba(165,243,252,.95) 0%,
+    rgba(34,211,238,.92) 22%,
+    rgba(6,182,212,.95) 55%,
+    rgba(8,145,178,1) 78%,
+    rgba(14,116,144,1) 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.25)!important;
+}
+/* layer 1 — main crest */
+.liq-water::before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;top:-18px!important;
+  width:200%!important;height:24px!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C100,100 200,20 300,60 C400,100 500,20 600,60 C700,100 800,20 900,60 C1000,100 1100,20 1200,60 L1200,120 L0,120 Z' fill='%23a5f3fc'/%3E%3C/svg%3E")!important;
+  background-repeat:repeat-x!important;
+  background-size:600px 24px!important;
+  animation:liqWaveA 4s linear infinite!important;
+  opacity:.92!important;
+  pointer-events:none!important;
+  will-change:transform!important;
+}
+/* layer 2 — secondary softer crest */
+.liq-water::after{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;top:-12px!important;
+  width:200%!important;height:18px!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,55 C150,15 300,95 450,55 C600,15 750,95 900,55 C1050,15 1125,80 1200,55 L1200,120 L0,120 Z' fill='%2367e8f9'/%3E%3C/svg%3E")!important;
+  background-repeat:repeat-x!important;
+  background-size:480px 18px!important;
+  animation:liqWaveB 6.5s linear infinite reverse!important;
+  opacity:.55!important;
+  pointer-events:none!important;
+  will-change:transform!important;
+}
+@keyframes liqWaveA{
+  0%{transform:translateX(0) translateY(0)}
+  50%{transform:translateX(-25%) translateY(1px)}
+  100%{transform:translateX(-50%) translateY(0)}
+}
+@keyframes liqWaveB{
+  0%{transform:translateX(0) translateY(0)}
+  50%{transform:translateX(-25%) translateY(-1px)}
+  100%{transform:translateX(-50%) translateY(0)}
+}
+/* soft highlight shimmer on surface */
+.liq-ball::after{
+  content:""!important;
+  position:absolute!important;
+  left:18%;right:18%;top:14%;height:28%!important;
+  border-radius:50%!important;
+  background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.22),transparent 70%)!important;
+  pointer-events:none!important;
+  z-index:2!important;
+  animation:liqShine 5s ease-in-out infinite alternate!important;
+}
+@keyframes liqShine{
+  0%{opacity:.35;transform:scaleX(1)}
+  100%{opacity:.6;transform:scaleX(1.05)}
+}
 
 </style>
 </head>
