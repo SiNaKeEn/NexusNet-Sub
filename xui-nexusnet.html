@@ -253,26 +253,9 @@ html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
 .ring-wrap{position:relative;width:118px;height:118px;flex-shrink:0;
   filter:drop-shadow(0 0 16px rgba(34,211,238,.35))}
 .ring-wrap svg{position:absolute;inset:0;width:118px;height:118px;display:block;z-index:2;pointer-events:none}
-.liq-ball{position:absolute;inset:14px;border-radius:50%;overflow:hidden;z-index:1;
-  background:radial-gradient(circle at 50% 30%,rgba(15,23,42,.55),rgba(2,6,23,.85));
-  box-shadow:inset 0 0 12px rgba(0,0,0,.35)}
-.liq-water{position:absolute;left:0;right:0;bottom:0;height:var(--pct,50%);
-  background:linear-gradient(180deg,#a5f3fc 0%,#22d3ee 35%,#0284c7 100%);
-  transition:height .7s cubic-bezier(.4,0,.2,1);
-  min-height:8%;
-  overflow:visible}
-.liq-water::before{content:"";position:absolute;top:-14px;left:-50%;width:200%;height:28px;
-  background:
-    radial-gradient(ellipse 40% 100% at 20% 50%,rgba(255,255,255,.65) 0%,transparent 55%),
-    radial-gradient(ellipse 45% 100% at 55% 50%,rgba(255,255,255,.45) 0%,transparent 55%),
-    radial-gradient(ellipse 40% 100% at 85% 50%,rgba(255,255,255,.55) 0%,transparent 55%);
-  animation:liqSurf 2.2s linear infinite}
-.liq-water::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.25) 0%,transparent 30%,rgba(0,40,80,.12) 100%);
-  pointer-events:none}
-@keyframes liqSurf{0%{transform:translateX(0)}100%{transform:translateX(28%)}}
-.liq-ball.overflowing .liq-water::before{height:34px;top:-18px;animation-duration:1.4s}
-.liq-ball.overflowing{box-shadow:inset 0 -6px 16px rgba(34,211,238,.35),inset 0 0 12px rgba(0,0,0,.35)}
+100%{transform:translateX(28%)}}
+
+
 .ring-center{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
   pointer-events:none}
 .ring-center .pct{font-size:1.4rem;font-weight:900;line-height:1;
@@ -374,44 +357,48 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{animation:floatC 8s eas
   animation:ambShift 14s ease-in-out infinite alternate;pointer-events:none}
 @keyframes ambShift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-3%,2%) scale(1.05)}}
 
-.loc-row{display:flex;gap:.45rem;overflow-x:auto;padding:.1rem 0 .55rem;scrollbar-width:none}
+.loc-row{display:flex;gap:.5rem;overflow-x:auto;padding:.1rem 0 .6rem;scrollbar-width:none}
 .loc-row::-webkit-scrollbar{display:none}
-.loc-card{flex:0 0 118px;height:78px;border-radius:14px;position:relative;overflow:hidden;
-  border:1px solid rgba(34,211,238,.15);pointer-events:none;
-  box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.loc-card{flex:0 0 124px;height:82px;border-radius:16px;position:relative;overflow:hidden;
+  border:1px solid rgba(148,163,184,.15);pointer-events:none;
+  box-shadow:0 12px 28px rgba(0,0,0,.4)}
 .loc-card .loc-bg{position:absolute;inset:0}
-.loc-card .loc-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.75) 100%)}
-.loc-card .loc-name{position:absolute;bottom:7px;left:6px;right:6px;text-align:center;
-  font-size:.74rem;font-weight:800;color:#fff;letter-spacing:.01em;text-shadow:0 2px 6px rgba(0,0,0,.7)}
-.loc-card .loc-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);
-  font-size:1.6rem;opacity:.9;filter:drop-shadow(0 2px 6px rgba(0,0,0,.45));z-index:2}
-/* scenic gradients */
-.loc-card[data-cc="DE"] .loc-bg{background:
-  radial-gradient(ellipse 80% 50% at 50% 100%,#1e293b 0%,transparent 60%),
-  linear-gradient(180deg,#0f172a 0%,#1e3a5f 40%,#334155 70%,#0f172a 100%)}
-.loc-card[data-cc="TR"] .loc-bg{background:
-  radial-gradient(ellipse 70% 45% at 50% 100%,#7c2d12 0%,transparent 55%),
-  linear-gradient(180deg,#0c4a6e 0%,#0369a1 35%,#c2410c 75%,#431407 100%)}
-.loc-card[data-cc="FR"] .loc-bg{background:
-  radial-gradient(ellipse 60% 40% at 50% 90%,#312e81 0%,transparent 50%),
-  linear-gradient(180deg,#0c0a1a 0%,#1e1b4b 40%,#4c1d95 80%,#1e1b4b 100%)}
-.loc-card[data-cc="NL"] .loc-bg{background:
-  radial-gradient(ellipse 80% 40% at 50% 100%,#0e7490 0%,transparent 50%),
-  linear-gradient(180deg,#082f49 0%,#0c4a6e 40%,#f59e0b 85%,#78350f 100%)}
-.loc-card[data-cc="US"] .loc-bg{background:
-  radial-gradient(ellipse 70% 50% at 50% 100%,#1e3a8a 0%,transparent 55%),
-  linear-gradient(180deg,#020617 0%,#1e3a8a 45%,#7f1d1d 100%)}
-.loc-card[data-cc="GB"] .loc-bg{background:
-  linear-gradient(180deg,#0f172a 0%,#1e3a8a 50%,#7f1d1d 100%)}
-.loc-card[data-cc="AE"] .loc-bg{background:
-  linear-gradient(180deg,#042f2e 0%,#0f766e 40%,#fbbf24 100%)}
-.loc-card[data-cc="JP"] .loc-bg{background:
-  radial-gradient(circle at 70% 30%,#fecaca 0%,transparent 35%),
-  linear-gradient(180deg,#0f172a 0%,#1e293b 50%,#be123c 100%)}
-.loc-card[data-cc="SG"] .loc-bg{background:linear-gradient(180deg,#0f172a,#0e7490 50%,#f43f5e)}
-.loc-card[data-cc="RU"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1d4ed8 50%,#f8fafc)}
-.loc-card[data-cc="CA"] .loc-bg{background:linear-gradient(180deg,#0f172a,#dc2626 60%,#f8fafc)}
-.loc-card[data-cc="AU"] .loc-bg{background:linear-gradient(180deg,#0c4a6e,#0369a1 40%,#f59e0b)}
+.loc-card .loc-fade{position:absolute;inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.15) 40%,rgba(0,0,0,.82) 100%)}
+.loc-card .loc-name{position:absolute;bottom:8px;left:8px;right:8px;text-align:center;
+  font-size:.78rem;font-weight:800;color:#f8fafc;text-shadow:0 2px 8px rgba(0,0,0,.8);z-index:3}
+.loc-card .loc-icon{display:none!important}
+/* sky + skyline blocks via pseudo */
+.loc-card .loc-bg::before{content:"";position:absolute;left:0;right:0;bottom:28%;height:32%;
+  background-repeat:no-repeat;background-position:center bottom;background-size:100% 100%;opacity:.9}
+.loc-card .loc-bg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:28%;
+  background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.35))}
+/* Germany — cool night city */
+.loc-card[data-cc="DE"] .loc-bg{background:linear-gradient(180deg,#0b1220 0%,#172554 45%,#334155 100%)}
+.loc-card[data-cc="DE"] .loc-bg::before{background-image:linear-gradient(90deg,#1e293b 0% 8%,#334155 8% 14%,#1e293b 14% 22%,#475569 22% 30%,#1e293b 30% 40%,#334155 40% 48%,#0f172a 48% 58%,#475569 58% 66%,#1e293b 66% 78%,#334155 78% 88%,#1e293b 88% 100%);
+  box-shadow:inset 0 8px 0 #0f172a}
+/* Turkey — warm dusk */
+.loc-card[data-cc="TR"] .loc-bg{background:linear-gradient(180deg,#0c4a6e 0%,#ea580c 55%,#7c2d12 100%)}
+.loc-card[data-cc="TR"] .loc-bg::before{background-image:radial-gradient(ellipse 18px 28px at 50% 100%,#fef3c7 0%,#fef3c7 40%,transparent 41%),
+  linear-gradient(90deg,#7c2d12 0% 20%,#9a3412 20% 35%,#7c2d12 35% 55%,#9a3412 55% 70%,#7c2d12 70% 100%)}
+/* USA */
+.loc-card[data-cc="US"] .loc-bg{background:linear-gradient(180deg,#020617 0%,#1d4ed8 50%,#450a0a 100%)}
+.loc-card[data-cc="US"] .loc-bg::before{background-image:linear-gradient(90deg,#0f172a 5% 12%,#1e293b 12% 18%,#0f172a 18% 28%,#334155 28% 34%,#0f172a 34% 50%,#1e293b 50% 60%,#0f172a 60% 100%)}
+/* France */
+.loc-card[data-cc="FR"] .loc-bg{background:linear-gradient(180deg,#0c0a1a 0%,#312e81 50%,#4c1d95 100%)}
+.loc-card[data-cc="FR"] .loc-bg::before{background-image:linear-gradient(90deg,#1e1b4b 10% 20%,#312e81 20% 28%,#1e1b4b 28% 45%,#4338ca 45% 52%,#1e1b4b 52% 90%)}
+/* Netherlands */
+.loc-card[data-cc="NL"] .loc-bg{background:linear-gradient(180deg,#082f49 0%,#0284c7 40%,#f59e0b 100%)}
+.loc-card[data-cc="NL"] .loc-bg::before{background-image:linear-gradient(90deg,#0c4a6e 0% 25%,#155e75 25% 40%,#0c4a6e 40% 70%,#155e75 70% 100%)}
+/* defaults for other CC */
+.loc-card:not([data-cc]) .loc-bg,.loc-card .loc-bg{background:linear-gradient(180deg,#020617,#0f172a 40%,#1e293b)}
+.loc-card[data-cc="GB"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1e3a8a 55%,#7f1d1d)}
+.loc-card[data-cc="AE"] .loc-bg{background:linear-gradient(180deg,#042f2e,#0f766e 45%,#fbbf24)}
+.loc-card[data-cc="JP"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1e293b 50%,#9f1239)}
+.loc-card[data-cc="SG"] .loc-bg{background:linear-gradient(180deg,#0f172a,#0e7490 50%,#e11d48)}
+.loc-card[data-cc="RU"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1d4ed8 55%,#f8fafc)}
+.loc-card[data-cc="CA"] .loc-bg{background:linear-gradient(180deg,#0f172a,#b91c1c 60%,#f8fafc)}
+.loc-card[data-cc="AU"] .loc-bg{background:linear-gradient(180deg,#0c4a6e,#0284c7 40%,#d97706)}
 .loc-card .loc-bg::before{content:"";position:absolute;left:10%;right:10%;bottom:22%;height:18px;
   background:rgba(0,0,0,.25);border-radius:4px 4px 0 0;box-shadow:
     14px 0 0 rgba(0,0,0,.2), -16px 4px 0 rgba(0,0,0,.18), 28px 6px 0 rgba(0,0,0,.15)}
@@ -433,6 +420,27 @@ body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
 body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#0c1e3d!important;opacity:.55}
 body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#0a2a3a!important;opacity:.5}
 body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!important;opacity:.4}
+
+.vol{text-align:center!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:.2rem!important;
+  padding:.5rem .4rem!important}
+.vol .k{justify-content:center!important;width:100%;font-size:.64rem!important}
+.vol .v{text-align:center!important;width:100%;font-size:.84rem!important;font-weight:800}
+
+.liq-ball{position:absolute;inset:8px;border-radius:50%;overflow:hidden;z-index:1;
+  background:radial-gradient(circle at 50% 20%,rgba(15,23,42,.5),rgba(2,6,23,.9))}
+.liq-water{position:absolute;left:-10%;right:-10%;bottom:0;height:var(--pct,50%);
+  
+  background:linear-gradient(180deg,#67e8f9 0%,#22d3ee 40%,#0369a1 100%);
+  transition:height .6s ease;min-height:10%}
+.liq-water .wave,.liq-water::before,.liq-water::after{content:"";position:absolute;left:0;width:200%;height:20px}
+.liq-water::before{top:-10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,120 L0,120 Z' fill='%2367e8f9'/%3E%3C/svg%3E") repeat-x;
+  background-size:600px 20px;animation:waveX 2.5s linear infinite;opacity:.95}
+.liq-water::after{top:-6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C200,10 400,90 600,50 C800,10 1000,90 1200,50 L1200,120 L0,120 Z' fill='%2322d3ee'/%3E%3C/svg%3E") repeat-x;
+  background-size:500px 18px;animation:waveX 3.2s linear infinite reverse;opacity:.7}
+@keyframes waveX{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.liq-ball.overflowing .liq-water::before{animation-duration:1.6s}
+.liq-ball.overflowing .liq-water::after{animation-duration:2s}
 </style>
 </head>
 <body>
@@ -559,17 +567,17 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!impo
     <div class="st"><i class="fa-solid fa-id-card"></i> <span id="tProf">Profile</span></div>
     <div class="card pinfo">
       <div class="prow"><span id="p1">Username</span><b id="pv1">—</b></div>
-    <div class="act-row" id="profActs">
-      <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-brands fa-telegram"></i> <span id="tRenew">Renew</span></a>
-      <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-solid fa-headset"></i> <span id="tSupport">Support</span></a>
-    </div>
-  <div class="prow"><span id="p2">User ID</span><b id="pv2">—</b></div>
+      <div class="prow"><span id="p2">User ID</span><b id="pv2">—</b></div>
       <div class="prow"><span id="p3">Status</span><b id="pv3">—</b></div>
       <div class="prow"><span id="p5">Expire</span><b id="pv5">—</b></div>
       <div class="prow"><span id="p6">Last online</span><b id="pv6">—</b></div>
     </div>
+    <div class="act-row" id="profActs">
+      <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-brands fa-telegram"></i> <span id="tRenew">Renew</span></a>
+      <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-solid fa-headset"></i> <span id="tSupport">Support</span></a>
+    </div>
   </div>
-</div>
+
 
 <nav class="nav">
   <button type="button" class="on" data-t="home"><i class="fa-solid fa-house"></i><span id="n1">Home</span></button>
@@ -968,8 +976,7 @@ function renderLocCards(){
   row.style.display="flex";
   row.innerHTML=top.map(cc=>{
     const label=countryLabel(cc);
-    const ic={"DE":"🏰","TR":"🕌","FR":"🗼","NL":"🌷","US":"🗽","GB":"🎡","AE":"🏙️","JP":"🗻","SG":"🏙️","RU":"🏛️","CA":"🍁","AU":"🦘","IT":"🏛️","ES":"🏛️","PL":"🏰","AT":"🏔️","CH":"🏔️","SE":"🦌","FI":"🌲","NO":"🏔️","HK":"🏙️","KR":"🏯","IN":"🕌","BR":"🌴"};
-    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-icon">${ic[cc]||"🌍"}</div><div class="loc-name">${esc(label)}</div></div>`;
+    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-name">${esc(label)}</div></div>`;
   }).join("");
 }
 
