@@ -441,64 +441,6 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!impo
 @keyframes waveX{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .liq-ball.overflowing .liq-water::before{animation-duration:1.6s}
 .liq-ball.overflowing .liq-water::after{animation-duration:2s}
-
-/* === safe-only v4: CSS only, zero JS changes === */
-
-/* pure dark blue default — no green, no hue-rotate */
-.ambient{animation:none!important;filter:none!important;
-  background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 50%,#000 100%)!important}
-html[data-theme="light"] .ambient{background:radial-gradient(140% 100% at 50% -20%,#dbeafe 0%,#e2e8f0 100%)!important}
-.orb.a{background:#1e3a8a!important}
-.orb.b{background:#1d4ed8!important}
-.orb.c{background:#312e81!important}
-
-body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 50%,#000 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#1e3a8a!important}
-body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#1d4ed8!important}
-body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#312e81!important}
-
-body[data-mood="fresh"] .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#14532d 0%,#052e16 55%,#022c22 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="fresh"] .orb.a{background:#22c55e!important}
-body[data-mood="fresh"] .orb.b{background:#16a34a!important}
-body[data-mood="fresh"] .orb.c{background:#15803d!important}
-
-body[data-mood="warn"] .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#713f12 0%,#451a03 55%,#1c0a00 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="warn"] .orb.a{background:#eab308!important}
-body[data-mood="warn"] .orb.b{background:#f59e0b!important}
-body[data-mood="warn"] .orb.c{background:#d97706!important}
-
-body[data-mood="bad"] .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#7f1d1d 0%,#450a0a 50%,#1a0505 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="bad"] .orb.a{background:#ef4444!important}
-body[data-mood="bad"] .orb.b{background:#dc2626!important}
-body[data-mood="bad"] .orb.c{background:#b91c1c!important}
-
-/* pct visible */
-.ring-center{z-index:6!important}
-.ring-center .pct{
-  color:#ecfeff!important;-webkit-text-fill-color:#ecfeff!important;
-  background:none!important;-webkit-background-clip:border-box!important;
-  text-shadow:0 1px 3px rgba(0,0,0,.75)!important;font-size:1.3rem!important;font-weight:900!important}
-html[data-theme="light"] .ring-center .pct{
-  color:#0c4a6e!important;-webkit-text-fill-color:#0c4a6e!important}
-
-/* liquid: do not move water body vertically */
-.liq-water{transform:none!important;animation:none!important;
-  transition:height .8s ease!important;min-height:14%!important}
-.liq-water::before{animation:waveX 3s linear infinite!important}
-.liq-water::after{animation:waveX 4.5s linear infinite reverse!important}
-@keyframes waveX{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* hide broken country cards */
-.loc-row,.loc-card{display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}
-
 </style>
 </head>
 <body>
@@ -790,8 +732,8 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"داشبورد",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"حجم کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
-  en:{n1:"Dashboard",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"حجم کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
@@ -922,7 +864,7 @@ function data(){
     if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
     if(we){
       const exp=num(TV.expire); let showE=false;
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
+      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
       if(showE) we.classList.add("show"); else we.classList.remove("show");
     }
   }catch(e){}
