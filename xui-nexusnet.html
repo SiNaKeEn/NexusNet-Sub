@@ -257,16 +257,22 @@ html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
   background:radial-gradient(circle at 50% 30%,rgba(15,23,42,.55),rgba(2,6,23,.85));
   box-shadow:inset 0 0 12px rgba(0,0,0,.35)}
 .liq-water{position:absolute;left:0;right:0;bottom:0;height:var(--pct,50%);
-  background:linear-gradient(180deg,#7dd3fc 0%,#22d3ee 40%,#0284c7 100%);
+  background:linear-gradient(180deg,#a5f3fc 0%,#22d3ee 35%,#0284c7 100%);
   transition:height .7s cubic-bezier(.4,0,.2,1);
-  animation:liqBob 3.2s ease-in-out infinite}
-.liq-water::before{content:"";position:absolute;top:-10px;left:-40%;width:180%;height:20px;
-  background:radial-gradient(ellipse at center,rgba(255,255,255,.55) 0%,rgba(255,255,255,.12) 42%,transparent 70%);
-  animation:liqSurf 2.8s linear infinite}
+  min-height:8%;
+  overflow:visible}
+.liq-water::before{content:"";position:absolute;top:-14px;left:-50%;width:200%;height:28px;
+  background:
+    radial-gradient(ellipse 40% 100% at 20% 50%,rgba(255,255,255,.65) 0%,transparent 55%),
+    radial-gradient(ellipse 45% 100% at 55% 50%,rgba(255,255,255,.45) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 100% at 85% 50%,rgba(255,255,255,.55) 0%,transparent 55%);
+  animation:liqSurf 2.2s linear infinite}
 .liq-water::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,.2) 0%,transparent 28%,rgba(0,40,80,.15) 100%)}
-@keyframes liqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@keyframes liqSurf{0%{transform:translateX(0)}100%{transform:translateX(22%)}}
+  background:linear-gradient(180deg,rgba(255,255,255,.25) 0%,transparent 30%,rgba(0,40,80,.12) 100%);
+  pointer-events:none}
+@keyframes liqSurf{0%{transform:translateX(0)}100%{transform:translateX(28%)}}
+.liq-ball.overflowing .liq-water::before{height:34px;top:-18px;animation-duration:1.4s}
+.liq-ball.overflowing{box-shadow:inset 0 -6px 16px rgba(34,211,238,.35),inset 0 0 12px rgba(0,0,0,.35)}
 .ring-center{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
   pointer-events:none}
 .ring-center .pct{font-size:1.4rem;font-weight:900;line-height:1;
@@ -307,8 +313,8 @@ html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10
 
 
 /* profile actions full width */
-#profActs.act-row{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.85rem}
-#profActs .btn{width:100%;justify-content:center;padding:.85rem 1rem;font-size:.92rem;border-radius:14px}
+#profActs.act-row{display:flex;flex-direction:row;flex-wrap:nowrap;gap:.55rem;margin-bottom:.85rem}
+#profActs .btn{flex:1;width:auto;justify-content:center;padding:.8rem .6rem;font-size:.88rem;border-radius:14px;min-width:0}
 /* smaller ring to align with 4 stats */
 .ring-col{display:flex;flex-direction:column;align-items:center;gap:.32rem;flex-shrink:0}
 .ring-wrap{position:relative;width:96px!important;height:96px!important;flex-shrink:0;
@@ -352,6 +358,43 @@ body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
 @keyframes floatB{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-60px,-30px) scale(1.12)}66%{transform:translate(30px,-45px) scale(1.05)}}
 @keyframes floatC{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,55px) scale(1.15)}}
 
+
+.usage{display:flex!important;align-items:center!important;gap:.65rem!important;flex-wrap:nowrap}
+.usage .vol-grid{flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:.38rem}
+.usage .vol{padding:.42rem .48rem!important}
+.ring-col{justify-content:center}
+
+body[data-mood] .orb{will-change:transform,opacity}
+body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{animation:floatA 9s ease-in-out infinite!important}
+body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{animation:floatB 11s ease-in-out infinite!important}
+body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{animation:floatC 8s ease-in-out infinite!important}
+.ambient::after{content:"";position:absolute;inset:-20%;background:
+  radial-gradient(circle at 30% 40%,rgba(34,211,238,.08),transparent 40%),
+  radial-gradient(circle at 70% 60%,rgba(99,102,241,.07),transparent 42%);
+  animation:ambShift 14s ease-in-out infinite alternate;pointer-events:none}
+@keyframes ambShift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-3%,2%) scale(1.05)}}
+
+.loc-row{display:flex;gap:.5rem;overflow-x:auto;padding:.15rem 0 .65rem;margin-bottom:.15rem;
+  scrollbar-width:none;-ms-overflow-style:none}
+.loc-row::-webkit-scrollbar{display:none}
+.loc-card{flex:0 0 108px;height:72px;border-radius:14px;position:relative;overflow:hidden;
+  border:1px solid var(--bd);pointer-events:none;cursor:default;
+  box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.loc-card .loc-bg{position:absolute;inset:0;background-size:cover;background-position:center;
+  filter:saturate(1.1) brightness(.9)}
+.loc-card .loc-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.72) 100%)}
+.loc-card .loc-name{position:absolute;bottom:6px;left:8px;right:8px;text-align:center;
+  font-size:.72rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
+.loc-card[data-cc="DE"] .loc-bg{background-image:linear-gradient(135deg,#1e3a5f 0%,#0c4a6e 40%,#334155 100%)}
+.loc-card[data-cc="TR"] .loc-bg{background-image:linear-gradient(135deg,#7c2d12 0%,#b45309 45%,#0e7490 100%)}
+.loc-card[data-cc="FR"] .loc-bg{background-image:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#6366f1 100%)}
+.loc-card[data-cc="NL"] .loc-bg{background-image:linear-gradient(135deg,#0c4a6e 0%,#0369a1 50%,#f59e0b 100%)}
+.loc-card[data-cc="US"] .loc-bg{background-image:linear-gradient(135deg,#0f172a 0%,#1d4ed8 50%,#dc2626 100%)}
+.loc-card[data-cc="GB"] .loc-bg{background-image:linear-gradient(135deg,#0f172a 0%,#1e3a8a 55%,#b91c1c 100%)}
+.loc-card[data-cc="AE"] .loc-bg{background-image:linear-gradient(135deg,#134e4a 0%,#0f766e 40%,#fbbf24 100%)}
+.loc-card[data-cc="JP"] .loc-bg{background-image:linear-gradient(135deg,#111827 0%,#be123c 45%,#e2e8f0 100%)}
+.loc-card .loc-bg::after{content:"";position:absolute;inset:0;opacity:.35;
+  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),transparent 50%)}
 </style>
 </head>
 <body>
@@ -470,6 +513,7 @@ body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
   </div>
 
   <div id="tab-cfg" class="tab">
+    <div class="loc-row" id="locRow"></div>
     <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
     <div class="row" style="margin-top:.6rem">
@@ -707,7 +751,7 @@ function renderTraffic(){
     const used=rawD+rawU;
     const noLimit=!tot||tot<=0;
     const left=noLimit?0:Math.max(0,tot-used);
-    const remPct=noLimit?100:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
+    const remPct=noLimit?80:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
     const el=id=>document.getElementById(id);
     const setTxt=(id,v)=>{const e=el(id);if(e)e.textContent=v;};
     setTxt("down",bytes(rawD));
@@ -724,9 +768,11 @@ function renderTraffic(){
     if(bar&&bar.style) bar.style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
     const w=el("liqWater");
     if(w){
-      const pct=(noLimit?100:remPct)+"%";
+      const pct=Math.max(8, remPct)+"%";
       try{ if(w.style&&typeof w.style.setProperty==="function") w.style.setProperty("--pct",pct); }catch(_e){}
       try{ w.style.height=pct; }catch(_e){}
+      const ball=w.parentElement;
+      if(ball){ if(noLimit||remPct>=78) ball.classList.add("overflowing"); else ball.classList.remove("overflowing"); }
     }
   }catch(e){ try{console.error("renderTraffic",e);}catch(_e){} }
 }
@@ -869,6 +915,37 @@ function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subU
   document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
 function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
   const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
+
+function detectCC(name){
+  const s=String(name||"");
+  for(const em in FLAG_MAP){ if(s.indexOf(em)>=0) return FLAG_MAP[em]; }
+  const u=s.toUpperCase();
+  const codes=Object.keys(COUNTRY||{});
+  for(const c of codes){ if(new RegExp("(?:^|[^A-Z])"+c+"(?:[^A-Z]|$)").test(u)) return c; }
+  for(const c of codes){
+    const fa=(COUNTRY[c].fa||""), en=(COUNTRY[c].en||"");
+    if(fa&&s.indexOf(fa)>=0) return c;
+    if(en&&u.indexOf(en.toUpperCase())>=0) return c;
+  }
+  return "";
+}
+function renderLocCards(){
+  const row=document.getElementById("locRow");
+  if(!row) return;
+  const counts={};
+  (links||[]).forEach(l=>{
+    const cc=detectCC(nameOf(l));
+    if(cc) counts[cc]=(counts[cc]||0)+1;
+  });
+  const top=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,3);
+  if(!top.length){ row.innerHTML=""; row.style.display="none"; return; }
+  row.style.display="flex";
+  row.innerHTML=top.map(cc=>{
+    const label=countryLabel(cc);
+    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-name">${esc(label)}</div></div>`;
+  }).join("");
+}
+
 function renderList(){const box=document.getElementById("list");if(!box)return;
   if((!links||!links.length)&&TV&&TV.links){links=String(TV.links).split(/\r?\n/).filter(Boolean);}
   if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
@@ -877,6 +954,7 @@ function renderList(){const box=document.getElementById("list");if(!box)return;
     <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
+  try{renderLocCards();}catch(e){}
 }
 function renderApps(){
   const cur=plat();
