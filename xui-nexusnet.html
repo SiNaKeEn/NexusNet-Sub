@@ -274,10 +274,7 @@ html[data-theme="light"] .total-under{background:rgba(255,255,255,.55)}
 /* ambient stronger motion */
 .ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
   background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%);
-  animation:ambPulse 12s ease-in-out infinite alternate}
-html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
-@keyframes ambPulse{0%{filter:hue-rotate(0deg) brightness(1)}100%{filter:hue-rotate(12deg) brightness(1.08)}}
-.orb{position:absolute;border-radius:50%;filter:blur(56px);opacity:.65;pointer-events:none;will-change:transform}
+  /* no hue pulse */border-radius:50%;filter:blur(56px);opacity:.65;pointer-events:none;will-change:transform}
 .orb.a{width:420px;height:420px;background:#1d4ed8;top:-14%;left:-14%;animation:floatA 14s ease-in-out infinite}
 .orb.b{width:360px;height:360px;background:#0e7490;bottom:-8%;right:-12%;animation:floatB 18s ease-in-out infinite}
 .orb.c{width:280px;height:280px;background:#4f46e5;top:40%;left:55%;animation:floatC 16s ease-in-out infinite;opacity:.45}
@@ -543,6 +540,49 @@ body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
 .loc-card .loc-name{z-index:3!important;font-size:.8rem!important;font-weight:800!important;
   text-shadow:0 2px 8px rgba(0,0,0,.9)!important}
 
+
+/*final-blue-v3 — pure dark blue, no green/teal*/
+body[data-mood="ok"] .ambient,
+body:not([data-mood]) .ambient,
+body[data-mood="ok"]{
+  background:#020617!important;
+}
+body[data-mood="ok"] .ambient,
+body:not([data-mood]) .ambient{
+  background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 45%,#000000 100%)!important;
+  filter:none!important;
+  animation:none!important;
+}
+body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#1e3a8a!important;opacity:.5!important;filter:blur(70px)!important}
+body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#1d4ed8!important;opacity:.4!important;filter:blur(70px)!important}
+body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#312e81!important;opacity:.35!important;filter:blur(70px)!important}
+body[data-mood="ok"] .orb,body:not([data-mood]) .orb{/* no teal */}
+
+body[data-mood="fresh"] .ambient{
+  background:radial-gradient(140% 100% at 50% -20%,#14532d 0%,#052e16 50%,#022c22 100%)!important;
+  filter:none!important;animation:none!important;
+}
+body[data-mood="fresh"] .orb.a{background:#22c55e!important;opacity:.45!important}
+body[data-mood="fresh"] .orb.b{background:#16a34a!important;opacity:.4!important}
+body[data-mood="fresh"] .orb.c{background:#15803d!important;opacity:.35!important}
+
+body[data-mood="warn"] .ambient{
+  background:radial-gradient(140% 100% at 50% -20%,#713f12 0%,#451a03 50%,#1c0a00 100%)!important;
+  filter:none!important;animation:none!important;
+}
+body[data-mood="warn"] .orb.a{background:#eab308!important;opacity:.45!important}
+body[data-mood="warn"] .orb.b{background:#f59e0b!important;opacity:.4!important}
+body[data-mood="warn"] .orb.c{background:#d97706!important;opacity:.35!important}
+
+body[data-mood="bad"] .ambient{
+  background:radial-gradient(140% 100% at 50% -20%,#7f1d1d 0%,#450a0a 45%,#1a0505 100%)!important;
+  filter:none!important;animation:none!important;
+}
+body[data-mood="bad"] .orb.a{background:#ef4444!important;opacity:.5!important}
+body[data-mood="bad"] .orb.b{background:#dc2626!important;opacity:.45!important}
+body[data-mood="bad"] .orb.c{background:#b91c1c!important;opacity:.4!important}
+
+.loc-row,.loc-card{display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important}/*loc-removed*/
 </style>
 </head>
 <body data-mood="ok">
@@ -652,8 +692,7 @@ body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
   </div>
 
   <div id="tab-cfg" class="tab">
-    <div class="loc-row" id="locRow"></div>
-    <div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
+<div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
     <div id="list"></div>
     <div class="row" style="margin-top:.6rem">
       <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
@@ -932,25 +971,37 @@ function applyMood(){
   try{
     const tot=num(TV.totalByte)||0;
     const used=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const exp=num(TV.expire);
     const last=num(TV.lastOnline);
-    const en=n(TV.enabled,"true");
+    const en=String(n(TV.enabled,"true")).toLowerCase();
     let mood="ok";
-    // expired or disabled or quota full -> red
-    if(en==="false"||en==="0") mood="bad";
+    // disabled -> red
+    if(en==="false"||en==="0"||en==="disabled"||en==="expired"||en==="limited") mood="bad";
+    // quota full -> red
     else if(tot>0 && used>=tot) mood="bad";
-    else if(exp){
-      const ms=exp<1e12?exp*1000:exp;
-      if(ms<Date.now()) mood="bad";
-      else if((ms-Date.now())/86400000<=7) mood="warn";
+    else {
+      // parse expire like data(): number seconds/ms OR date string
+      let expMs=0;
+      const raw=TV.expire;
+      if(raw!=null && raw!=="" && raw!=="0" && String(raw).indexOf("{{")<0){
+        if(/^\d+$/.test(String(raw).trim())){
+          const nexp=Number(raw);
+          expMs=nexp<1e12?nexp*1000:nexp;
+        } else {
+          const d=new Date(raw);
+          if(!isNaN(d.getTime())) expMs=d.getTime();
+        }
+      }
+      if(expMs>0){
+        if(expMs<Date.now()) mood="bad";
+        else if((expMs-Date.now())/86400000<=7) mood="warn";
+      }
     }
-    // low traffic remaining (<=3 days estimate OR <=15% left)
+    // low remaining volume
     if(mood==="ok" && tot>0){
       const left=Math.max(0,tot-used);
-      const pct=left/tot;
-      if(pct<=0.15) mood="warn";
+      if(left/tot<=0.15) mood="warn";
     }
-    // never used -> fresh green (lastOnline 0 and used ~0)
+    // brand new: never online and zero traffic
     if(mood==="ok" && (!last || last===0) && used<=0) mood="fresh";
     document.body.setAttribute("data-mood", mood);
   }catch(e){ document.body.setAttribute("data-mood","ok"); }
@@ -1043,6 +1094,8 @@ function data(){
   _setp("pv3",stTxt);
   _setp("pv6",formatLastOnline(TV.lastOnline));
   if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
+
+  try{applyMood();}catch(e){}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
@@ -1065,22 +1118,7 @@ function detectCC(name){
   }
   return "";
 }
-function renderLocCards(){
-  const row=document.getElementById("locRow");
-  if(!row) return;
-  const counts={};
-  (links||[]).forEach(l=>{
-    const cc=detectCC(nameOf(l));
-    if(cc) counts[cc]=(counts[cc]||0)+1;
-  });
-  const top=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,3);
-  if(!top.length){ row.innerHTML=""; row.style.display="none"; return; }
-  row.style.display="flex";
-  row.innerHTML=top.map(cc=>{
-    const label=countryLabel(cc);
-    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-name">${esc(label)}</div></div>`;
-  }).join("");
-}
+function renderLocCards(){/* removed */}
 
 function renderList(){const box=document.getElementById("list");if(!box)return;
   if((!links||!links.length)&&TV&&TV.links){links=String(TV.links).split(/\r?\n/).filter(Boolean);}
@@ -1090,7 +1128,7 @@ function renderList(){const box=document.getElementById("list");if(!box)return;
     <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
-  try{renderLocCards();}catch(e){}
+  
 }
 function renderApps(){
   const cur=plat();
