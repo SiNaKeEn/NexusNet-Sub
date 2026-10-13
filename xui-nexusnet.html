@@ -900,7 +900,12 @@ function renderApps(){
     h.onclick=()=>{ h.parentElement.classList.toggle("collapsed"); };
   });
 }
-catch(e){}return{host:"",port:443,name:nameOf(link)}}
+function extractHost(link){try{
+  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
+  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
+  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
+  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
+}catch(e){}return{host:"",port:443,name:nameOf(link)}}
 
 /* Events */
 document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
