@@ -442,54 +442,45 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!impo
 .liq-ball.overflowing .liq-water::before{animation-duration:1.6s}
 .liq-ball.overflowing .liq-water::after{animation-duration:2s}
 
-/*nn-fix-v5*/
+/*nn-all-v6*/
 #warnVol:not(.show),#warnExp:not(.show){display:none!important}
 #warnVol.show:has(span:empty),#warnExp.show:has(span:empty){display:none!important}
-#ann:not([style*="flex"]){display:none!important}
-
-.loc-row,.loc-card{display:none!important;height:0!important;max-height:0!important;
-  margin:0!important;padding:0!important;overflow:hidden!important;border:0!important}
-
+.loc-row,.loc-card{display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;border:0!important}
 .ambient{animation:none!important;filter:none!important;
   background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 50%,#000 100%)!important}
-.orb.a{background:#1e3a8a!important}
-.orb.b{background:#1d4ed8!important}
-.orb.c{background:#312e81!important}
-
+.orb.a{background:#1e3a8a!important}.orb.b{background:#1d4ed8!important}.orb.c{background:#312e81!important}
 body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
   background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 50%,#000 100%)!important;
   filter:none!important;animation:none!important}
 body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#1e3a8a!important}
 body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#1d4ed8!important}
 body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#312e81!important}
-
 body[data-mood="fresh"] .ambient{
   background:radial-gradient(140% 100% at 50% -20%,#14532d 0%,#052e16 55%,#022c22 100%)!important;
   filter:none!important;animation:none!important}
 body[data-mood="fresh"] .orb.a{background:#22c55e!important}
 body[data-mood="fresh"] .orb.b{background:#16a34a!important}
 body[data-mood="fresh"] .orb.c{background:#15803d!important}
-
 body[data-mood="warn"] .ambient{
   background:radial-gradient(140% 100% at 50% -20%,#713f12 0%,#451a03 55%,#1c0a00 100%)!important;
   filter:none!important;animation:none!important}
 body[data-mood="warn"] .orb.a{background:#eab308!important}
 body[data-mood="warn"] .orb.b{background:#f59e0b!important}
 body[data-mood="warn"] .orb.c{background:#d97706!important}
-
 body[data-mood="bad"] .ambient{
   background:radial-gradient(140% 100% at 50% -20%,#7f1d1d 0%,#450a0a 50%,#1a0505 100%)!important;
   filter:none!important;animation:none!important}
 body[data-mood="bad"] .orb.a{background:#ef4444!important}
 body[data-mood="bad"] .orb.b{background:#dc2626!important}
 body[data-mood="bad"] .orb.c{background:#b91c1c!important}
-
 .ring-center{z-index:6!important}
 .ring-center .pct{color:#ecfeff!important;-webkit-text-fill-color:#ecfeff!important;
   background:none!important;text-shadow:0 1px 3px rgba(0,0,0,.75)!important;
   font-size:1.3rem!important;font-weight:900!important}
-
 .liq-water{transform:none!important;animation:none!important;min-height:14%!important}
+.liq-water::before{animation:waveX 3s linear infinite!important}
+.liq-water::after{animation:waveX 4.5s linear infinite reverse!important}
+@keyframes waveX{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 
 </style>
 </head>
@@ -879,25 +870,29 @@ function applyMood(){
   try{
     const tot=num(TV.totalByte)||0;
     const used=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const exp=num(TV.expire);
     const last=num(TV.lastOnline);
-    const en=n(TV.enabled,"true");
+    const en=String(n(TV.enabled,"true")).toLowerCase();
     let mood="ok";
-    // expired or disabled or quota full -> red
-    if(en==="false"||en==="0") mood="bad";
+    if(en==="false"||en==="0"||en==="disabled"||en==="expired") mood="bad";
     else if(tot>0 && used>=tot) mood="bad";
-    else if(exp){
-      const ms=exp<1e12?exp*1000:exp;
-      if(ms<Date.now()) mood="bad";
-      else if((ms-Date.now())/86400000<=7) mood="warn";
+    else {
+      var expMs=0, raw=TV.expire;
+      if(raw!=null && raw!=="" && raw!=="0"){
+        if(/^\d+(\.\d+)?$/.test(String(raw).trim())){
+          var nx=Number(raw); expMs=nx<1e12?nx*1000:nx;
+        } else {
+          var dd=new Date(raw); if(!isNaN(dd.getTime())) expMs=dd.getTime();
+        }
+      }
+      if(expMs>0){
+        if(expMs<Date.now()) mood="bad";
+        else if((expMs-Date.now())/86400000<=7) mood="warn";
+      }
     }
-    // low traffic remaining (<=3 days estimate OR <=15% left)
     if(mood==="ok" && tot>0){
-      const left=Math.max(0,tot-used);
-      const pct=left/tot;
-      if(pct<=0.15) mood="warn";
+      var left=Math.max(0,tot-used);
+      if(left/tot<=0.15) mood="warn";
     }
-    // never used -> fresh green (lastOnline 0 and used ~0)
     if(mood==="ok" && (!last || last===0) && used<=0) mood="fresh";
     document.body.setAttribute("data-mood", mood);
   }catch(e){ document.body.setAttribute("data-mood","ok"); }
@@ -910,10 +905,10 @@ function data(){
   try{
     const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
     const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
-    if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
+    if(wv){var _wvt=document.getElementById("warnVolTxt");if(totB>0&&usedB/totB>=0.8){var _wtx=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)";if(_wvt)_wvt.textContent=_wtx;if(_wtx&&_wtx.replace(/\s/g,""))wv.classList.add("show");else wv.classList.remove("show");}else{wv.classList.remove("show");if(_wvt)_wvt.textContent="";}}
     if(we){
       const exp=num(TV.expire); let showE=false;
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
+      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
       if(showE) we.classList.add("show"); else we.classList.remove("show");
     }
   }catch(e){}
@@ -990,6 +985,8 @@ function data(){
   _setp("pv3",stTxt);
   _setp("pv6",formatLastOnline(TV.lastOnline));
   if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
+
+  try{applyMood();}catch(e){}
 }
 function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
 function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
@@ -1012,22 +1009,7 @@ function detectCC(name){
   }
   return "";
 }
-function renderLocCards(){
-  const row=document.getElementById("locRow");
-  if(!row) return;
-  const counts={};
-  (links||[]).forEach(l=>{
-    const cc=detectCC(nameOf(l));
-    if(cc) counts[cc]=(counts[cc]||0)+1;
-  });
-  const top=Object.keys(counts).sort((a,b)=>counts[b]-counts[a]).slice(0,3);
-  if(!top.length){ row.innerHTML=""; row.style.display="none"; return; }
-  row.style.display="flex";
-  row.innerHTML=top.map(cc=>{
-    const label=countryLabel(cc);
-    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-name">${esc(label)}</div></div>`;
-  }).join("");
-}
+function renderLocCards(){var r=document.getElementById("locRow");if(r){r.innerHTML="";r.style.display="none";}}
 
 function renderList(){const box=document.getElementById("list");if(!box)return;
   if((!links||!links.length)&&TV&&TV.links){links=String(TV.links).split(/\r?\n/).filter(Boolean);}
