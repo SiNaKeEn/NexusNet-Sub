@@ -123,6 +123,45 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
 .lat-btn,.lat-note,#latUpdated,#btnLat{display:none!important}
 .lat-head{display:block!important}
 .lat-head .st{margin:0 0 .65rem}
+
+/*layout-301-v2 — dashboard like 3.0.1, IDs untouched*/
+.usage{
+  display:flex!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  gap:.7rem!important;
+  flex-wrap:nowrap!important;
+}
+.ring-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.35rem;
+  flex-shrink:0;
+}
+.ring-wrap{width:120px!important;height:120px!important;position:relative}
+.total-under{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.12rem;
+  min-width:108px;
+  padding:.32rem .5rem;
+  border-radius:12px;
+  background:rgba(0,0,0,.18);
+  border:1px solid var(--bd);
+}
+.total-under span{font-size:.62rem;color:var(--mu);font-weight:600}
+.total-under b{font-size:.88rem;font-weight:800;color:var(--tx);font-variant-numeric:tabular-nums}
+.usage .vol-grid{
+  flex:1!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  gap:.4rem!important;
+}
+.usage .vol.full{grid-column:auto!important}
+
 </style>
 </head>
 <body>
@@ -154,7 +193,8 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
     <div class="card">
       <div style="display:flex;justify-content:flex-end;margin-bottom:.4rem"><div class="badge ok" id="badge"><span id="badgeTxt">—</span></div></div>
       <div class="usage">
-        <div class="ring-wrap" id="ringWrap">
+        <div class="ring-col">
+          <div class="ring-wrap" id="ringWrap">
           <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
             <defs>
               <clipPath id="clipT"><circle cx="60" cy="60" r="43"/></clipPath>
@@ -176,13 +216,16 @@ button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var
           </svg>
           <div class="ring-center"><div class="pct" id="pctT">—</div><div class="lab" id="lTraffic">—</div></div>
         </div>
-        <div class="vol-grid">
-          <div class="vol accent full"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-database"/></svg><span data-i18n="limit"></span></div><div class="v" id="limit">—</div></div>
-          <div class="vol" id="cDown"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="down"></span></div><div class="v" id="down">—</div></div>
-          <div class="vol" id="cUp"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-upload"/></svg><span data-i18n="up"></span></div><div class="v" id="up">—</div></div>
-          <div class="vol" id="cUsed"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-chart-simple"/></svg><span data-i18n="used"></span></div><div class="v" id="used">—</div></div>
-          <div class="vol" id="cLeft"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-battery-three-quarters"/></svg><span data-i18n="left"></span></div><div class="v" id="left">—</div></div>
-          <div class="vol full" id="cLife" style="display:none"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-signal"/></svg><span data-i18n="life"></span></div><div class="v" id="life">—</div></div>
+          <div class="total-under">
+            <span data-i18n="limit" id="sTotal">حجم کل</span>
+            <b id="limit">—</b>
+          </div>
+        </div>
+        <div class="vol-grid" style="flex:1">
+          <div class="vol" id="cDown"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="down">دانلود شده</span></div><div class="v" id="down">—</div></div>
+          <div class="vol" id="cUp"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-upload"/></svg><span data-i18n="up">آپلود شده</span></div><div class="v" id="up">—</div></div>
+          <div class="vol" id="cUsed"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-chart-simple"/></svg><span data-i18n="used">مصرف‌شده</span></div><div class="v" id="used">—</div></div>
+          <div class="vol accent" id="cLeft"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-battery-three-quarters"/></svg><span data-i18n="left">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
         </div>
       </div>
       <div class="bar"><i id="bar"></i></div>
@@ -1288,7 +1331,7 @@ function renderTraffic(){
   $("limit").textContent=unl?"∞":bytes(tot);$("used").textContent=bytes(used);$("left").textContent=unl?"∞":bytes(left);
   $("cDown").style.display=$("cUp").style.display=SPLIT?"":"none";
   $("down").textContent=bytes(d);$("up").textContent=bytes(u);
-  const lf=num(TV.lifetime);$("cLife").style.display=(!SPLIT&&lf>0)?"":"none";$("life").textContent=bytes(lf);
+  const lf=num(TV.lifetime);
   $("pctT").textContent=unl?"∞":(rem>0&&rem<1?"<1":Math.round(rem))+(unl?"":"%");
   $("lTraffic").textContent=unl?t("unl"):t("left");
   $("rTraffic").style.strokeDashoffset=String(CIRC*(1-rem/100));
