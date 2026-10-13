@@ -374,27 +374,65 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{animation:floatC 8s eas
   animation:ambShift 14s ease-in-out infinite alternate;pointer-events:none}
 @keyframes ambShift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-3%,2%) scale(1.05)}}
 
-.loc-row{display:flex;gap:.5rem;overflow-x:auto;padding:.15rem 0 .65rem;margin-bottom:.15rem;
-  scrollbar-width:none;-ms-overflow-style:none}
+.loc-row{display:flex;gap:.45rem;overflow-x:auto;padding:.1rem 0 .55rem;scrollbar-width:none}
 .loc-row::-webkit-scrollbar{display:none}
-.loc-card{flex:0 0 108px;height:72px;border-radius:14px;position:relative;overflow:hidden;
-  border:1px solid var(--bd);pointer-events:none;cursor:default;
-  box-shadow:0 8px 20px rgba(0,0,0,.25)}
-.loc-card .loc-bg{position:absolute;inset:0;background-size:cover;background-position:center;
-  filter:saturate(1.1) brightness(.9)}
-.loc-card .loc-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(0,0,0,.72) 100%)}
-.loc-card .loc-name{position:absolute;bottom:6px;left:8px;right:8px;text-align:center;
-  font-size:.72rem;font-weight:800;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.6)}
-.loc-card[data-cc="DE"] .loc-bg{background-image:linear-gradient(135deg,#1e3a5f 0%,#0c4a6e 40%,#334155 100%)}
-.loc-card[data-cc="TR"] .loc-bg{background-image:linear-gradient(135deg,#7c2d12 0%,#b45309 45%,#0e7490 100%)}
-.loc-card[data-cc="FR"] .loc-bg{background-image:linear-gradient(135deg,#1e1b4b 0%,#312e81 40%,#6366f1 100%)}
-.loc-card[data-cc="NL"] .loc-bg{background-image:linear-gradient(135deg,#0c4a6e 0%,#0369a1 50%,#f59e0b 100%)}
-.loc-card[data-cc="US"] .loc-bg{background-image:linear-gradient(135deg,#0f172a 0%,#1d4ed8 50%,#dc2626 100%)}
-.loc-card[data-cc="GB"] .loc-bg{background-image:linear-gradient(135deg,#0f172a 0%,#1e3a8a 55%,#b91c1c 100%)}
-.loc-card[data-cc="AE"] .loc-bg{background-image:linear-gradient(135deg,#134e4a 0%,#0f766e 40%,#fbbf24 100%)}
-.loc-card[data-cc="JP"] .loc-bg{background-image:linear-gradient(135deg,#111827 0%,#be123c 45%,#e2e8f0 100%)}
-.loc-card .loc-bg::after{content:"";position:absolute;inset:0;opacity:.35;
-  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),transparent 50%)}
+.loc-card{flex:0 0 118px;height:78px;border-radius:14px;position:relative;overflow:hidden;
+  border:1px solid rgba(34,211,238,.15);pointer-events:none;
+  box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.loc-card .loc-bg{position:absolute;inset:0}
+.loc-card .loc-fade{position:absolute;inset:0;background:linear-gradient(180deg,transparent 30%,rgba(0,0,0,.75) 100%)}
+.loc-card .loc-name{position:absolute;bottom:7px;left:6px;right:6px;text-align:center;
+  font-size:.74rem;font-weight:800;color:#fff;letter-spacing:.01em;text-shadow:0 2px 6px rgba(0,0,0,.7)}
+.loc-card .loc-icon{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);
+  font-size:1.6rem;opacity:.9;filter:drop-shadow(0 2px 6px rgba(0,0,0,.45));z-index:2}
+/* scenic gradients */
+.loc-card[data-cc="DE"] .loc-bg{background:
+  radial-gradient(ellipse 80% 50% at 50% 100%,#1e293b 0%,transparent 60%),
+  linear-gradient(180deg,#0f172a 0%,#1e3a5f 40%,#334155 70%,#0f172a 100%)}
+.loc-card[data-cc="TR"] .loc-bg{background:
+  radial-gradient(ellipse 70% 45% at 50% 100%,#7c2d12 0%,transparent 55%),
+  linear-gradient(180deg,#0c4a6e 0%,#0369a1 35%,#c2410c 75%,#431407 100%)}
+.loc-card[data-cc="FR"] .loc-bg{background:
+  radial-gradient(ellipse 60% 40% at 50% 90%,#312e81 0%,transparent 50%),
+  linear-gradient(180deg,#0c0a1a 0%,#1e1b4b 40%,#4c1d95 80%,#1e1b4b 100%)}
+.loc-card[data-cc="NL"] .loc-bg{background:
+  radial-gradient(ellipse 80% 40% at 50% 100%,#0e7490 0%,transparent 50%),
+  linear-gradient(180deg,#082f49 0%,#0c4a6e 40%,#f59e0b 85%,#78350f 100%)}
+.loc-card[data-cc="US"] .loc-bg{background:
+  radial-gradient(ellipse 70% 50% at 50% 100%,#1e3a8a 0%,transparent 55%),
+  linear-gradient(180deg,#020617 0%,#1e3a8a 45%,#7f1d1d 100%)}
+.loc-card[data-cc="GB"] .loc-bg{background:
+  linear-gradient(180deg,#0f172a 0%,#1e3a8a 50%,#7f1d1d 100%)}
+.loc-card[data-cc="AE"] .loc-bg{background:
+  linear-gradient(180deg,#042f2e 0%,#0f766e 40%,#fbbf24 100%)}
+.loc-card[data-cc="JP"] .loc-bg{background:
+  radial-gradient(circle at 70% 30%,#fecaca 0%,transparent 35%),
+  linear-gradient(180deg,#0f172a 0%,#1e293b 50%,#be123c 100%)}
+.loc-card[data-cc="SG"] .loc-bg{background:linear-gradient(180deg,#0f172a,#0e7490 50%,#f43f5e)}
+.loc-card[data-cc="RU"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1d4ed8 50%,#f8fafc)}
+.loc-card[data-cc="CA"] .loc-bg{background:linear-gradient(180deg,#0f172a,#dc2626 60%,#f8fafc)}
+.loc-card[data-cc="AU"] .loc-bg{background:linear-gradient(180deg,#0c4a6e,#0369a1 40%,#f59e0b)}
+.loc-card .loc-bg::before{content:"";position:absolute;left:10%;right:10%;bottom:22%;height:18px;
+  background:rgba(0,0,0,.25);border-radius:4px 4px 0 0;box-shadow:
+    14px 0 0 rgba(0,0,0,.2), -16px 4px 0 rgba(0,0,0,.18), 28px 6px 0 rgba(0,0,0,.15)}
+
+.ring-wrap{width:84px!important;height:84px!important}
+.ring-wrap svg{width:84px!important;height:84px!important}
+.liq-ball{inset:8px!important}
+.ring-center .pct{font-size:1.05rem!important}
+.total-under{min-width:84px!important;padding:.18rem .3rem!important}
+.total-under span{font-size:.58rem!important}
+.total-under b{font-size:.68rem!important}
+.usage{align-items:stretch!important}
+.usage .vol-grid{align-content:center}
+.usage .vol{min-height:36px;display:flex;flex-direction:column;justify-content:center}
+
+.ambient{background:radial-gradient(120% 80% at 50% -10%,#030712 0%,#010409 55%,#000000 100%)!important}
+body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
+  background:radial-gradient(120% 80% at 50% -10%,#030712 0%,#010409 55%,#000000 100%)!important}
+body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#0c1e3d!important;opacity:.55}
+body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#0a2a3a!important;opacity:.5}
+body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!important;opacity:.4}
 </style>
 </head>
 <body>
@@ -458,18 +496,9 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{animation:floatC 8s eas
           <div class="liq-ball" aria-hidden="true">
             <div class="liq-water" id="liqWater" style="--pct:100%"></div>
           </div>
-          <svg viewBox="0 0 120 120">
-            <defs>
-              <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#67e8f9"/>
-                <stop offset="50%" stop-color="#38bdf8"/>
-                <stop offset="100%" stop-color="#818cf8"/>
-              </linearGradient>
-            </defs>
-            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(34,211,238,.12)" stroke-width="9"/>
-            <circle id="rTraffic" cx="60" cy="60" r="48" fill="none" stroke="url('#ringGrad')" stroke-width="9"
-              stroke-linecap="round" stroke-dasharray="301.59" stroke-dashoffset="0"
-              transform="rotate(-90 60 60)"/>
+          <svg viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(34,211,238,.18)" stroke-width="3"/>
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(34,211,238,.08)" stroke-width="6"/>
           </svg>
           <div class="ring-center"><div class="pct" id="pctT">∞</div></div>
         </div>
@@ -527,15 +556,14 @@ body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{animation:floatC 8s eas
   </div>
 
   <div id="tab-profile" class="tab">
+    <div class="st"><i class="fa-solid fa-id-card"></i> <span id="tProf">Profile</span></div>
+    <div class="card pinfo">
+      <div class="prow"><span id="p1">Username</span><b id="pv1">—</b></div>
     <div class="act-row" id="profActs">
       <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-brands fa-telegram"></i> <span id="tRenew">Renew</span></a>
       <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-solid fa-headset"></i> <span id="tSupport">Support</span></a>
     </div>
-
-    <div class="st"><i class="fa-solid fa-id-card"></i> <span id="tProf">Profile</span></div>
-    <div class="card pinfo">
-      <div class="prow"><span id="p1">Username</span><b id="pv1">—</b></div>
-      <div class="prow"><span id="p2">User ID</span><b id="pv2">—</b></div>
+  <div class="prow"><span id="p2">User ID</span><b id="pv2">—</b></div>
       <div class="prow"><span id="p3">Status</span><b id="pv3">—</b></div>
       <div class="prow"><span id="p5">Expire</span><b id="pv5">—</b></div>
       <div class="prow"><span id="p6">Last online</span><b id="pv6">—</b></div>
@@ -761,9 +789,7 @@ function renderTraffic(){
     setTxt("total",noLimit?"∞":bytes(tot));
     setTxt("pctT",noLimit?"∞":(remPct+"%"));
     window.__pctT=remPct;
-    const circ=(typeof CIRC==="number"&&CIRC)?CIRC:(2*Math.PI*48);
-    const rt=el("rTraffic");
-    if(rt&&rt.style) rt.style.strokeDashoffset=String(circ-circ*remPct/100);
+    
     const bar=el("bar");
     if(bar&&bar.style) bar.style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
     const w=el("liqWater");
@@ -942,7 +968,8 @@ function renderLocCards(){
   row.style.display="flex";
   row.innerHTML=top.map(cc=>{
     const label=countryLabel(cc);
-    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-name">${esc(label)}</div></div>`;
+    const ic={"DE":"🏰","TR":"🕌","FR":"🗼","NL":"🌷","US":"🗽","GB":"🎡","AE":"🏙️","JP":"🗻","SG":"🏙️","RU":"🏛️","CA":"🍁","AU":"🦘","IT":"🏛️","ES":"🏛️","PL":"🏰","AT":"🏔️","CH":"🏔️","SE":"🦌","FI":"🌲","NO":"🏔️","HK":"🏙️","KR":"🏯","IN":"🕌","BR":"🌴"};
+    return `<div class="loc-card" data-cc="${cc}"><div class="loc-bg"></div><div class="loc-fade"></div><div class="loc-icon">${ic[cc]||"🌍"}</div><div class="loc-name">${esc(label)}</div></div>`;
   }).join("");
 }
 
