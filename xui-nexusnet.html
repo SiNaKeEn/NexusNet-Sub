@@ -305,6 +305,53 @@ html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10
   animation:twinkle 6s ease-in-out infinite alternate;opacity:.7}
 @keyframes twinkle{0%{opacity:.4}100%{opacity:.85}}
 
+
+/* profile actions full width */
+#profActs.act-row{display:flex;flex-direction:column;gap:.55rem;margin-bottom:.85rem}
+#profActs .btn{width:100%;justify-content:center;padding:.85rem 1rem;font-size:.92rem;border-radius:14px}
+/* smaller ring to align with 4 stats */
+.ring-col{display:flex;flex-direction:column;align-items:center;gap:.32rem;flex-shrink:0}
+.ring-wrap{position:relative;width:96px!important;height:96px!important;flex-shrink:0;
+  filter:drop-shadow(0 0 12px rgba(34,211,238,.3))}
+.ring-wrap svg{position:absolute;inset:0;width:96px!important;height:96px!important;z-index:2;pointer-events:none}
+.liq-ball{position:absolute;inset:12px;border-radius:50%;overflow:hidden;z-index:1;
+  background:radial-gradient(circle at 50% 30%,rgba(15,23,42,.55),rgba(2,6,23,.85));
+  box-shadow:inset 0 0 10px rgba(0,0,0,.35)}
+.ring-center .pct{font-size:1.15rem!important}
+.total-under{min-width:96px!important;padding:.22rem .35rem!important}
+.total-under span{font-size:.6rem!important}
+.total-under b{font-size:.72rem!important}
+/* apps accordion */
+.grp{overflow:hidden;margin-bottom:.55rem}
+.grp > h4{cursor:pointer;user-select:none;display:flex;align-items:center;gap:.45rem}
+.grp > h4 .chev{margin-inline-start:auto;transition:transform .2s;opacity:.7;font-size:.75rem}
+.grp.collapsed .grp-body{display:none}
+.grp.collapsed > h4 .chev{transform:rotate(-90deg)}
+.grp.hot > h4{color:var(--p)}
+/* ambient status themes */
+.ambient{transition:background 1s ease,filter 1s ease}
+body[data-mood="fresh"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#052e1a 0%,#02140c 50%,#010806 100%)!important}
+body[data-mood="fresh"] .orb.a{background:#15803d!important}
+body[data-mood="fresh"] .orb.b{background:#0f766e!important}
+body[data-mood="fresh"] .orb.c{background:#166534!important}
+body[data-mood="ok"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%)!important}
+body[data-mood="warn"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#2a1f06 0%,#1a1204 50%,#0c0902 100%)!important}
+body[data-mood="warn"] .orb.a{background:#a16207!important}
+body[data-mood="warn"] .orb.b{background:#b45309!important}
+body[data-mood="warn"] .orb.c{background:#ca8a04!important}
+body[data-mood="bad"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#2a0606 0%,#140202 50%,#0a0101 100%)!important}
+body[data-mood="bad"] .orb.a{background:#991b1b!important}
+body[data-mood="bad"] .orb.b{background:#9f1239!important}
+body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
+/* stronger ambient motion */
+.orb{animation-duration:12s!important}
+.orb.a{animation:floatA 11s ease-in-out infinite!important}
+.orb.b{animation:floatB 13s ease-in-out infinite!important}
+.orb.c{animation:floatC 10s ease-in-out infinite!important}
+@keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(55px,35px) scale(1.1)}66%{transform:translate(-20px,50px) scale(.95)}}
+@keyframes floatB{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-60px,-30px) scale(1.12)}66%{transform:translate(30px,-45px) scale(1.05)}}
+@keyframes floatC{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,55px) scale(1.15)}}
+
 </style>
 </head>
 <body>
@@ -590,6 +637,7 @@ const TV=(function(){
       emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
       if(typeof data==="function") data();
       if(typeof renderTraffic==="function") renderTraffic();
+  applyMood();
       if(typeof renderList==="function") renderList();
       if(typeof renderQi==="function") renderQi();
     }catch(e){}
@@ -604,7 +652,7 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"حجم کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
   en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}}
@@ -677,6 +725,49 @@ function renderTraffic(){
   const y=104-(remPct/100)*88;
   const f=el("liqFillT");
   if(f){ f.setAttribute("y",String(y)); f.setAttribute("height",String(Math.max(0,130-y))); }
+}
+
+
+function subIdFromUrl(){
+  try{
+    const href=n(TV.subUrl,"")||location.href;
+    const u=new URL(href, location.origin);
+    const parts=u.pathname.split("/").filter(Boolean);
+    // .../sub/XXXX or /sub/XXXX/extra
+    const i=parts.findIndex(p=>p.toLowerCase()==="sub");
+    if(i>=0 && parts[i+1]) return decodeURIComponent(parts[i+1]);
+    if(parts.length) return decodeURIComponent(parts[parts.length-1]);
+  }catch(e){}
+  return n(TV.sId,"—")||"—";
+}
+
+
+function applyMood(){
+  try{
+    const tot=num(TV.totalByte)||0;
+    const used=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
+    const exp=num(TV.expire);
+    const last=num(TV.lastOnline);
+    const en=n(TV.enabled,"true");
+    let mood="ok";
+    // expired or disabled or quota full -> red
+    if(en==="false"||en==="0") mood="bad";
+    else if(tot>0 && used>=tot) mood="bad";
+    else if(exp){
+      const ms=exp<1e12?exp*1000:exp;
+      if(ms<Date.now()) mood="bad";
+      else if((ms-Date.now())/86400000<=7) mood="warn";
+    }
+    // low traffic remaining (<=3 days estimate OR <=15% left)
+    if(mood==="ok" && tot>0){
+      const left=Math.max(0,tot-used);
+      const pct=left/tot;
+      if(pct<=0.15) mood="warn";
+    }
+    // never used -> fresh green (lastOnline 0 and used ~0)
+    if(mood==="ok" && (!last || last===0) && used<=0) mood="fresh";
+    document.body.setAttribute("data-mood", mood);
+  }catch(e){ document.body.setAttribute("data-mood","ok"); }
 }
 
 function data(){
@@ -764,7 +855,7 @@ function data(){
 
   const _setp=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   _setp("pv1",emails[0]||"—");
-  _setp("pv2",n(TV.sId,"—"));
+  _setp("pv2",subIdFromUrl());
   _setp("pv3",stTxt);
   _setp("pv6",formatLastOnline(TV.lastOnline));
   if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
@@ -784,17 +875,32 @@ function renderList(){const box=document.getElementById("list");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
   box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
 }
-function renderApps(){const cur=plat();
-  document.getElementById("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur?" hot":"";
-    return `<div class="grp${hot}"><h4><i class="${g.i}"></i> ${g.p}${hot?' <span class="t">★</span>':""}</h4>
-      ${g.a.map(a=>{const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);const letter=String(a.n).slice(0,1).toUpperCase();return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`}).join("")}</div>`}).join("")}
-
-function extractHost(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
-  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
-  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
-}catch(e){}return{host:"",port:443,name:nameOf(link)}}
+function renderApps(){
+  const cur=plat();
+  const order=["iOS","Android","Windows","macOS","Linux"];
+  const sorted=[...APPS].sort((a,b)=>{
+    if(a.p===cur) return -1;
+    if(b.p===cur) return 1;
+    return order.indexOf(a.p)-order.indexOf(b.p);
+  });
+  const box=document.getElementById("apps");
+  if(!box) return;
+  box.innerHTML=sorted.map(g=>{
+    const isCur=g.p===cur;
+    const hot=isCur?" hot":"";
+    const collapsed=isCur?"":" collapsed";
+    const body=g.a.map(a=>{
+      const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);
+      const letter=String(a.n).slice(0,1).toUpperCase();
+      return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`;
+    }).join("");
+    return `<div class="grp${hot}${collapsed}" data-plat="${g.p}"><h4 type="button"><i class="${g.i}"></i> ${g.p}${isCur?' <span class="t">★</span>':""}<i class="fa-solid fa-chevron-down chev"></i></h4><div class="grp-body">${body}</div></div>`;
+  }).join("");
+  box.querySelectorAll(".grp > h4").forEach(h=>{
+    h.onclick=()=>{ h.parentElement.classList.toggle("collapsed"); };
+  });
+}
+catch(e){}return{host:"",port:443,name:nameOf(link)}}
 
 /* Events */
 document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
