@@ -2,724 +2,1167 @@
 <html lang="fa" dir="rtl" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="color-scheme" content="dark light"/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306b6d4'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"/>
-<title>Subscription</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<title>{{ .subTitle }}</title>
 <style>
-:root{
-  --font:"Inter","Vazirmatn",system-ui,sans-serif;
-  --p:#22d3ee; --p2:#3b82f6; --pg:rgba(34,211,238,.14);
-  --bg:#020617; --sf:rgba(10,18,38,.55); --sf2:rgba(8,14,28,.88);
-  --bd:rgba(100,180,255,.14); --tx:#f0f9ff; --mu:#8ba3b8;
-  --ok:#34d399; --wn:#fbbf24; --er:#f87171; --r:18px;
-}
-html[data-theme="light"]{
-  --bg:#dce8f6; --sf:rgba(255,255,255,.72); --sf2:rgba(255,255,255,.92);
-  --bd:rgba(30,90,150,.12); --tx:#0f172a; --mu:#5b6f85;
-  --p:#0891b2; --pg:rgba(8,145,178,.12);
-}
+:root{--font:"Vazirmatn","Inter",system-ui,-apple-system,"Segoe UI",Tahoma,sans-serif;
+--p:#22d3ee;--p2:#3b82f6;--pg:rgba(34,211,238,.14);--bg:#020617;--sf:rgba(10,18,38,.6);--sf2:rgba(8,14,28,.92);
+--bd:rgba(100,180,255,.14);--tx:#f0f9ff;--mu:#93a9bd;--ok:#34d399;--wn:#fbbf24;--er:#f87171;--r:18px;--l1:#67e8f9;--l2:#06b6d4}
+html[data-theme=light]{--bg:#dce8f6;--sf:rgba(255,255,255,.75);--sf2:rgba(255,255,255,.95);--bd:rgba(30,90,150,.14);--tx:#0f172a;--mu:#506378;--p:#0891b2;--pg:rgba(8,145,178,.12)}
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:auto;min-height:100%;overflow-x:hidden}
-body{
-  font-family:var(--font);color:var(--tx);min-height:100vh;
-  background:var(--bg);display:flex;justify-content:center;
-  -webkit-overflow-scrolling:touch;
-}
-.app{-webkit-overflow-scrolling:touch;padding-bottom:0}
-.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%)}
-html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
-.orb{position:absolute;border-radius:50%;filter:blur(64px);opacity:.6;animation:float 16s ease-in-out infinite;pointer-events:none;will-change:transform}
-.orb.a{width:380px;height:380px;background:#1e3a8a;top:-10%;left:-12%;animation-duration:20s}
-.orb.b{width:320px;height:320px;background:#0c4a6e;bottom:2%;right:-14%;animation-duration:24s;animation-delay:-5s}
-.orb.c{width:240px;height:240px;background:#312e81;top:38%;left:52%;animation-duration:18s;animation-delay:-9s;opacity:.4}
-html[data-theme="light"] .orb{opacity:.32}
-@keyframes float{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(5%,8%) scale(1.08)}50%{transform:translate(-4%,12%) scale(.94)}75%{transform:translate(6%,-4%) scale(1.05)}}
-.stars{position:absolute;inset:0;opacity:.8;pointer-events:none;animation:twinkle 7s ease-in-out infinite alternate;background-image:radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.4),transparent),radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.28),transparent),radial-gradient(1.5px 1.5px at 70% 30%,rgba(140,200,255,.35),transparent),radial-gradient(1px 1px at 85% 60%,rgba(255,255,255,.22),transparent),radial-gradient(1px 1px at 50% 50%,rgba(100,180,255,.2),transparent)}
-html[data-theme="light"] .stars{opacity:.2}
-@keyframes twinkle{from{opacity:.4}to{opacity:.9}}
-.lat-note{font-size:.65rem;color:var(--mu);margin-top:.4rem;line-height:1.4;opacity:.85}
-
-/* Always phone-column — works on Windows too */
-.app{
-  position:relative;z-index:2;width:100%;max-width:440px;min-height:100vh;
-  padding:1rem 1rem 8.5rem;background:transparent;
-}
-
+html,body{min-height:100%;overflow-x:hidden}
+body{font-family:var(--font);color:var(--tx);min-height:100vh;background:var(--bg);display:flex;justify-content:center;-webkit-font-smoothing:antialiased}
+.i{width:1em;height:1em;fill:currentColor;vertical-align:-.125em;flex-shrink:0}
+.ambient{position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(60% 40% at 15% 0%,rgba(29,78,216,.45),transparent 70%),radial-gradient(50% 40% at 95% 85%,rgba(14,165,233,.3),transparent 70%),radial-gradient(120% 80% at 50% -10%,#0b1a33 0%,#030712 55%,#02040a 100%)}
+html[data-theme=light] .ambient{background:radial-gradient(60% 40% at 15% 0%,rgba(96,165,250,.45),transparent 70%),radial-gradient(50% 40% at 95% 85%,rgba(56,189,248,.35),transparent 70%),linear-gradient(#e8eef8,#dfe8f5)}
+.app{position:relative;z-index:2;width:100%;max-width:440px;min-height:100vh;padding:1rem 1rem 8.5rem}
+@media(min-width:960px){.app{margin:1.25rem auto;min-height:auto}}
 .hd{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.85rem}
-.hd-info{min-width:0}
-.hd h1{font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd-l{display:flex;align-items:center;gap:.6rem;min-width:0}
+.logo{width:38px;height:38px;border-radius:12px;object-fit:cover;flex-shrink:0}
+.hd-info{min-width:0}.hd h1{font-size:1.05rem;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hd .sub{font-size:.72rem;color:var(--mu);margin-top:.12rem;display:flex;align-items:center;gap:.35rem}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 8px var(--ok);flex-shrink:0}
-.dot.off{background:var(--er);box-shadow:0 0 8px var(--er)}
+.dot.bad{background:var(--er);box-shadow:0 0 8px var(--er)}.dot.wn{background:var(--wn);box-shadow:0 0 8px var(--wn)}
 .tools{display:flex;gap:.4rem;flex-shrink:0}
-.ib{width:36px;height:36px;border-radius:12px;border:1px solid var(--bd);background:var(--sf);
-  color:var(--tx);display:grid;place-items:center;cursor:pointer;font-size:.85rem;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.ib:active{transform:scale(.95)}
-.lw{position:relative}
-.ld{display:none;position:absolute;top:42px;inset-inline-start:0;min-width:120px;background:var(--sf2);
-  border:1px solid var(--bd);border-radius:12px;overflow:hidden;z-index:50;box-shadow:0 12px 28px rgba(0,0,0,.35)}
+.ib{width:38px;height:38px;border-radius:12px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);display:grid;place-items:center;cursor:pointer;font-size:.9rem}
+.ib:active,.btn:active,.mb:active{transform:scale(.95)}
+.lw{position:relative}.ld{display:none;position:absolute;top:44px;inset-inline-start:0;min-width:120px;background:var(--sf2);border:1px solid var(--bd);border-radius:12px;overflow:hidden;z-index:50;box-shadow:0 12px 28px rgba(0,0,0,.35)}
 .lw.open .ld{display:block}
-.ld button{display:block;width:100%;padding:.55rem .8rem;border:0;background:0;color:var(--tx);
-  font-family:var(--font);font-size:.8rem;font-weight:600;cursor:pointer;text-align:start}
+.ld button{display:block;width:100%;padding:.6rem .8rem;border:0;background:0;color:var(--tx);font-family:var(--font);font-size:.8rem;font-weight:600;cursor:pointer;text-align:start}
 .ld button:hover{background:var(--pg)}
-
-.card{
-  background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.1rem;margin-bottom:.75rem;
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  box-shadow:0 8px 32px rgba(0,0,0,.12);
-}
-.badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;font-weight:700;
-  padding:.25rem .65rem;border-radius:999px}
-.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}
-.badge.bad{background:rgba(248,113,113,.14);color:var(--er)}
-.badge.wn{background:rgba(251,191,36,.14);color:var(--wn)}
-
-/* Usage block */
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:1.1rem;margin-bottom:.75rem;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 28px rgba(0,0,0,.12)}
+.badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.72rem;font-weight:800;padding:.28rem .7rem;border-radius:999px}
+.badge.ok{background:rgba(52,211,153,.14);color:var(--ok)}.badge.bad{background:rgba(248,113,113,.14);color:var(--er)}.badge.wn{background:rgba(251,191,36,.14);color:var(--wn)}
 .usage{display:flex;align-items:center;gap:1rem;margin-bottom:.85rem;flex-wrap:wrap}
-.usage .vol-grid{flex:1;min-width:160px}
-.ring-wrap{position:relative;width:110px;height:110px;flex-shrink:0}
-.ring-wrap svg{width:110px;height:110px;display:block}
-.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.4)}
-.ring-center .pct{font-size:1.25rem;font-weight:900;line-height:1.1}
-.ring-center .lab{font-size:.62rem;color:var(--mu);margin-top:.12rem;font-weight:600}
-.period-card{margin-bottom:.75rem}
-.period-card .st{margin:0 0 .55rem}
-.period{display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem}
-.period button{border:1px solid var(--bd);background:rgba(0,0,0,.12);color:var(--mu);font-family:var(--font);
-  font-size:.72rem;font-weight:700;padding:.55rem .35rem;border-radius:12px;cursor:pointer;transition:.15s}
-html[data-theme="light"] .period button{background:rgba(0,0,0,.04)}
-.period button.on{background:var(--pg);color:var(--p);border-color:rgba(34,211,238,.35);box-shadow:0 0 0 1px rgba(34,211,238,.15)}
-.period button:active{transform:scale(.97)}
-.vol-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
-.vol{padding:.65rem .7rem;border-radius:12px;background:rgba(0,0,0,.12);border:1px solid rgba(255,255,255,.04)}
-html[data-theme="light"] .vol{background:rgba(0,0,0,.04)}
-.vol .k{font-size:.66rem;color:var(--mu);font-weight:600;display:flex;align-items:center;gap:.28rem;margin-bottom:.25rem}
-.vol .k i{color:var(--p);font-size:.7rem;width:12px;text-align:center}
-.vol .v{font-size:.92rem;font-weight:800;direction:ltr;text-align:start;unicode-bidi:isolate}
-.vol.full{grid-column:1/-1}
-.vol.accent{border-color:rgba(34,211,238,.2);background:rgba(34,211,238,.06)}
-
-/* Expiry timer */
-.exp-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
-.exp-hd .t{font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.35rem}
-.exp-hd .t i{color:var(--p2)}
-.exp-tag{font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:8px;
-  background:rgba(59,130,246,.12);color:#93c5fd}
-.timers{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem}
-.timer{text-align:center;padding:.65rem .3rem;border-radius:12px;background:rgba(0,0,0,.16);
-  border:1px solid rgba(255,255,255,.04)}
-html[data-theme="light"] .timer{background:rgba(0,0,0,.04)}
-.timer .n{font-size:1.25rem;font-weight:900;font-variant-numeric:tabular-nums}
-.timer .l{font-size:.62rem;color:var(--mu);margin-top:.15rem;font-weight:600}
-
-.bar{height:6px;background:rgba(255,255,255,.06);border-radius:99px;overflow:hidden;margin:.85rem 0 0}
-html[data-theme="light"] .bar{background:rgba(0,0,0,.06)}
-.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--p),var(--p2));transition:width .5s}
-
+.ring-wrap{position:relative;width:128px;height:128px;flex-shrink:0;margin-inline:auto}
+.ring-wrap svg{width:128px;height:128px;display:block;overflow:visible}
+.ring-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.55)}
+.ring-center .pct{font-size:1.4rem;font-weight:900;line-height:1.1;color:#fff}
+.ring-center .lab{font-size:.62rem;color:#e0f2fe;margin-top:.12rem;font-weight:700}
+html[data-theme=light] .ring-center{text-shadow:0 1px 0 rgba(255,255,255,.6)}
+html[data-theme=light] .ring-center .pct{color:#06263d}html[data-theme=light] .ring-center .lab{color:#0c4a6e}
+.bub{fill:rgba(255,255,255,.55);animation:bub 4.5s linear infinite}
+@keyframes bub{0%{transform:translateY(0);opacity:0}15%{opacity:.8}100%{transform:translateY(-44px);opacity:0}}
+.nobub .bub{display:none}
+.vol-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.45rem;flex:1 1 170px;min-width:0}
+.vol{min-width:0;padding:.65rem .7rem;border-radius:12px;background:rgba(0,0,0,.14);border:1px solid rgba(255,255,255,.04)}
+html[data-theme=light] .vol,html[data-theme=light] .timer,html[data-theme=light] .item,html[data-theme=light] .prow,html[data-theme=light] .al{background:rgba(0,0,0,.045)}
+.vol .k span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.vol .k{font-size:.64rem;color:var(--mu);font-weight:600;display:flex;align-items:center;gap:.28rem;margin-bottom:.25rem}.vol .k .i{color:var(--p);font-size:.7rem}
+.vol .v{font-size:.84rem;white-space:nowrap;font-weight:800;direction:ltr;text-align:start;unicode-bidi:isolate}
+.vol.full{grid-column:1/-1}.vol.accent{border-color:rgba(34,211,238,.22);background:rgba(34,211,238,.07)}
+.bar{height:6px;background:rgba(255,255,255,.07);border-radius:99px;overflow:hidden;margin:.85rem 0 0}
+html[data-theme=light] .bar{background:rgba(0,0,0,.07)}
+.bar i{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--l2),var(--l1));transition:width .6s}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:.55rem;margin-top:.85rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.72rem .5rem;
-  border-radius:14px;border:0;font-family:var(--font);font-size:.82rem;font-weight:700;cursor:pointer;transition:.15s}
-.btn:active{transform:scale(.97)}
-.bp{background:linear-gradient(135deg,#06b6d4,#2563eb);color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.28)}
-.bg{background:var(--sf);border:1px solid var(--bd);color:var(--tx)}
-
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;padding:.75rem .5rem;border-radius:14px;border:0;font-family:var(--font);font-size:.82rem;font-weight:700;cursor:pointer;text-decoration:none;color:var(--tx)}
+.bp{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.28)}
+.bg{background:var(--sf);border:1px solid var(--bd)}
+.btn.big{width:100%;padding:.9rem 1rem;font-size:.92rem;font-weight:800}
 .st{font-size:.76rem;font-weight:700;color:var(--mu);margin:.95rem 0 .5rem;display:flex;align-items:center;gap:.35rem}
-.qi{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
-.qi a{display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.65rem .4rem;border-radius:12px;
-  background:var(--pg);border:1px solid var(--bd);color:var(--tx);text-decoration:none;font-size:.78rem;font-weight:600}
+.exp-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.exp-hd .t{font-size:.8rem;font-weight:700;display:flex;align-items:center;gap:.35rem}.exp-hd .t .i{color:var(--p2)}
+.exp-tag{font-size:.68rem;font-weight:700;padding:.2rem .55rem;border-radius:8px;background:rgba(59,130,246,.12);color:#93c5fd}
+html[data-theme=light] .exp-tag{color:#1d4ed8}
+.timers{display:grid;grid-template-columns:repeat(3,1fr);gap:.45rem}
+.timer{text-align:center;padding:.65rem .3rem;border-radius:12px;background:rgba(0,0,0,.16);border:1px solid rgba(255,255,255,.04)}
+.timer .n{font-size:1.25rem;font-weight:900;font-variant-numeric:tabular-nums}.timer .l{font-size:.62rem;color:var(--mu);margin-top:.15rem;font-weight:600}
+.qi{display:grid;grid-template-columns:1fr 1fr;gap:.45rem;margin-top:.6rem}
+.qi a{display:flex;align-items:center;justify-content:center;gap:.35rem;padding:.65rem .4rem;border-radius:12px;background:var(--pg);border:1px solid var(--bd);color:var(--tx);text-decoration:none;font-size:.78rem;font-weight:600}
 .qi a:hover{border-color:var(--p)}
-
+.linkbtn{background:0;border:0;color:var(--p);font-family:var(--font);font-size:.74rem;font-weight:700;cursor:pointer;margin-top:.6rem;display:inline-flex;gap:.3rem;align-items:center}
+details.gd{border:1px solid var(--bd);border-radius:14px;background:var(--sf);margin-bottom:.5rem;padding:.2rem .85rem}
+details.gd summary{cursor:pointer;font-size:.8rem;font-weight:700;padding:.65rem 0;list-style:none;display:flex;align-items:center;gap:.4rem}
+details.gd summary::-webkit-details-marker{display:none}
+details.gd summary .i{color:var(--p)}
+details.gd ol,details.gd ul{padding-inline-start:1.2rem;font-size:.78rem;line-height:1.9;color:var(--mu);padding-bottom:.65rem}
 .item{display:flex;align-items:center;gap:.45rem;padding:.65rem .7rem;background:rgba(0,0,0,.14);border-radius:12px;margin-bottom:.35rem}
-html[data-theme="light"] .item{background:rgba(0,0,0,.04)}
-.item .n{flex:1;font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mb{width:32px;height:32px;border-radius:9px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);
-  display:grid;place-items:center;cursor:pointer;font-size:.74rem;flex-shrink:0}
-
-.grp{margin-bottom:.85rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.75rem;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
-.grp h4{font-size:.74rem;color:var(--mu);margin-bottom:.4rem;font-weight:700}
-.grp.hot{border-color:rgba(34,211,238,.28);background:rgba(34,211,238,.08)}
-.al{display:flex;align-items:center;gap:.4rem;padding:.55rem .65rem;border-radius:10px;background:rgba(0,0,0,.1);
-  color:var(--tx);text-decoration:none;font-size:.8rem;font-weight:600;margin-bottom:.3rem;
-  border:1px solid transparent}
-.al:last-child{margin-bottom:0}
-html[data-theme="light"] .al{background:rgba(0,0,0,.04)}
-.al:hover{border-color:var(--bd)}
-.al .t{color:var(--p);font-size:.62rem;margin-inline-start:.15rem}
-.al .d{margin-inline-start:auto;opacity:.35;font-size:.7rem}
-
-.pinfo{display:grid;gap:.5rem}
-.prow{display:flex;justify-content:space-between;align-items:center;padding:.65rem .75rem;background:rgba(0,0,0,.12);border-radius:12px}
-html[data-theme="light"] .prow{background:rgba(0,0,0,.04)}
-.prow span{font-size:.76rem;color:var(--mu)}
-.prow b{font-size:.82rem;font-weight:700}
-
-/* Bottom nav — always fixed bottom */
-.nav{
-  position:fixed;bottom:12px;left:50%;transform:translateX(-50%);
-  width:calc(100% - 24px);max-width:416px;
-  display:flex;justify-content:space-around;padding:.45rem;
-  background:var(--sf2);border:1px solid var(--bd);border-radius:18px;
-  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
-  z-index:40;box-shadow:0 10px 36px rgba(0,0,0,.3);
-}
-.nav button{background:0;border:0;color:var(--mu);font-family:var(--font);font-size:.6rem;font-weight:600;
-  display:flex;flex-direction:column;align-items:center;gap:.1rem;cursor:pointer;padding:.28rem .55rem;border-radius:12px}
-.nav button i{font-size:1.1rem}
-.nav button.on{color:var(--p);background:var(--pg)}
-
-.tab{display:none;padding-bottom:.75rem}.tab.on{display:block;animation:fadeIn .3s ease}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-
-.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);opacity:0;background:var(--sf2);
-  border:1px solid var(--bd);padding:.55rem 1.1rem;border-radius:999px;font-size:.8rem;font-weight:700;z-index:100;transition:.25s;pointer-events:none}
+.item .meta{flex:1;min-width:0}.item .n{font-size:.8rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tags{display:flex;gap:.25rem;margin-top:.25rem;flex-wrap:wrap}
+.tag{font-size:.58rem;font-weight:800;padding:.1rem .4rem;border-radius:6px;background:var(--pg);color:var(--p);direction:ltr;letter-spacing:.02em}
+.ping{font-size:.76rem;font-weight:800;min-width:46px;text-align:end;font-variant-numeric:tabular-nums;direction:ltr}
+.ping.good{color:var(--ok)}.ping.mid{color:var(--wn)}.ping.bad{color:var(--er)}.ping.wait{color:var(--mu)}
+.mb{width:34px;height:34px;border-radius:9px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);display:grid;place-items:center;cursor:pointer;font-size:.74rem;flex-shrink:0}
+.lat-head{display:flex;align-items:center;justify-content:space-between;gap:.5rem;margin:.2rem 0 .6rem}.lat-head .st{margin:0}
+.lat-btn{display:inline-flex;align-items:center;gap:.35rem;border:1px solid var(--bd);background:var(--sf);color:var(--p);border-radius:10px;padding:.4rem .75rem;font-family:var(--font);font-size:.74rem;font-weight:700;cursor:pointer}
+.lat-btn.spin .i{animation:spin .6s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.lat-note{font-size:.64rem;color:var(--mu);margin:.5rem 0 .8rem;line-height:1.6}
+.grp{margin-bottom:.85rem;background:var(--sf);border:1px solid var(--bd);border-radius:var(--r);padding:.75rem}
+.grp h4{font-size:.74rem;color:var(--mu);margin-bottom:.4rem;font-weight:700;display:flex;gap:.35rem;align-items:center}
+.grp.hot{border-color:rgba(34,211,238,.3);background:rgba(34,211,238,.08)}
+.al{display:flex;align-items:center;gap:.5rem;padding:.55rem .65rem;border-radius:10px;background:rgba(0,0,0,.1);color:var(--tx);text-decoration:none;font-size:.8rem;font-weight:600;margin-bottom:.3rem;border:1px solid transparent}
+.al:last-child{margin-bottom:0}.al:hover{border-color:var(--bd)}.al .t{color:var(--p);font-size:.62rem}.al .d{margin-inline-start:auto;opacity:.4;font-size:.7rem}
+.app-badge{width:22px;height:22px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:800;color:#fff;background:linear-gradient(135deg,#06b6d4,#2563eb)}
+.app-badge.happ{background:linear-gradient(135deg,#f59e0b,#ea580c)}.app-badge.throne{background:linear-gradient(135deg,#8b5cf6,#6d28d9)}.app-badge.hiddify{background:linear-gradient(135deg,#22c55e,#15803d)}
+.app-badge.v2ray{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}.app-badge.v2box{background:linear-gradient(135deg,#ec4899,#be185d)}.app-badge.streisand{background:linear-gradient(135deg,#14b8a6,#0f766e)}.app-badge.shadow{background:linear-gradient(135deg,#64748b,#334155)}
+.pinfo{display:grid;gap:.5rem}.prow{display:flex;justify-content:space-between;align-items:center;gap:.5rem;padding:.65rem .75rem;background:rgba(0,0,0,.12);border-radius:12px}
+.prow span{font-size:.76rem;color:var(--mu)}.prow b{font-size:.82rem;font-weight:700;direction:ltr;unicode-bidi:isolate;text-align:end;overflow-wrap:anywhere}
+.act-row{display:flex;gap:.4rem;margin:.7rem 0;flex-wrap:wrap}.act-row a{flex:1;min-width:0}
+.nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:calc(100% - 24px);max-width:416px;display:flex;justify-content:space-around;padding:.45rem;background:var(--sf2);border:1px solid var(--bd);border-radius:18px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);z-index:40;box-shadow:0 10px 36px rgba(0,0,0,.3);margin-bottom:env(safe-area-inset-bottom,0)}
+.nav button{background:0;border:0;color:var(--mu);font-family:var(--font);font-size:.62rem;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:.15rem;cursor:pointer;padding:.3rem .6rem;border-radius:12px}
+.nav button .i{font-size:1.1rem}.nav button.on{color:var(--p);background:var(--pg)}
+.tab{display:none}.tab.on{display:block;animation:tabIn .25s ease}@keyframes tabIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-10px);opacity:0;background:var(--sf2);border:1px solid var(--bd);padding:.55rem 1.1rem;border-radius:999px;font-size:.8rem;font-weight:700;z-index:100;transition:.25s;pointer-events:none}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-#md{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;align-items:center;justify-content:center;padding:1rem}
-#md.open{display:flex}
-.mbx{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:1.25rem;text-align:center;max-width:260px;width:100%}
-#qr{display:flex;justify-content:center;margin:1rem 0}
-.ann{display:none;align-items:flex-start;gap:.5rem;padding:.8rem;margin-bottom:.75rem;border-radius:14px;
-  background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.16);font-size:.76rem;line-height:1.45}
-.ann i{color:var(--p);margin-top:.08rem}
-
-/* Latency */
-
-
-/* v2.1-opt — visual/performance only */
-@media(min-width:960px){
-  .app{max-width:440px!important;margin:1.25rem auto}
-}
-.orb{will-change:transform,opacity}
-.stars{will-change:opacity}
-html{-webkit-tap-highlight-color:transparent}
-.btn,.mb,.nav button,.period button,.ib{touch-action:manipulation}
-.card,.cfg-row,.al{-webkit-font-smoothing:antialiased}
-/* slightly smoother nav */
-.nav{backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px)}
-/* readable text */
-.hd h1,.vol .v,.timer .n{color:var(--tx)}
-
-.hid{display:none!important}
-
-.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.45;font-weight:600}
-.warn.show{display:flex}
-.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.28);color:#fbbf24}
-.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.28);color:#f87171}
-.warn i{margin-top:.1rem}
-
-.home-renew{display:none;margin-bottom:.75rem}
-.home-renew.show{display:block}
-.home-renew .btn{width:100%;padding:.85rem 1rem;font-size:.9rem;box-shadow:0 8px 28px rgba(37,99,235,.35);text-decoration:none}
-
-a.btn,a.btn:hover{text-decoration:none;color:inherit}
-a.btn.bp{color:#fff}
-
-.usage-hd{display:none!important;display:flex;justify-content:flex-start;margin-bottom:.75rem}
-.usage-hd .badge{font-size:.72rem}
-
-.ring-wrap{filter:drop-shadow(0 0 18px rgba(34,211,238,.28))}
-.ring-wrap svg circle[id="rTraffic"],.ring-wrap svg path{filter:drop-shadow(0 0 6px rgba(56,189,248,.45))}
-.ring-center .pct{background:linear-gradient(180deg,#ecfeff,#67e8f9);-webkit-background-clip:text;background-clip:text;color:transparent;
-  font-size:1.35rem;font-weight:900;letter-spacing:-.02em}
-html[data-theme="light"] .ring-center .pct{background:linear-gradient(180deg,#0e7490,#0369a1);-webkit-background-clip:text;background-clip:text}
-.ring-center .lab{opacity:.85;letter-spacing:.02em}
-.ring-wrap::after{content:"";position:absolute;inset:18px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,rgba(255,255,255,.14),transparent 55%);
-  pointer-events:none}
-
-
-.total-strip{display:flex;align-items:center;justify-content:space-between;gap:.5rem;
-  padding:.35rem .65rem;margin-bottom:.55rem;border-radius:10px;
-  background:rgba(0,0,0,.12);border:1px solid var(--bd);font-size:.78rem}
-html[data-theme="light"] .total-strip{background:rgba(0,0,0,.04)}
-.total-strip span{color:var(--mu);font-weight:600}
-.total-strip b{font-weight:800;color:var(--tx);font-size:.85rem}
-.usage-hd{display:none!important;height:0;margin:0;padding:0;overflow:hidden}
-.ring-center .lab{display:none!important}
-
-#liqFillT{fill:url('#liqT')!important}
-
-}
-.ring-wrap svg{overflow:visible}
-
-
-/* ring column + liquid (CSS — works on Windows) */
-.ring-col{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex-shrink:0}
-.ring-wrap{position:relative;width:118px;height:118px;flex-shrink:0;
-  filter:drop-shadow(0 0 16px rgba(34,211,238,.35))}
-.ring-wrap svg{position:absolute;inset:0;width:118px;height:118px;display:block;z-index:2;pointer-events:none}
-100%{transform:translateX(28%)}}
-
-
-.ring-center{position:absolute;inset:0;z-index:3;display:flex;align-items:center;justify-content:center;
-  pointer-events:none}
-.ring-center .pct{font-size:1.4rem;font-weight:900;line-height:1;
-  color:#f0fdff;text-shadow:0 1px 2px rgba(0,0,0,.65),0 0 12px rgba(0,0,0,.35);
-  letter-spacing:-.02em}
-html[data-theme="light"] .ring-center .pct{color:#0c4a6e;text-shadow:0 1px 0 rgba(255,255,255,.8)}
-html[data-theme="light"] .liq-ball{background:radial-gradient(circle at 50% 30%,rgba(224,242,254,.9),rgba(186,230,253,.95))}
-.total-under{display:flex;flex-direction:column;align-items:center;gap:.1rem;min-width:118px;
-  padding:.28rem .45rem;border-radius:10px;background:rgba(0,0,0,.14);border:1px solid var(--bd)}
-html[data-theme="light"] .total-under{background:rgba(255,255,255,.55)}
-.total-under span{font-size:.65rem;color:var(--mu);font-weight:600}
-.total-under b{font-size:.8rem;font-weight:800;color:var(--tx)}
-/* usage layout */
-.usage{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap}
-.usage .stats-grid{flex:1;min-width:140px;display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
-/* ambient stronger motion */
-.ambient{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;
-  background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%);
-  animation:ambPulse 12s ease-in-out infinite alternate}
-html[data-theme="light"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#c7d8f0 0%,#e8eef8 55%,#dfe8f5 100%)}
-@keyframes ambPulse{0%{filter:hue-rotate(0deg) brightness(1)}100%{filter:hue-rotate(12deg) brightness(1.08)}}
-.orb{position:absolute;border-radius:50%;filter:blur(56px);opacity:.65;pointer-events:none;will-change:transform}
-.orb.a{width:420px;height:420px;background:#1d4ed8;top:-14%;left:-14%;animation:floatA 14s ease-in-out infinite}
-.orb.b{width:360px;height:360px;background:#0e7490;bottom:-8%;right:-12%;animation:floatB 18s ease-in-out infinite}
-.orb.c{width:280px;height:280px;background:#4f46e5;top:40%;left:55%;animation:floatC 16s ease-in-out infinite;opacity:.45}
-@keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(40px,30px) scale(1.08)}}
-@keyframes floatB{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-50px,-25px) scale(1.12)}}
-@keyframes floatC{0%,100%{transform:translate(0,0)}50%{transform:translate(-30px,40px) scale(1.1)}}
-.orb.d{width:240px;height:240px;background:#0369a1;top:60%;left:10%;animation:floatA 22s ease-in-out infinite reverse;opacity:.35}
-.stars{position:absolute;inset:0;background:
-  radial-gradient(1px 1px at 10% 20%,rgba(255,255,255,.55),transparent),
-  radial-gradient(1px 1px at 30% 70%,rgba(255,255,255,.4),transparent),
-  radial-gradient(1.5px 1.5px at 70% 30%,rgba(255,255,255,.5),transparent),
-  radial-gradient(1px 1px at 90% 60%,rgba(255,255,255,.35),transparent),
-  radial-gradient(1px 1px at 50% 50%,rgba(255,255,255,.3),transparent);
-  animation:twinkle 6s ease-in-out infinite alternate;opacity:.7}
-@keyframes twinkle{0%{opacity:.4}100%{opacity:.85}}
-
-
-/* profile actions full width */
-#profActs.act-row{display:flex;flex-direction:row;flex-wrap:nowrap;gap:.55rem;margin-bottom:.85rem}
-#profActs .btn{flex:1;width:auto;justify-content:center;padding:.8rem .6rem;font-size:.88rem;border-radius:14px;min-width:0}
-/* smaller ring to align with 4 stats */
-.ring-col{display:flex;flex-direction:column;align-items:center;gap:.32rem;flex-shrink:0}
-.ring-wrap{position:relative;width:96px!important;height:96px!important;flex-shrink:0;
-  filter:drop-shadow(0 0 12px rgba(34,211,238,.3))}
-.ring-wrap svg{position:absolute;inset:0;width:96px!important;height:96px!important;z-index:2;pointer-events:none}
-.liq-ball{position:absolute;inset:12px;border-radius:50%;overflow:hidden;z-index:1;
-  background:radial-gradient(circle at 50% 30%,rgba(15,23,42,.55),rgba(2,6,23,.85));
-  box-shadow:inset 0 0 10px rgba(0,0,0,.35)}
-.ring-center .pct{font-size:1.15rem!important}
-.total-under{min-width:96px!important;padding:.22rem .35rem!important}
-.total-under span{font-size:.6rem!important}
-.total-under b{font-size:.72rem!important}
-/* apps accordion */
-.grp{overflow:hidden;margin-bottom:.55rem}
-.grp > h4{cursor:pointer;user-select:none;display:flex;align-items:center;gap:.45rem}
-.grp > h4 .chev{margin-inline-start:auto;transition:transform .2s;opacity:.7;font-size:.75rem}
-.grp.collapsed .grp-body{display:none}
-.grp.collapsed > h4 .chev{transform:rotate(-90deg)}
-.grp.hot > h4{color:var(--p)}
-/* ambient status themes */
-.ambient{transition:background 1s ease,filter 1s ease}
-body[data-mood="fresh"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#052e1a 0%,#02140c 50%,#010806 100%)!important}
-body[data-mood="fresh"] .orb.a{background:#15803d!important}
-body[data-mood="fresh"] .orb.b{background:#0f766e!important}
-body[data-mood="fresh"] .orb.c{background:#166534!important}
-body[data-mood="ok"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#06101f 0%,#02040c 50%,#010208 100%)!important}
-body[data-mood="warn"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#2a1f06 0%,#1a1204 50%,#0c0902 100%)!important}
-body[data-mood="warn"] .orb.a{background:#a16207!important}
-body[data-mood="warn"] .orb.b{background:#b45309!important}
-body[data-mood="warn"] .orb.c{background:#ca8a04!important}
-body[data-mood="bad"] .ambient{background:radial-gradient(120% 80% at 50% -10%,#2a0606 0%,#140202 50%,#0a0101 100%)!important}
-body[data-mood="bad"] .orb.a{background:#991b1b!important}
-body[data-mood="bad"] .orb.b{background:#9f1239!important}
-body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
-/* stronger ambient motion */
-.orb{animation-duration:12s!important}
-.orb.a{animation:floatA 11s ease-in-out infinite!important}
-.orb.b{animation:floatB 13s ease-in-out infinite!important}
-.orb.c{animation:floatC 10s ease-in-out infinite!important}
-@keyframes floatA{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(55px,35px) scale(1.1)}66%{transform:translate(-20px,50px) scale(.95)}}
-@keyframes floatB{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-60px,-30px) scale(1.12)}66%{transform:translate(30px,-45px) scale(1.05)}}
-@keyframes floatC{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-40px,55px) scale(1.15)}}
-
-
-.usage{display:flex!important;align-items:center!important;gap:.65rem!important;flex-wrap:nowrap}
-.usage .vol-grid{flex:1;min-width:0;display:grid;grid-template-columns:1fr 1fr;gap:.38rem}
-.usage .vol{padding:.42rem .48rem!important}
-.ring-col{justify-content:center}
-
-body[data-mood] .orb{will-change:transform,opacity}
-body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{animation:floatA 9s ease-in-out infinite!important}
-body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{animation:floatB 11s ease-in-out infinite!important}
-body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{animation:floatC 8s ease-in-out infinite!important}
-.ambient::after{content:"";position:absolute;inset:-20%;background:
-  radial-gradient(circle at 30% 40%,rgba(34,211,238,.08),transparent 40%),
-  radial-gradient(circle at 70% 60%,rgba(99,102,241,.07),transparent 42%);
-  animation:ambShift 14s ease-in-out infinite alternate;pointer-events:none}
-@keyframes ambShift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(-3%,2%) scale(1.05)}}
-
-.loc-row{display:flex;gap:.5rem;overflow-x:auto;padding:.1rem 0 .6rem;scrollbar-width:none}
-.loc-row::-webkit-scrollbar{display:none}
-.loc-card{flex:0 0 124px;height:82px;border-radius:16px;position:relative;overflow:hidden;
-  border:1px solid rgba(148,163,184,.15);pointer-events:none;
-  box-shadow:0 12px 28px rgba(0,0,0,.4)}
-.loc-card .loc-bg{position:absolute;inset:0}
-.loc-card .loc-fade{position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(0,0,0,.05) 0%,rgba(0,0,0,.15) 40%,rgba(0,0,0,.82) 100%)}
-.loc-card .loc-name{position:absolute;bottom:8px;left:8px;right:8px;text-align:center;
-  font-size:.78rem;font-weight:800;color:#f8fafc;text-shadow:0 2px 8px rgba(0,0,0,.8);z-index:3}
-.loc-card .loc-icon{display:none!important}
-/* sky + skyline blocks via pseudo */
-.loc-card .loc-bg::before{content:"";position:absolute;left:0;right:0;bottom:28%;height:32%;
-  background-repeat:no-repeat;background-position:center bottom;background-size:100% 100%;opacity:.9}
-.loc-card .loc-bg::after{content:"";position:absolute;left:0;right:0;bottom:0;height:28%;
-  background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.35))}
-/* Germany — cool night city */
-.loc-card[data-cc="DE"] .loc-bg{background:linear-gradient(180deg,#0b1220 0%,#172554 45%,#334155 100%)}
-.loc-card[data-cc="DE"] .loc-bg::before{background-image:linear-gradient(90deg,#1e293b 0% 8%,#334155 8% 14%,#1e293b 14% 22%,#475569 22% 30%,#1e293b 30% 40%,#334155 40% 48%,#0f172a 48% 58%,#475569 58% 66%,#1e293b 66% 78%,#334155 78% 88%,#1e293b 88% 100%);
-  box-shadow:inset 0 8px 0 #0f172a}
-/* Turkey — warm dusk */
-.loc-card[data-cc="TR"] .loc-bg{background:linear-gradient(180deg,#0c4a6e 0%,#ea580c 55%,#7c2d12 100%)}
-.loc-card[data-cc="TR"] .loc-bg::before{background-image:radial-gradient(ellipse 18px 28px at 50% 100%,#fef3c7 0%,#fef3c7 40%,transparent 41%),
-  linear-gradient(90deg,#7c2d12 0% 20%,#9a3412 20% 35%,#7c2d12 35% 55%,#9a3412 55% 70%,#7c2d12 70% 100%)}
-/* USA */
-.loc-card[data-cc="US"] .loc-bg{background:linear-gradient(180deg,#020617 0%,#1d4ed8 50%,#450a0a 100%)}
-.loc-card[data-cc="US"] .loc-bg::before{background-image:linear-gradient(90deg,#0f172a 5% 12%,#1e293b 12% 18%,#0f172a 18% 28%,#334155 28% 34%,#0f172a 34% 50%,#1e293b 50% 60%,#0f172a 60% 100%)}
-/* France */
-.loc-card[data-cc="FR"] .loc-bg{background:linear-gradient(180deg,#0c0a1a 0%,#312e81 50%,#4c1d95 100%)}
-.loc-card[data-cc="FR"] .loc-bg::before{background-image:linear-gradient(90deg,#1e1b4b 10% 20%,#312e81 20% 28%,#1e1b4b 28% 45%,#4338ca 45% 52%,#1e1b4b 52% 90%)}
-/* Netherlands */
-.loc-card[data-cc="NL"] .loc-bg{background:linear-gradient(180deg,#082f49 0%,#0284c7 40%,#f59e0b 100%)}
-.loc-card[data-cc="NL"] .loc-bg::before{background-image:linear-gradient(90deg,#0c4a6e 0% 25%,#155e75 25% 40%,#0c4a6e 40% 70%,#155e75 70% 100%)}
-/* defaults for other CC */
-.loc-card:not([data-cc]) .loc-bg,.loc-card .loc-bg{background:linear-gradient(180deg,#020617,#0f172a 40%,#1e293b)}
-.loc-card[data-cc="GB"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1e3a8a 55%,#7f1d1d)}
-.loc-card[data-cc="AE"] .loc-bg{background:linear-gradient(180deg,#042f2e,#0f766e 45%,#fbbf24)}
-.loc-card[data-cc="JP"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1e293b 50%,#9f1239)}
-.loc-card[data-cc="SG"] .loc-bg{background:linear-gradient(180deg,#0f172a,#0e7490 50%,#e11d48)}
-.loc-card[data-cc="RU"] .loc-bg{background:linear-gradient(180deg,#0f172a,#1d4ed8 55%,#f8fafc)}
-.loc-card[data-cc="CA"] .loc-bg{background:linear-gradient(180deg,#0f172a,#b91c1c 60%,#f8fafc)}
-.loc-card[data-cc="AU"] .loc-bg{background:linear-gradient(180deg,#0c4a6e,#0284c7 40%,#d97706)}
-.loc-card .loc-bg::before{content:"";position:absolute;left:10%;right:10%;bottom:22%;height:18px;
-  background:rgba(0,0,0,.25);border-radius:4px 4px 0 0;box-shadow:
-    14px 0 0 rgba(0,0,0,.2), -16px 4px 0 rgba(0,0,0,.18), 28px 6px 0 rgba(0,0,0,.15)}
-
-.ring-wrap{width:84px!important;height:84px!important}
-.ring-wrap svg{width:84px!important;height:84px!important}
-.liq-ball{inset:8px!important}
-.ring-center .pct{font-size:1.05rem!important}
-.total-under{min-width:84px!important;padding:.18rem .3rem!important}
-.total-under span{font-size:.58rem!important}
-.total-under b{font-size:.68rem!important}
-.usage{align-items:stretch!important}
-.usage .vol-grid{align-content:center}
-.usage .vol{min-height:36px;display:flex;flex-direction:column;justify-content:center}
-
-.ambient{background:radial-gradient(120% 80% at 50% -10%,#030712 0%,#010409 55%,#000000 100%)!important}
-body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
-  background:radial-gradient(120% 80% at 50% -10%,#030712 0%,#010409 55%,#000000 100%)!important}
-body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#0c1e3d!important;opacity:.55}
-body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#0a2a3a!important;opacity:.5}
-body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#1a1440!important;opacity:.4}
-
-.vol{text-align:center!important;display:flex!important;flex-direction:column!important;
-  align-items:center!important;justify-content:center!important;gap:.2rem!important;
-  padding:.5rem .4rem!important}
-.vol .k{justify-content:center!important;width:100%;font-size:.64rem!important}
-.vol .v{text-align:center!important;width:100%;font-size:.84rem!important;font-weight:800}
-
-.liq-ball{position:absolute;inset:8px;border-radius:50%;overflow:hidden;z-index:1;
-  background:radial-gradient(circle at 50% 20%,rgba(15,23,42,.5),rgba(2,6,23,.9))}
-.liq-water{position:absolute;left:-10%;right:-10%;bottom:0;height:var(--pct,50%);
-  
-  background:linear-gradient(180deg,#67e8f9 0%,#22d3ee 40%,#0369a1 100%);
-  transition:height .6s ease;min-height:10%}
-.liq-water .wave,.liq-water::before,.liq-water::after{content:"";position:absolute;left:0;width:200%;height:20px}
-.liq-water::before{top:-10px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C150,80 350,0 600,40 C850,80 1050,0 1200,40 L1200,120 L0,120 Z' fill='%2367e8f9'/%3E%3C/svg%3E") repeat-x;
-  background-size:600px 20px;animation:waveX 2.5s linear infinite;opacity:.95}
-.liq-water::after{top:-6px;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C200,10 400,90 600,50 C800,10 1000,90 1200,50 L1200,120 L0,120 Z' fill='%2322d3ee'/%3E%3C/svg%3E") repeat-x;
-  background-size:500px 18px;animation:waveX 3.2s linear infinite reverse;opacity:.7}
-100%{transform:translateX(-50%)}}
-.liq-ball.overflowing .liq-water::before{animation-duration:1.6s}
-.liq-ball.overflowing .liq-water::after{animation-duration:2s}
-
-/*nn-all-v6*/
-#warnVol:not(.show),#warnExp:not(.show){display:none!important}
-#warnVol.show:has(span:empty),#warnExp.show:has(span:empty){display:none!important}
-.loc-row,.loc-card{display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;border:0!important}
-.ambient{animation:none!important;filter:none!important;
-  background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 50%,#000 100%)!important}
-.orb.a{background:#1e3a8a!important}.orb.b{background:#1d4ed8!important}.orb.c{background:#312e81!important}
-body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 50%,#000 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#1e3a8a!important}
-body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#1d4ed8!important}
-body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#312e81!important}
-body[data-mood="fresh"] .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#14532d 0%,#052e16 55%,#022c22 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="fresh"] .orb.a{background:#22c55e!important}
-body[data-mood="fresh"] .orb.b{background:#16a34a!important}
-body[data-mood="fresh"] .orb.c{background:#15803d!important}
-body[data-mood="warn"] .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#713f12 0%,#451a03 55%,#1c0a00 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="warn"] .orb.a{background:#eab308!important}
-body[data-mood="warn"] .orb.b{background:#f59e0b!important}
-body[data-mood="warn"] .orb.c{background:#d97706!important}
-body[data-mood="bad"] .ambient{
-  background:radial-gradient(140% 100% at 50% -20%,#7f1d1d 0%,#450a0a 50%,#1a0505 100%)!important;
-  filter:none!important;animation:none!important}
-body[data-mood="bad"] .orb.a{background:#ef4444!important}
-body[data-mood="bad"] .orb.b{background:#dc2626!important}
-body[data-mood="bad"] .orb.c{background:#b91c1c!important}
-.ring-center{z-index:6!important}
-.ring-center .pct{color:#ecfeff!important;-webkit-text-fill-color:#ecfeff!important;
-  background:none!important;text-shadow:0 1px 3px rgba(0,0,0,.75)!important;
-  font-size:1.3rem!important;font-weight:900!important}
-to{transform:translateX(-50%)}}
-
-
-/*liq-pro — soft multi-layer surface only, body fixed*/
-.liq-ball{
-  overflow:hidden!important;
-  border-radius:50%!important;
-  background:radial-gradient(circle at 50% 18%,rgba(15,23,42,.25),rgba(2,6,23,.9))!important;
-  box-shadow:inset 0 -8px 24px rgba(8,145,178,.15),inset 0 0 20px rgba(0,0,0,.4)!important;
-}
-.liq-water{
-  position:absolute!important;
-  left:-30%!important;right:-30%!important;bottom:0!important;
-  height:var(--pct,50%)!important;
-  min-height:16%!important;
-  transform:none!important;
-  animation:none!important;
-  transition:height .9s cubic-bezier(.4,0,.2,1)!important;
-  background:linear-gradient(180deg,
-    rgba(165,243,252,.95) 0%,
-    rgba(34,211,238,.92) 22%,
-    rgba(6,182,212,.95) 55%,
-    rgba(8,145,178,1) 78%,
-    rgba(14,116,144,1) 100%)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.25)!important;
-}
-/* layer 1 — main crest */
-.liq-water::before{
-  content:""!important;
-  position:absolute!important;
-  left:0!important;top:-18px!important;
-  width:200%!important;height:24px!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C100,100 200,20 300,60 C400,100 500,20 600,60 C700,100 800,20 900,60 C1000,100 1100,20 1200,60 L1200,120 L0,120 Z' fill='%23a5f3fc'/%3E%3C/svg%3E")!important;
-  background-repeat:repeat-x!important;
-  background-size:600px 24px!important;
-  animation:liqWaveA 4s linear infinite!important;
-  opacity:.92!important;
-  pointer-events:none!important;
-  will-change:transform!important;
-}
-/* layer 2 — secondary softer crest */
-.liq-water::after{
-  content:""!important;
-  position:absolute!important;
-  left:0!important;top:-12px!important;
-  width:200%!important;height:18px!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,55 C150,15 300,95 450,55 C600,15 750,95 900,55 C1050,15 1125,80 1200,55 L1200,120 L0,120 Z' fill='%2367e8f9'/%3E%3C/svg%3E")!important;
-  background-repeat:repeat-x!important;
-  background-size:480px 18px!important;
-  animation:liqWaveB 6.5s linear infinite reverse!important;
-  opacity:.55!important;
-  pointer-events:none!important;
-  will-change:transform!important;
-}
-@keyframes liqWaveA{
-  0%{transform:translateX(0) translateY(0)}
-  50%{transform:translateX(-25%) translateY(1px)}
-  100%{transform:translateX(-50%) translateY(0)}
-}
-@keyframes liqWaveB{
-  0%{transform:translateX(0) translateY(0)}
-  50%{transform:translateX(-25%) translateY(-1px)}
-  100%{transform:translateX(-50%) translateY(0)}
-}
-/* soft highlight shimmer on surface */
-.liq-ball::after{
-  content:""!important;
-  position:absolute!important;
-  left:18%;right:18%;top:14%;height:28%!important;
-  border-radius:50%!important;
-  background:radial-gradient(ellipse at 50% 0%,rgba(255,255,255,.22),transparent 70%)!important;
-  pointer-events:none!important;
-  z-index:2!important;
-  animation:liqShine 5s ease-in-out infinite alternate!important;
-}
-@keyframes liqShine{
-  0%{opacity:.35;transform:scaleX(1)}
-  100%{opacity:.6;transform:scaleX(1.05)}
-}
+#md{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:90;align-items:center;justify-content:center;padding:1rem}#md.open{display:flex}
+.mbx{background:var(--sf2);border:1px solid var(--bd);border-radius:20px;padding:1.3rem;text-align:center;max-width:320px;width:100%}
+#qr{margin:.2rem auto 1rem;width:240px;max-width:100%}#qr svg{width:100%;height:auto;border-radius:12px;display:block}
+.ann,.warn{display:none;align-items:flex-start;gap:.55rem;padding:.8rem .9rem;margin-bottom:.75rem;border-radius:14px;font-size:.78rem;line-height:1.5;font-weight:600}
+.ann{background:rgba(34,211,238,.08);border:1px solid rgba(34,211,238,.18);font-weight:500}.ann .i{color:var(--p);margin-top:.15rem}
+.warn.show,.ann.show{display:flex}.warn .i{margin-top:.15rem}
+.warn.vol{background:rgba(251,191,36,.12);border:1px solid rgba(251,191,36,.3);color:var(--wn)}.warn.exp{background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.3);color:var(--er)}
+.home-renew{display:none;margin-bottom:.75rem}.home-renew.show{display:block}
+.fmt{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.55rem}.fmt button{flex:1 1 auto;min-width:72px;padding:.55rem .5rem;border-radius:11px;border:1px solid var(--bd);background:var(--sf);color:var(--tx);font-family:var(--font);font-size:.72rem;font-weight:700;cursor:pointer}.fmt .hid{display:none}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:2px solid var(--p);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 </style>
 </head>
 <body>
-
-<div id="nn-data" style="display:none!important" hidden
-  data-sid="{{.sId}}"
-  data-enabled="{{.enabled}}"
-  data-online="{{.isOnline}}"
-  data-down="{{.downloadByte}}"
-  data-up="{{.uploadByte}}"
-  data-total="{{.totalByte}}"
-  data-expire="{{.expire}}"
-  data-last="{{.lastOnline}}"
-  data-sub="{{.subUrl}}"
-  data-json="{{.subJsonUrl}}"
-  data-clash="{{.subClashUrl}}"
-  data-title="{{.subTitle}}"
-  data-support="{{.subSupportUrl}}"
-  data-announce="{{.announce}}"></div>
-<textarea id="nn-links" style="display:none" hidden>{{range .links}}{{.}}
-{{end}}{{range .result}}{{.}}
-{{end}}</textarea>
-<textarea id="nn-emails" style="display:none" hidden>{{range .emails}}{{.}}
-{{end}}</textarea>
-
-<div class="ambient" aria-hidden="true">
-  <div class="orb a"></div><div class="orb b"></div><div class="orb c"></div><div class="orb d"></div>
-  <div class="stars"></div>
-</div>
+<!-- Icons: Font Awesome Free 7 (CC BY 4.0, https://fontawesome.com/license/free) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><symbol id="i-language" viewBox="0 0 576 512"><path d="M160 0c17.7 0 32 14.3 32 32v32h128c17.7 0 32 14.3 32 32s-14.3 32-32 32h-9.6l-8.4 23.1c-16.4 45.2-41.1 86.5-72.2 122 14.2 8.8 29 16.6 44.4 23.5l50.4 22.4 62.2-140c5.1-11.6 16.6-19 29.2-19s24.1 7.4 29.2 19l128 288c7.2 16.2-.1 35.1-16.2 42.2s-35.1-.1-42.2-16.2l-20-45H337.3l-20 45c-7.2 16.2-26.1 23.4-42.2 16.2s-23.4-26.1-16.2-42.2l39.8-89.5-50.4-22.4c-23-10.2-45-22.4-65.8-36.4-21.3 17.2-44.6 32.2-69.5 44.7l-34.7 17.2c-15.8 7.9-35 1.5-42.9-14.3s-1.5-35 14.3-42.9l34.5-17.3c16.3-8.2 31.8-17.7 46.4-28.3-13.8-12.7-26.8-26.4-38.9-40.9l-10.1-12.2c-11.3-13.6-9.5-33.8 4.1-45.1s33.8-9.5 45.1 4.1l10.2 12.2c11.5 13.9 24.1 26.8 37.4 38.7 27.5-30.4 49.2-66.1 63.5-105.4l.5-1.2H32.1C14.3 128 0 113.7 0 96s14.3-32 32-32h96V32c0-17.7 14.3-32 32-32m256 270.8L365.7 384h100.6z"/></symbol><symbol id="i-sun" viewBox="0 0 576 512"><path d="M178.2-10.1c7.4-3.1 15.8-2.2 22.5 2.2l87.8 58.2 87.8-58.2c6.7-4.4 15.1-5.2 22.5-2.2S411.4-.5 413 7.3l20.9 103.2 103.2 20.9c7.8 1.6 14.4 7 17.4 14.3s2.2 15.8-2.2 22.5L494.1 256l58.2 87.8c4.4 6.7 5.2 15.1 2.2 22.5s-9.6 12.8-17.4 14.3l-103.3 20.8L413 504.7c-1.6 7.8-7 14.4-14.3 17.4s-15.8 2.2-22.5-2.2l-87.8-58.2-87.8 58.2c-6.7 4.4-15.1 5.2-22.5 2.2s-12.8-9.6-14.3-17.4L143 401.4 39.7 380.5c-7.8-1.6-14.4-7-17.4-14.3s-2.2-15.8 2.2-22.5L82.7 256l-58.2-87.8c-4.4-6.7-5.2-15.1-2.2-22.5s9.6-12.8 17.4-14.3L143 110.6 163.9 7.3c1.6-7.8 7-14.4 14.3-17.4M207.6 256a80.4 80.4 0 1 1 160.8 0 80.4 80.4 0 1 1-160.8 0m208.8 0a128.4 128.4 0 1 0-256.8 0 128.4 128.4 0 1 0 256.8 0"/></symbol><symbol id="i-moon" viewBox="0 0 512 512"><path d="M256 0C114.6 0 0 114.6 0 256s114.6 256 256 256c68.8 0 131.3-27.2 177.3-71.4 7.3-7 9.4-17.9 5.3-27.1s-13.7-14.9-23.8-14.1c-4.9.4-9.8.6-14.8.6-101.6 0-184-82.4-184-184 0-72.1 41.5-134.6 102.1-164.8 9.1-4.5 14.3-14.3 13.1-24.4s-8.6-18.3-18.5-20.5C294.4 2.2 275.4 0 256 0"/></symbol><symbol id="i-bullhorn" viewBox="0 0 512 512"><path d="M461.2 18.9C472.7 24 480 35.4 480 48v416c0 12.6-7.3 24-18.8 29.1s-24.8 3.2-34.3-5.1l-46.6-40.7c-43.6-38.1-98.7-60.3-156.4-63V480c0 17.7-14.3 32-32 32h-32c-17.7 0-32-14.3-32-32v-96C57.3 384 0 326.7 0 256s57.3-128 128-128h84.5c61.8-.2 121.4-22.7 167.9-63.3L427 24c9.4-8.3 22.9-10.2 34.3-5.1zM224 320v.2c70.3 2.7 137.8 28.5 192 73.4V118.3c-54.2 44.9-121.7 70.7-192 73.4z"/></symbol><symbol id="i-triangle-exclamation" viewBox="0 0 512 512"><path d="M256 0c14.7 0 28.2 8.1 35.2 21l216 400c6.7 12.4 6.4 27.4-.8 39.5S486.1 480 472 480H40c-14.1 0-27.2-7.4-34.4-19.5s-7.5-27.1-.8-39.5l216-400c7-12.9 20.5-21 35.2-21m0 352a32 32 0 1 0 0 64 32 32 0 1 0 0-64m0-192c-18.2 0-32.7 15.5-31.4 33.7l7.4 104c.9 12.5 11.4 22.3 23.9 22.3 12.6 0 23-9.7 23.9-22.3l7.4-104c1.3-18.2-13.1-33.7-31.4-33.7z"/></symbol><symbol id="i-hourglass-end" viewBox="0 0 384 512"><path d="M32 0C14.3 0 0 14.3 0 32s14.3 32 32 32v11c0 42.4 16.9 83.1 46.9 113.1l67.9 67.9-67.9 67.9C48.9 353.9 32 394.6 32 437v11c-17.7 0-32 14.3-32 32s14.3 32 32 32h320c17.7 0 32-14.3 32-32s-14.3-32-32-32v-11c0-42.4-16.9-83.1-46.9-113.1L237.2 256l67.9-67.9c30-30 46.9-70.7 46.9-113.1V64c17.7 0 32-14.3 32-32S369.7 0 352 0zm64 75V64h192v11c0 25.5-10.1 49.9-28.1 67.9L192 210.8l-67.9-67.9c-18-18-28.1-42.5-28.1-67.9"/></symbol><symbol id="i-copy" viewBox="0 0 448 512"><path d="M192 0c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64V119.4c0-17.4-7.1-34.1-19.7-46.2l-57.7-55.4A64.1 64.1 0 0 0 326.3 0zM64 128c-35.3 0-64 28.7-64 64v256c0 35.3 28.7 64 64 64h192c35.3 0 64-28.7 64-64v-16h-64v16H64V192h16v-64z"/></symbol><symbol id="i-qrcode" viewBox="0 0 448 512"><path d="M64 160h64V96H64zM0 80c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zm64 336h64v-64H64zM0 336c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM320 96v64h64V96zm-16-64h96c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-96c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48m-16 320a32 32 0 1 1 0-64 32 32 0 1 1 0 64m0 64c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32m96 32c0-17.7 14.3-32 32-32s32 14.3 32 32-14.3 32-32 32-32-14.3-32-32m32-96a32 32 0 1 1 0-64 32 32 0 1 1 0 64m-32 32a32 32 0 1 1-64 0 32 32 0 1 1 64 0"/></symbol><symbol id="i-database" viewBox="0 0 448 512"><path d="M448 205.8c-14.8 9.8-31.8 17.7-49.5 24-47 16.8-108.7 26.2-174.5 26.2s-127.6-9.5-174.5-26.2c-17.6-6.3-34.7-14.2-49.5-24V288c0 44.2 100.3 80 224 80s224-35.8 224-80zm0-77.8V80c0-44.2-100.3-80-224-80S0 35.8 0 80v48c0 44.2 100.3 80 224 80s224-35.8 224-80m-49.5 261.8C351.6 406.5 289.9 416 224 416s-127.6-9.5-174.5-26.2c-17.6-6.3-34.7-14.2-49.5-24V432c0 44.2 100.3 80 224 80s224-35.8 224-80v-66.2c-14.8 9.8-31.8 17.7-49.5 24"/></symbol><symbol id="i-download" viewBox="0 0 448 512"><path d="M256 32c0-17.7-14.3-32-32-32s-32 14.3-32 32v210.7l-41.4-41.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 242.7zM64 320c-35.3 0-64 28.7-64 64v32c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64v-32c0-35.3-28.7-64-64-64h-46.9l-56.6 56.6c-31.2 31.2-81.9 31.2-113.1 0L110.9 320zm304 56a24 24 0 1 1 0 48 24 24 0 1 1 0-48"/></symbol><symbol id="i-upload" viewBox="0 0 448 512"><path d="M256 109.3V320c0 17.7-14.3 32-32 32s-32-14.3-32-32V109.3l-41.4 41.4c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l96-96c12.5-12.5 32.8-12.5 45.3 0l96 96c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0zM224 400c44.2 0 80-35.8 80-80h80c35.3 0 64 28.7 64 64v32c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64v-32c0-35.3 28.7-64 64-64h80c0 44.2 35.8 80 80 80m144 24a24 24 0 1 0 0-48 24 24 0 1 0 0 48"/></symbol><symbol id="i-chart-simple" viewBox="0 0 512 512"><path d="M192 80c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48zM0 272c0-26.5 21.5-48 48-48h32c26.5 0 48 21.5 48 48v160c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48zM432 96h32c26.5 0 48 21.5 48 48v288c0 26.5-21.5 48-48 48h-32c-26.5 0-48-21.5-48-48V144c0-26.5 21.5-48 48-48"/></symbol><symbol id="i-battery-three-quarters" viewBox="0 0 640 512"><path d="M528 128c8.8 0 16 7.2 16 16v224c0 8.8-7.2 16-16 16H112c-8.8 0-16-7.2-16-16V144c0-8.8 7.2-16 16-16zM112 64c-44.2 0-80 35.8-80 80v224c0 44.2 35.8 80 80 80h416c44.2 0 80-35.8 80-80v-48c17.7 0 32-14.3 32-32v-64c0-17.7-14.3-32-32-32v-48c0-44.2-35.8-80-80-80zm56 112c-13.3 0-24 10.7-24 24v112c0 13.3 10.7 24 24 24h224c13.3 0 24-10.7 24-24V200c0-13.3-10.7-24-24-24z"/></symbol><symbol id="i-bolt" viewBox="0 0 448 512"><path d="M338.8-9.9c11.9 8.6 16.3 24.2 10.9 37.8L271.3 224H416c13.5 0 25.5 8.4 30.1 21.1s.7 26.9-9.6 35.5l-288 240c-11.3 9.4-27.4 9.9-39.3 1.3s-16.3-24.2-10.9-37.8L176.7 288H32c-13.5 0-25.5-8.4-30.1-21.1s-.7-26.9 9.6-35.5l288-240c11.3-9.4 27.4-9.9 39.3-1.3"/></symbol><symbol id="i-shield-halved" viewBox="0 0 512 512"><path d="M256 0c4.6 0 9.2 1 13.4 2.9l188.4 79.9c22 9.3 38.4 31 38.3 57.2-.5 99.2-41.3 280.7-213.6 363.2-16.7 8-36.1 8-52.8 0C57.3 420.7 16.6 239.2 16.1 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.9 1 251.4 0 256 0m0 66.8v378.1c138-66.8 175.1-214.8 176-303.4L256 66.9z"/></symbol><symbol id="i-box-open" viewBox="0 0 640 512"><path d="M560.3 237.2c10.4 11.8 28.3 14.4 41.8 5.5 14.7-9.8 18.7-29.7 8.9-44.4l-48-72c-2.8-4.2-6.6-7.7-11.1-10.2L351.4 4.7C332.1-6 308.6-6 289.2 4.7L88.8 116c-5.4 3-9.7 7.4-12.6 12.8l-48.5 89.9c-12.6 23.4-3.8 52.5 19.6 65.1l33 17.7v53.3c0 23 12.4 44.3 32.4 55.7l176 99.7c19.6 11.1 43.5 11.1 63.1 0l176-99.7c20.1-11.4 32.4-32.6 32.4-55.7V237.3zm-240-9.8L170.2 144l150.1-83.4L470.4 144zm-41.5 50.2-21.3 46.2L91.7 235l25.4-47.2z"/></symbol><symbol id="i-signal" viewBox="0 0 512 512"><path d="M488 56c0-13.3-10.7-24-24-24s-24 10.7-24 24v400c0 13.3 10.7 24 24 24s24-10.7 24-24zm-128 72c-13.3 0-24 10.7-24 24v304c0 13.3 10.7 24 24 24s24-10.7 24-24V152c0-13.3-10.7-24-24-24m-80 120c0-13.3-10.7-24-24-24s-24 10.7-24 24v208c0 13.3 10.7 24 24 24s24-10.7 24-24zm-128 72c-13.3 0-24 10.7-24 24v112c0 13.3 10.7 24 24 24s24-10.7 24-24V344c0-13.3-10.7-24-24-24M48 384c-13.3 0-24 10.7-24 24v48c0 13.3 10.7 24 24 24s24-10.7 24-24v-48c0-13.3-10.7-24-24-24"/></symbol><symbol id="i-rotate" viewBox="0 0 512 512"><path d="M480.1 192h7.9c13.3 0 24-10.7 24-24V24c0-9.7-5.8-18.5-14.8-22.2S477.9.2 471 7l-51.7 51.8C375 22.1 318 0 256 0 127 0 20.3 95.4 2.6 219.5c-2.5 17.5 9.6 33.7 27.1 36.2s33.7-9.7 36.2-27.1C79.2 135.5 159.3 64 256 64c44.4 0 85.2 15 117.7 40.3L327 151c-6.9 6.9-8.9 17.2-5.2 26.2S334.3 192 344 192zm29.4 100.5c2.5-17.5-9.7-33.7-27.1-36.2s-33.7 9.7-36.2 27.1c-13.3 93-93.4 164.5-190.1 164.5-44.4 0-85.2-15-117.7-40.3L185 361c6.9-6.9 8.9-17.2 5.2-26.2S177.7 320 168 320H24c-13.3 0-24 10.7-24 24v144c0 9.7 5.8 18.5 14.8 22.2s19.3 1.6 26.2-5.2l51.8-51.8C137 489.9 194 512 256 512c129 0 235.7-95.4 253.4-219.5z"/></symbol><symbol id="i-server" viewBox="0 0 448 512"><path d="M64 32C28.7 32 0 60.7 0 96v64c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64zm216 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48m56 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0M64 288c-35.3 0-64 28.7-64 64v64c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64v-64c0-35.3-28.7-64-64-64zm216 72a24 24 0 1 1 0 48 24 24 0 1 1 0-48m56 24a24 24 0 1 1 48 0 24 24 0 1 1-48 0"/></symbol><symbol id="i-house" viewBox="0 0 512 512"><path d="M277.8 8.6c-12.3-11.4-31.3-11.4-43.5 0l-224 208c-9.6 9-12.8 22.9-8 35.1S18.8 272 32 272h16v176c0 35.3 28.7 64 64 64h288c35.3 0 64-28.7 64-64V272h16c13.2 0 25-8.1 29.8-20.3s1.6-26.2-8-35.1zM240 320h32c26.5 0 48 21.5 48 48v96H192v-96c0-26.5 21.5-48 48-48"/></symbol><symbol id="i-user" viewBox="0 0 448 512"><path d="M224 248a120 120 0 1 0 0-240 120 120 0 1 0 0 240m-29.7 56C95.8 304 16 383.8 16 482.3c0 16.4 13.3 29.7 29.7 29.7h356.6c16.4 0 29.7-13.3 29.7-29.7 0-98.5-79.8-178.3-178.3-178.3z"/></symbol><symbol id="i-headset" viewBox="0 0 448 512"><path d="M224 64c-79 0-144.7 57.3-157.7 132.7 9.3-3 19.3-4.7 29.7-4.7h16c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H96c-53 0-96-43-96-96v-64C0 100.3 100.3 0 224 0s224 100.3 224 224v168.1c0 66.3-53.8 120-120.1 120L240 512h-32c-26.5 0-48-21.5-48-48s21.5-48 48-48h32c26.5 0 48 21.5 48 48h40c39.8 0 72-32.2 72-72v-20.9c-14.1 8.2-30.5 12.8-48 12.8h-16c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48h16c10.4 0 20.3 1.6 29.7 4.7-13-75.3-78.6-132.7-157.7-132.7z"/></symbol><symbol id="i-id-card" viewBox="0 0 576 512"><path d="M0 96c0-35.3 28.7-64 64-64h448c35.3 0 64 28.7 64 64zm0 48h576v272c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64zm247.3 272c20.2 0 35.3-19.4 22.4-35-14.7-17.7-36.9-29-61.7-29h-64c-24.8 0-47 11.3-61.7 29-12.9 15.6 2.2 35 22.4 35h142.5zM176 312a56 56 0 1 0 0-112 56 56 0 1 0 0 112m184-104c-13.3 0-24 10.7-24 24s10.7 24 24 24h112c13.3 0 24-10.7 24-24s-10.7-24-24-24zm0 96c-13.3 0-24 10.7-24 24s10.7 24 24 24h112c13.3 0 24-10.7 24-24s-10.7-24-24-24z"/></symbol><symbol id="i-arrow-up-right-from-square" viewBox="0 0 512 512"><path d="M320 0c-17.7 0-32 14.3-32 32s14.3 32 32 32h82.7L201.3 265.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L448 109.3V192c0 17.7 14.3 32 32 32s32-14.3 32-32V32c0-17.7-14.3-32-32-32zM80 96c-44.2 0-80 35.8-80 80v256c0 44.2 35.8 80 80 80h256c44.2 0 80-35.8 80-80v-80c0-17.7-14.3-32-32-32s-32 14.3-32 32v80c0 8.8-7.2 16-16 16H80c-8.8 0-16-7.2-16-16V176c0-8.8 7.2-16 16-16h80c17.7 0 32-14.3 32-32s-14.3-32-32-32z"/></symbol><symbol id="i-check" viewBox="0 0 448 512"><path d="M434.8 70.1c14.3 10.4 17.5 30.4 7.1 44.7l-256 352c-5.5 7.6-14 12.3-23.4 13.1s-18.5-2.7-25.1-9.3l-128-128c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l101.5 101.5 234-321.7c10.4-14.3 30.4-17.5 44.7-7.1z"/></symbol><symbol id="i-circle-info" viewBox="0 0 512 512"><path d="M256 512a256 256 0 1 0 0-512 256 256 0 1 0 0 512m-32-352a32 32 0 1 1 64 0 32 32 0 1 1-64 0m-8 64h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24h-80c-13.3 0-24-10.7-24-24s10.7-24 24-24h24v-64h-24c-13.3 0-24-10.7-24-24s10.7-24 24-24"/></symbol><symbol id="i-star" viewBox="0 0 576 512"><path d="M309.5-18.9c-4.1-8-12.4-13.1-21.4-13.1s-17.3 5.1-21.4 13.1l-73.6 144.2-159.9 25.4c-8.9 1.4-16.3 7.7-19.1 16.3s-.5 18 5.8 24.4l114.4 114.5-25.2 159.9c-1.4 8.9 2.3 17.9 9.6 23.2s16.9 6.1 25 2l144.4-73.4L432.4 491c8 4.1 17.7 3.3 25-2s11-14.2 9.6-23.2l-25.3-159.9 114.4-114.5c6.4-6.4 8.6-15.8 5.8-24.4s-10.1-14.9-19.1-16.3L383 125.3z"/></symbol><symbol id="i-book-open" viewBox="0 0 512 512"><path d="M256 141.3v309.3l.5-.2A449 449 0 0 1 428.8 416H448V96h-19.2c-42.2 0-84.1 8.4-123.1 24.6-16.8 7-33.4 13.9-49.7 20.7m-25.1-79.8L256 72l25.1-10.5C327.9 42 378.1 32 428.8 32H464c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48h-35.2c-50.7 0-100.9 10-147.7 29.5l-12.8 5.3c-7.9 3.3-16.7 3.3-24.6 0l-12.8-5.3C184.1 490 133.9 480 83.2 480H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h35.2c50.7 0 100.9 10 147.7 29.5"/></symbol><symbol id="i-screwdriver-wrench" viewBox="0 0 576 512"><path d="M70.8-6.7c5.4-5.4 13.8-6.2 20.2-2l118.9 79.2c8.9 5.9 14.2 15.9 14.2 26.6v49.6l90.8 90.8c33.3-15 73.9-8.9 101.2 18.5l126.1 126.1c18.7 18.7 18.7 49.1 0 67.9l-60.1 60.1c-18.7 18.7-49.1 18.7-67.9 0L288.1 384c-27.4-27.4-33.5-67.9-18.5-101.2L178.8 192h-49.6c-10.7 0-20.7-5.3-26.6-14.2L23.4 58.9c-4.2-6.3-3.4-14.8 2-20.2zm145 303.5c-6.3 36.9 2.3 75.9 26.2 107.2l-94.9 95c-28.1 28.1-73.7 28.1-101.8 0s-28.1-73.7 0-101.8l135.4-135.5 35.2 35.1zM384.1 0c20.1 0 39.4 3.7 57.1 10.5 10 3.8 11.8 16.5 4.3 24.1l-56.7 56.7c-3 3-4.7 7.1-4.7 11.3V144c0 8.8 7.2 16 16 16h41.4c4.2 0 8.3-1.7 11.3-4.7l56.7-56.7c7.6-7.5 20.3-5.7 24.1 4.3 6.8 17.7 10.5 37 10.5 57.1 0 43.2-17.2 82.3-45 111.1L450 222c-33.1-33-78.5-45.7-121.1-38.4l-56.8-56.8V97.1l-.2-5c-.8-12.4-4.4-24.3-10.5-34.9C290.8 22.2 334.8 0 384.1-.1z"/></symbol><symbol id="i-globe" viewBox="0 0 512 512"><path d="M351.9 280H161c2.9 64.5 17.2 123.9 37.5 167.4 11.4 24.5 23.7 41.8 35.1 52.4 11.2 10.5 18.9 12.2 22.9 12.2s11.7-1.7 22.9-12.2c11.4-10.6 23.7-28 35.1-52.4 20.3-43.5 34.6-102.9 37.5-167.4zm-191-48h190.9c-2.8-64.5-17.1-123.9-37.4-167.4-11.4-24.4-23.7-41.8-35.1-52.4C268.1 1.7 260.4 0 256.4 0s-11.7 1.7-22.9 12.2c-11.4 10.6-23.7 28-35.1 52.4-20.3 43.5-34.6 102.9-37.5 167.4m-48 0c3.5-85.6 25.6-165.1 57.9-217.3C78.7 47.3 10.9 131.2 1.5 232zM1.5 280c9.4 100.8 77.2 184.7 169.3 217.3-32.3-52.2-54.4-131.7-57.9-217.3zm398.4 0c-3.5 85.6-25.6 165.1-57.9 217.3 92.1-32.7 159.9-116.5 169.3-217.3zm111.4-48C501.9 131.2 434.1 47.3 342 14.7c32.3 52.2 54.4 131.7 57.9 217.3z"/></symbol><symbol id="i-wand-magic-sparkles" viewBox="0 0 576 512"><path d="m263.4-27 14.8 36.8L315 24.6c3 1.2 5 4.2 5 7.4s-2 6.2-5 7.4l-36.8 14.8L263.4 91c-1.2 3-4.2 5-7.4 5s-6.2-2-7.4-5l-14.8-36.8L197 39.4c-3-1.2-5-4.2-5-7.4s2-6.2 5-7.4l36.8-14.8L248.6-27c1.2-3 4.2-5 7.4-5s6.2 2 7.4 5M110.7 41.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5C3.8 140.2 0 134.4 0 128s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1C83.8 35.8 89.6 32 96 32s12.2 3.8 14.7 9.7M464 304c6.4 0 12.2 3.8 14.7 9.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5c-5.9-2.5-9.7-8.3-9.7-14.7s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1c2.5-5.9 8.3-9.7 14.7-9.7M460 0c11 0 21.6 4.4 29.5 12.2l42.3 42.3C539.6 62.4 544 73 544 84s-4.4 21.6-12.2 29.5l-88.2 88.2-101.3-101.3 88.2-88.2C438.4 4.4 449 0 460 0M44.2 398.5l264.2-264.2 101.3 101.3-264.2 264.2C137.6 507.6 127 512 116 512s-21.6-4.4-29.5-12.2l-42.3-42.3C36.4 449.6 32 439 32 428s4.4-21.6 12.2-29.5"/></symbol><symbol id="i-xmark" viewBox="0 0 384 512"><path d="M55.1 73.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L147.2 256 9.9 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l137.3-137.4 137.4 137.3c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.8 256l137.3-137.4c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192.5 210.7z"/></symbol><symbol id="i-clock" viewBox="0 0 512 512"><path d="M464 256a208 208 0 1 1-416 0 208 208 0 1 1 416 0M0 256a256 256 0 1 0 512 0 256 256 0 1 0-512 0m232-136v136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24"/></symbol><symbol id="i-telegram" viewBox="0 0 512 512"><path d="M256 8a248 248 0 1 0 0 496 248 248 0 1 0 0-496m115 168.7c-3.7 39.2-19.9 134.4-28.1 178.3-3.5 18.6-10.3 24.8-16.9 25.4-14.4 1.3-25.3-9.5-39.3-18.7-21.8-14.3-34.2-23.2-55.3-37.2-24.5-16.1-8.6-25 5.3-39.5 3.7-3.8 67.1-61.5 68.3-66.7.2-.7.3-3.1-1.2-4.4s-3.6-.8-5.1-.5c-2.2.5-37.1 23.5-104.6 69.1-9.9 6.8-18.9 10.1-26.9 9.9-8.9-.2-25.9-5-38.6-9.1-15.5-5-27.9-7.7-26.8-16.3.6-4.5 6.7-9 18.4-13.7 72.3-31.5 120.5-52.3 144.6-62.3 68.9-28.6 83.2-33.6 92.5-33.8 2.1 0 6.6.5 9.6 2.9 2 1.7 3.2 4.1 3.5 6.7.5 3.2.6 6.5.4 9.8z"/></symbol><symbol id="i-android" viewBox="0 0 576 512"><path d="M420.5 253.9a24 24 0 1 1 0 48 24 24 0 1 1 0-48m-265.1 0a24 24 0 1 1 0 48 24 24 0 1 1 0-48m273.7-96.5 47.9-83c.8-1.1 1.3-2.4 1.5-3.8s.2-2.7-.1-4.1-.9-2.6-1.7-3.7-1.8-2-3-2.7-2.5-1.1-3.9-1.3-2.7 0-4 .4-2.5 1.1-3.6 1.9-1.9 2-2.5 3.2l-48.5 84.1C372.4 131 330.4 122 287.9 122s-84.5 9-123.3 26.4l-48.4-84c-.6-1.2-1.5-2.3-2.5-3.2s-2.3-1.5-3.6-1.9-2.7-.5-4-.4-2.7.6-3.9 1.3-2.2 1.6-3 2.7-1.4 2.4-1.7 3.7-.3 2.7-.1 4.1.8 2.6 1.5 3.8l47.9 83C64.5 202.2 8.2 285.5 0 384h576c-8.2-98.5-64.5-181.8-146.9-226.6"/></symbol><symbol id="i-apple" viewBox="0 0 384 512"><path d="M319.1 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7-55.8.9-115.1 44.5-115.1 133.2 0 26.2 4.8 53.3 14.4 81.2 12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9m-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26.1 2 49.9-11.4 69.5-34.3"/></symbol><symbol id="i-windows" viewBox="0 0 448 512"><path d="m0 93.7 183.6-25.3v177.4H0zm0 324.6 183.6 25.3V268.4H0zm203.8 28L448 480V268.4H203.8zm0-380.6v180.1H448V32z"/></symbol><symbol id="i-linux" viewBox="0 0 448 512"><path d="M220.9 123.3c1 .5 1.8 1.7 3 1.7 1.1 0 2.8-.4 2.9-1.5.2-1.4-1.9-2.3-3.2-2.9-1.7-.7-3.9-1-5.5-.1-.4.2-.8.7-.6 1.1.3 1.3 2.3 1.1 3.4 1.7M199 125c1.2 0 2-1.2 3-1.7 1.1-.6 3.1-.4 3.5-1.6.2-.4-.2-.9-.6-1.1-1.6-.9-3.8-.6-5.5.1-1.3.6-3.4 1.5-3.2 2.9.1 1 1.8 1.5 2.8 1.4m221 278.8c-3.6-4-5.3-11.6-7.2-19.7-1.8-8.1-3.9-16.8-10.5-22.4-1.3-1.1-2.6-2.1-4-2.9-1.3-.8-2.7-1.5-4.1-2 9.2-27.3 5.6-54.5-3.7-79.1-11.4-30.1-31.3-56.4-46.5-74.4-17.1-21.5-33.7-41.9-33.4-72C311.1 85.4 315.7.1 234.8 0 132.4-.2 158 103.4 156.9 135.2c-1.7 23.4-6.4 41.8-22.5 64.7-18.9 22.5-45.5 58.8-58.1 96.7-6 17.9-8.8 36.1-6.2 53.3-6.5 5.8-11.4 14.7-16.6 20.2-4.2 4.3-10.3 5.9-17 8.3s-14 6-18.5 14.5c-2.1 3.9-2.8 8.1-2.8 12.4 0 3.9.6 7.9 1.2 11.8 1.2 8.1 2.5 15.7.8 20.8-5.2 14.4-5.9 24.4-2.2 31.7 3.8 7.3 11.4 10.5 20.1 12.3 17.3 3.6 40.8 2.7 59.3 12.5 19.8 10.4 39.9 14.1 55.9 10.4 11.6-2.6 21.1-9.6 25.9-20.2 12.5-.1 26.3-5.4 48.3-6.6 14.9-1.2 33.6 5.3 55.1 4.1.6 2.3 1.4 4.6 2.5 6.7v.1c8.3 16.7 23.8 24.3 40.3 23 16.6-1.3 34.1-11 48.3-27.9 13.6-16.4 36-23.2 50.9-32.2 7.4-4.5 13.4-10.1 13.9-18.3.4-8.2-4.4-17.3-15.5-29.7M223.8 87.3c9.8-22.2 34.2-21.8 44-.4 6.5 14.2 3.6 30.9-4.3 40.4-1.6-.8-5.9-2.6-12.6-4.9 1.1-1.2 3.1-2.7 3.9-4.6 4.8-11.8-.2-27-9.1-27.3-7.3-.5-13.9 10.8-11.8 23-4.1-2-9.4-3.5-13-4.4-1-6.9-.3-14.6 2.9-21.8m-40.7-11.5c10.1 0 20.8 14.2 19.1 33.5-3.5 1-7.1 2.5-10.2 4.6 1.2-8.9-3.3-20.1-9.6-19.6-8.4.7-9.8 21.2-1.8 28.1 1 .8 1.9-.2-5.9 5.5-15.6-14.6-10.5-52.1 8.4-52.1m-13.6 60.7c6.2-4.6 13.6-10 14.1-10.5 4.7-4.4 13.5-14.2 27.9-14.2 7.1 0 15.6 2.3 25.9 8.9 6.3 4.1 11.3 4.4 22.6 9.3 8.4 3.5 13.7 9.7 10.5 18.2-2.6 7.1-11 14.4-22.7 18.1-11.1 3.6-19.8 16-38.2 14.9-3.9-.2-7-1-9.6-2.1-8-3.5-12.2-10.4-20-15-8.6-4.8-13.2-10.4-14.7-15.3q-2.1-7.35 4.2-12.3m3.3 334c-2.7 35.1-43.9 34.4-75.3 18-29.9-15.8-68.6-6.5-76.5-21.9-2.4-4.7-2.4-12.7 2.6-26.4v-.2c2.4-7.6.6-16-.6-23.9-1.2-7.8-1.8-15 .9-20 3.5-6.7 8.5-9.1 14.8-11.3 10.3-3.7 11.8-3.4 19.6-9.9 5.5-5.7 9.5-12.9 14.3-18 5.1-5.5 10-8.1 17.7-6.9 8.1 1.2 15.1 6.8 21.9 16l19.6 35.6c9.5 19.9 43.1 48.4 41 68.9m-1.4-25.9c-4.1-6.6-9.6-13.6-14.4-19.6 7.1 0 14.2-2.2 16.7-8.9 2.3-6.2 0-14.9-7.4-24.9-13.5-18.2-38.3-32.5-38.3-32.5-13.5-8.4-21.1-18.7-24.6-29.9s-3-23.3-.3-35.2c5.2-22.9 18.6-45.2 27.2-59.2 2.3-1.7.8 3.2-8.7 20.8-8.5 16.1-24.4 53.3-2.6 82.4.6-20.7 5.5-41.8 13.8-61.5 12-27.4 37.3-74.9 39.3-112.7 1.1.8 4.6 3.2 6.2 4.1 4.6 2.7 8.1 6.7 12.6 10.3 12.4 10 28.5 9.2 42.4 1.2 6.2-3.5 11.2-7.5 15.9-9 9.9-3.1 17.8-8.6 22.3-15 7.7 30.4 25.7 74.3 37.2 95.7 6.1 11.4 18.3 35.5 23.6 64.6 3.3-.1 7 .4 10.9 1.4 13.8-35.7-11.7-74.2-23.3-84.9-4.7-4.6-4.9-6.6-2.6-6.5 12.6 11.2 29.2 33.7 35.2 59 2.8 11.6 3.3 23.7.4 35.7 16.4 6.8 35.9 17.9 30.7 34.8-2.2-.1-3.2 0-4.2 0 3.2-10.1-3.9-17.6-22.8-26.1-19.6-8.6-36-8.6-38.3 12.5-12.1 4.2-18.3 14.7-21.4 27.3-2.8 11.2-3.6 24.7-4.4 39.9-.5 7.7-3.6 18-6.8 29-32.1 22.9-76.7 32.9-114.3 7.2m257.4-11.5c-.9 16.8-41.2 19.9-63.2 46.5-13.2 15.7-29.4 24.4-43.6 25.5s-26.5-4.8-33.7-19.3c-4.7-11.1-2.4-23.1 1.1-36.3 3.7-14.2 9.2-28.8 9.9-40.6.8-15.2 1.7-28.5 4.2-38.7 2.6-10.3 6.6-17.2 13.7-21.1.3-.2.7-.3 1-.5.8 13.2 7.3 26.6 18.8 29.5 12.6 3.3 30.7-7.5 38.4-16.3 9-.3 15.7-.9 22.6 5.1 9.9 8.5 7.1 30.3 17.1 41.6 10.6 11.6 14 19.5 13.7 24.6M173.4 148.7c2 1.9 4.7 4.5 8 7.1 6.6 5.2 15.8 10.6 27.3 10.6 11.6 0 22.5-5.9 31.8-10.8 4.9-2.6 10.9-7 14.8-10.4s5.9-6.3 3.1-6.6-2.6 2.6-6 5.1c-4.4 3.2-9.7 7.4-13.9 9.8-7.4 4.2-19.5 10.2-29.9 10.2s-18.7-4.8-24.9-9.7c-3.1-2.5-5.7-5-7.7-6.9-1.5-1.4-1.9-4.6-4.3-4.9-1.4-.1-1.8 3.7 1.7 6.5"/></symbol></defs></svg>
+<div class="ambient" aria-hidden="true"></div>
 <div class="app">
   <div class="hd">
-    <div class="hd-info">
-      <h1 id="title">—</h1>
-      <div class="sub"><span class="dot" id="statusDot"></span><span id="userLine">—</span></div>
+    <div class="hd-l">
+      <img id="logo" class="logo" alt="" hidden>
+      <div class="hd-info"><h1 id="title">—</h1><div class="sub"><span class="dot" id="statusDot"></span><span id="userLine">—</span></div></div>
     </div>
     <div class="tools">
       <div class="lw" id="lw">
-        <button class="ib" type="button" id="langBtn"><i class="fa-solid fa-language"></i></button>
-        <div class="ld">
-          <button type="button" data-l="fa">فارسی</button>
-          <button type="button" data-l="en">English</button>
-        </div>
+        <button class="ib" type="button" id="langBtn" data-al="aLang"><svg class="i" aria-hidden="true"><use href="#i-language"/></svg></button>
+        <div class="ld"><button type="button" data-l="fa">فارسی</button><button type="button" data-l="en">English</button></div>
       </div>
-      <button class="ib" type="button" id="themeBtn"><i class="fa-solid fa-sun"></i></button>
+      <button class="ib" type="button" id="themeBtn" data-al="aTheme"><svg class="i" aria-hidden="true"><use href="#i-sun"/></svg></button>
     </div>
   </div>
 
-  <div id="ann" class="ann"><i class="fa-solid fa-bullhorn"></i><span id="annTxt"></span></div>
-  <div id="warnVol" class="warn vol"><i class="fa-solid fa-triangle-exclamation"></i><span id="warnVolTxt"></span></div>
-  <div id="warnExp" class="warn exp"><i class="fa-solid fa-hourglass-end"></i><span id="warnExpTxt"></span></div>
+  <div id="ann" class="ann"><svg class="i" aria-hidden="true"><use href="#i-bullhorn"/></svg><span id="annTxt"></span></div>
+  <div id="warnVol" class="warn vol"><svg class="i" aria-hidden="true"><use href="#i-triangle-exclamation"/></svg><span id="warnVolTxt"></span></div>
+  <div id="warnExp" class="warn exp"><svg class="i" aria-hidden="true"><use href="#i-hourglass-end"/></svg><span id="warnExpTxt"></span></div>
 
   <div id="tab-home" class="tab on">
-    <div class="home-renew" id="homeRenew">
-      <a class="btn bp" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i> <span id="tHomeRenew">تمدید سرویس</span></a>
-    </div>
+    <div class="home-renew" id="homeRenew"><a class="btn bp big" id="btnHomeRenew" href="#" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-telegram"/></svg> <span data-i18n="renewSvc"></span></a></div>
 
     <div class="card">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:.4rem"><div class="badge ok" id="badge"><span id="badgeTxt">—</span></div></div>
       <div class="usage">
-<div class="ring-col">
-        <div class="ring-wrap">
-          <div class="liq-ball" aria-hidden="true">
-            <div class="liq-water" id="liqWater" style="--pct:100%"></div>
-          </div>
-          <svg viewBox="0 0 120 120" aria-hidden="true">
-            <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(34,211,238,.18)" stroke-width="3"/>
-            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(34,211,238,.08)" stroke-width="6"/>
+        <div class="ring-wrap" id="ringWrap">
+          <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+            <defs>
+              <clipPath id="clipT"><circle cx="60" cy="60" r="43"/></clipPath>
+              <linearGradient id="liqT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--l1)"/><stop offset="1" style="stop-color:var(--l2)"/></linearGradient>
+              <radialGradient id="glassG" cx=".5" cy=".45" r=".55"><stop offset=".62" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".16"/></radialGradient>
+            </defs>
+            <circle cx="60" cy="60" r="51" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="5"/>
+            <circle id="rTraffic" cx="60" cy="60" r="51" fill="none" stroke="var(--l1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="320.44" stroke-dashoffset="320.44" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset .8s ease"/>
+            <circle cx="60" cy="60" r="45" fill="rgba(255,255,255,.05)"/>
+            <g clip-path="url(#clipT)">
+              <path id="waveB" fill="url(#liqT)" opacity=".5"/>
+              <path id="waveT" fill="url(#liqT)" opacity=".92"/>
+              <g id="bubs"><circle class="bub" cx="44" cy="100" r="2" style="animation-delay:0s"/><circle class="bub" cx="70" cy="100" r="1.6" style="animation-delay:1.4s"/><circle class="bub" cx="56" cy="100" r="2.4" style="animation-delay:2.6s"/><circle class="bub" cx="80" cy="100" r="1.4" style="animation-delay:3.4s"/></g>
+            </g>
+            <circle cx="60" cy="60" r="45" fill="url(#glassG)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+            <path id="domeT" fill="url(#liqT)" opacity=".92"/>
+            <path d="M 27 46 A 36 36 0 0 1 50 26" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round" fill="none"/>
+            <circle cx="33" cy="58" r="1.6" fill="#fff" fill-opacity=".55"/>
           </svg>
-          <div class="ring-center"><div class="pct" id="pctT">∞</div></div>
+          <div class="ring-center"><div class="pct" id="pctT">—</div><div class="lab" id="lTraffic">—</div></div>
         </div>
-        <div class="total-under">
-          <span id="sTotal">حجم کل</span>
-          <b id="total">—</b>
-        </div>
-      </div>
-        <div class="vol-grid" style="flex:1">
-          <div class="vol"><div class="k"><i class="fa-solid fa-download"></i><span id="sDown">دانلود</span></div><div class="v" id="down">—</div></div>
-          <div class="vol"><div class="k"><i class="fa-solid fa-upload"></i><span id="sUp">آپلود</span></div><div class="v" id="up">—</div></div>
-          <div class="vol"><div class="k"><i class="fa-solid fa-chart-simple"></i><span id="sUsed">مصرف</span></div><div class="v" id="used">—</div></div>
-          <div class="vol accent"><div class="k"><i class="fa-solid fa-battery-three-quarters"></i><span id="sLeft">باقی‌مانده</span></div><div class="v" id="left">—</div></div>
+        <div class="vol-grid">
+          <div class="vol accent full"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-database"/></svg><span data-i18n="limit"></span></div><div class="v" id="limit">—</div></div>
+          <div class="vol" id="cDown"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="down"></span></div><div class="v" id="down">—</div></div>
+          <div class="vol" id="cUp"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-upload"/></svg><span data-i18n="up"></span></div><div class="v" id="up">—</div></div>
+          <div class="vol" id="cUsed"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-chart-simple"/></svg><span data-i18n="used"></span></div><div class="v" id="used">—</div></div>
+          <div class="vol" id="cLeft"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-battery-three-quarters"/></svg><span data-i18n="left"></span></div><div class="v" id="left">—</div></div>
+          <div class="vol full" id="cLife" style="display:none"><div class="k"><svg class="i" aria-hidden="true"><use href="#i-signal"/></svg><span data-i18n="life"></span></div><div class="v" id="life">—</div></div>
         </div>
       </div>
       <div class="bar"><i id="bar"></i></div>
       <div class="row">
-        <button class="btn bp" type="button" id="btnCopy"><i class="fa-solid fa-copy"></i> <span id="tCopy">کپی اشتراک</span></button>
-        <button class="btn bg" type="button" id="btnQr"><i class="fa-solid fa-qrcode"></i> QR</button>
+        <button class="btn bp" type="button" id="btnCopy"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg> <span data-i18n="copy"></span></button>
+        <button class="btn bg" type="button" id="btnQr"><svg class="i" aria-hidden="true"><use href="#i-qrcode"/></svg> QR</button>
       </div>
-      <div class="fmt hid" id="fmtRow">
-        <button type="button" id="btnFmtJson">JSON</button>
-        <button type="button" id="btnFmtClash">Clash</button>
-      </div>
+      <div class="fmt"><button type="button" id="btnFmtJson" class="hid">JSON</button><button type="button" id="btnFmtClash" class="hid">Clash</button></div>
+    </div>
+
+    <div class="card">
+      <div class="st" style="margin-top:0"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> <span data-i18n="qi"></span></div>
+      <a class="btn bp big" id="btnSmart" href="#" style="display:none"></a>
+      <div class="qi" id="qi"></div>
+      <button class="linkbtn" type="button" id="btnGoApps"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg> <span data-i18n="needApp"></span></button>
     </div>
 
     <div class="card" id="expCard">
-      <div class="exp-hd">
-        <span class="t"><i class="fa-regular fa-clock"></i> <span id="tExp">زمان باقی‌مانده</span></span>
-        <span class="exp-tag" id="expTag">—</span>
-      </div>
+      <div class="exp-hd"><span class="t"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg> <span data-i18n="exp"></span></span><span class="exp-tag" id="expTag">—</span></div>
       <div class="timers">
-        <div class="timer"><div class="n" id="expD">—</div><div class="l" id="lDay">روز</div></div>
-        <div class="timer"><div class="n" id="expH">—</div><div class="l" id="lHour">ساعت</div></div>
-        <div class="timer"><div class="n" id="expM">—</div><div class="l" id="lMin">دقیقه</div></div>
+        <div class="timer"><div class="n" id="expD">—</div><div class="l" data-i18n="day"></div></div>
+        <div class="timer"><div class="n" id="expH">—</div><div class="l" data-i18n="hour"></div></div>
+        <div class="timer"><div class="n" id="expM">—</div><div class="l" data-i18n="min"></div></div>
       </div>
     </div>
 
-    <div class="st"><i class="fa-solid fa-bolt"></i> <span id="tQi">افزودن سریع</span></div>
-    <div class="qi" id="qi"></div>
+    <div class="st"><svg class="i" aria-hidden="true"><use href="#i-book-open"/></svg> <span data-i18n="guide"></span></div>
+    <div id="guide"></div>
   </div>
 
   <div id="tab-cfg" class="tab">
-<div class="st"><i class="fa-solid fa-server"></i> <span id="tCfg">کانفیگ‌ها</span></div>
-    <div id="list"></div>
-    <div class="row" style="margin-top:.6rem">
-      <button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><i class="fa-solid fa-copy"></i> <span id="tAll">کپی همه</span></button>
+    <div class="lat-head">
+      <div class="st"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg> <span data-i18n="cfg"></span></div>
+      <button class="lat-btn" type="button" id="btnLat"><svg class="i" aria-hidden="true"><use href="#i-rotate"/></svg> <span data-i18n="pingTest"></span></button>
     </div>
+    <div class="lat-note" data-i18n="pingNote"></div>
+    <div id="list"></div>
+    <div class="row"><button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg> <span data-i18n="all"></span></button></div>
+    <div class="lat-note" id="latUpdated" style="text-align:end"></div>
   </div>
 
-  <div id="tab-apps" class="tab">
-    <div class="st"><i class="fa-solid fa-download"></i> <span id="tApps">Clients</span></div>
-    <div id="apps"></div>
-  </div>
+  <div id="tab-apps" class="tab"><div class="st"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg> <span data-i18n="apps"></span></div><div id="apps"></div></div>
 
   <div id="tab-profile" class="tab">
-    <div class="st"><i class="fa-solid fa-id-card"></i> <span id="tProf">Profile</span></div>
-    <div class="card pinfo">
-      <div class="prow"><span id="p1">Username</span><b id="pv1">—</b></div>
-      <div class="prow"><span id="p2">User ID</span><b id="pv2">—</b></div>
-      <div class="prow"><span id="p3">Status</span><b id="pv3">—</b></div>
-      <div class="prow"><span id="p5">Expire</span><b id="pv5">—</b></div>
-      <div class="prow"><span id="p6">Last online</span><b id="pv6">—</b></div>
+    <div class="act-row">
+      <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><svg class="i" aria-hidden="true"><use href="#i-telegram"/></svg> <span data-i18n="renew"></span></a>
+      <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><svg class="i" aria-hidden="true"><use href="#i-headset"/></svg> <span data-i18n="support"></span></a>
     </div>
-    <div class="act-row" id="profActs">
-      <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-brands fa-telegram"></i> <span id="tRenew">Renew</span></a>
-      <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><i class="fa-solid fa-headset"></i> <span id="tSupport">Support</span></a>
+    <div class="st"><svg class="i" aria-hidden="true"><use href="#i-id-card"/></svg> <span data-i18n="prof"></span></div>
+    <div class="card pinfo">
+      <div class="prow"><span data-i18n="p1"></span><b id="pv1">—</b></div>
+      <div class="prow"><span data-i18n="p2"></span><b id="pv2">—</b></div>
+      <div class="prow"><span data-i18n="p3"></span><b id="pv3">—</b></div>
+      <div class="prow"><span data-i18n="p5"></span><b id="pv5">—</b></div>
+      <div class="prow"><span data-i18n="p6"></span><b id="pv6">—</b></div>
+      <div class="prow" id="rowEst" style="display:none"><span data-i18n="est"></span><b id="pv7">—</b></div>
     </div>
   </div>
+</div>
 
-
-<nav class="nav">
-  <button type="button" class="on" data-t="home"><i class="fa-solid fa-house"></i><span id="n1">Home</span></button>
-  <button type="button" data-t="cfg"><i class="fa-solid fa-server"></i><span id="n2">Configs</span></button>
-  <button type="button" data-t="apps"><i class="fa-solid fa-download"></i><span id="n3">Apps</span></button>
-  <button type="button" data-t="profile"><i class="fa-solid fa-user"></i><span id="n4">Profile</span></button>
+<nav class="nav" aria-label="main">
+  <button type="button" class="on" data-t="home"><svg class="i" aria-hidden="true"><use href="#i-house"/></svg><span data-i18n="n1"></span></button>
+  <button type="button" data-t="cfg"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg><span data-i18n="n2"></span></button>
+  <button type="button" data-t="apps"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg><span data-i18n="n3"></span></button>
+  <button type="button" data-t="profile"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span data-i18n="n4"></span></button>
 </nav>
-
-<div class="toast" id="toast"></div>
-<div id="md"><div class="mbx"><div id="qr"></div>
-<button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem"><i class="fa-solid fa-copy"></i> <span id="tQrCopy">Copy</span></button>
-<button class="btn bg" type="button" style="width:100%" onclick="document.getElementById('md').classList.remove('open')">OK</button></div></div>
+<div class="toast" id="toast" role="status"></div>
+<div id="md" role="dialog" aria-modal="true"><div class="mbx"><div id="qr"></div>
+  <button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg> <span data-i18n="copyLink"></span></button>
+  <button class="btn bg" type="button" id="btnQrClose" style="width:100%">OK</button></div></div>
 
 <script>
-/* ===== Geo data: real-ish positions (lat, lon) ===== */
-const FLAG_MAP={"🇩🇪":"DE","🇺🇸":"US","🇬🇧":"GB","🇫🇷":"FR","🇳🇱":"NL","🇹🇷":"TR","🇦🇪":"AE","🇸🇬":"SG","🇯🇵":"JP","🇰🇷":"KR","🇮🇳":"IN","🇨🇦":"CA","🇦🇺":"AU","🇧🇷":"BR","🇷🇺":"RU","🇵🇱":"PL","🇮🇹":"IT","🇪🇸":"ES","🇸🇪":"SE","🇫🇮":"FI","🇳🇴":"NO","🇩🇰":"DK","🇨🇭":"CH","🇦🇹":"AT","🇧🇪":"BE","🇵🇹":"PT","🇮🇪":"IE","🇭🇰":"HK","🇹🇼":"TW","🇻🇳":"VN","🇹🇭":"TH","🇲🇾":"MY","🇮🇩":"ID","🇵🇭":"PH","🇮🇱":"IL","🇸🇦":"SA","🇿🇦":"ZA","🇲🇽":"MX","🇦🇷":"AR","🇺🇦":"UA","🇷🇴":"RO","🇨🇿":"CZ","🇭🇺":"HU","🇬🇷":"GR","🇧🇬":"BG","🇭🇷":"HR","🇷🇸":"RS","🇸🇰":"SK","🇱🇹":"LT","🇱🇻":"LV","🇪🇪":"EE","🇮🇸":"IS","🇳🇿":"NZ","🇨🇱":"CL","🇨🇴":"CO","🇵🇪":"PE","🇮🇷":"IR","🇨🇳":"CN"};
-const CODE_TO_FLAG=Object.fromEntries(Object.entries(FLAG_MAP).map(([f,c])=>[c,f]));
-const CODE_RE=/\b(DE|US|GB|UK|FR|NL|TR|AE|SG|JP|KR|IN|CA|AU|BR|RU|PL|IT|ES|SE|FI|NO|DK|CH|AT|BE|PT|IE|HK|TW|VN|TH|MY|ID|PH|IL|SA|ZA|MX|AR|UA|RO|CZ|HU|GR|BG|HR|RS|SK|LT|LV|EE|IS|NZ|CL|CO|PE|IR|CN)\b/i;
-const COUNTRY={DE:{fa:"آلمان",en:"Germany"},US:{fa:"آمریکا",en:"USA"},GB:{fa:"انگلستان",en:"UK"},FR:{fa:"فرانسه",en:"France"},NL:{fa:"هلند",en:"Netherlands"},TR:{fa:"ترکیه",en:"Turkey"},AE:{fa:"امارات",en:"UAE"},SG:{fa:"سنگاپور",en:"Singapore"},JP:{fa:"ژاپن",en:"Japan"},KR:{fa:"کره",en:"Korea"},IN:{fa:"هند",en:"India"},CA:{fa:"کانادا",en:"Canada"},AU:{fa:"استرالیا",en:"Australia"},BR:{fa:"برزیل",en:"Brazil"},RU:{fa:"روسیه",en:"Russia"},PL:{fa:"لهستان",en:"Poland"},IT:{fa:"ایتالیا",en:"Italy"},ES:{fa:"اسپانیا",en:"Spain"},SE:{fa:"سوئد",en:"Sweden"},FI:{fa:"فنلاند",en:"Finland"},NO:{fa:"نروژ",en:"Norway"},DK:{fa:"دانمارک",en:"Denmark"},CH:{fa:"سوئیس",en:"Switzerland"},AT:{fa:"اتریش",en:"Austria"},BE:{fa:"بلژیک",en:"Belgium"},PT:{fa:"پرتغال",en:"Portugal"},IE:{fa:"ایرلند",en:"Ireland"},HK:{fa:"هنگ‌کنگ",en:"Hong Kong"},TW:{fa:"تایوان",en:"Taiwan"},VN:{fa:"ویتنام",en:"Vietnam"},TH:{fa:"تایلند",en:"Thailand"},MY:{fa:"مالزی",en:"Malaysia"},ID:{fa:"اندونزی",en:"Indonesia"},PH:{fa:"فیلیپین",en:"Philippines"},IL:{fa:"اسرائیل",en:"Israel"},SA:{fa:"عربستان",en:"Saudi"},ZA:{fa:"آفریقای جنوبی",en:"S.Africa"},MX:{fa:"مکزیک",en:"Mexico"},AR:{fa:"آرژانتین",en:"Argentina"},UA:{fa:"اوکراین",en:"Ukraine"},RO:{fa:"رومانی",en:"Romania"},CZ:{fa:"چک",en:"Czechia"},HU:{fa:"مجارستان",en:"Hungary"},GR:{fa:"یونان",en:"Greece"},BG:{fa:"بلغارستان",en:"Bulgaria"},HR:{fa:"کرواسی",en:"Croatia"},RS:{fa:"صربستان",en:"Serbia"},SK:{fa:"اسلواکی",en:"Slovakia"},LT:{fa:"لیتوانی",en:"Lithuania"},LV:{fa:"لتونی",en:"Latvia"},EE:{fa:"استونی",en:"Estonia"},IS:{fa:"ایسلند",en:"Iceland"},NZ:{fa:"نیوزیلند",en:"New Zealand"},CL:{fa:"شیلی",en:"Chile"},CO:{fa:"کلمبیا",en:"Colombia"},PE:{fa:"پرو",en:"Peru"},IR:{fa:"ایران",en:"Iran"},CN:{fa:"چین",en:"China"}};
-
-/* ===== Background: real map positions for panel servers ===== */
-/* ===== Liquid wave ===== */
-let wavePhase=0;
-function updateWaves(){ /* CSS liquid */ }
-
-
-/* ===== Jalali ===== */
+/* QRCode for JavaScript (c) 2009 Kazuhiko Arase, MIT license — http://www.d-project.com/ */
+var QRC=(function(){var M={};function R(n){return M[n.replace('./','')]}
+M['QRMode']=(function(){var module={exports:{}};var require=R;module.exports = {
+MODE_NUMBER :       1 << 0,
+MODE_ALPHA_NUM :    1 << 1,
+MODE_8BIT_BYTE :    1 << 2,
+MODE_KANJI :        1 << 3
+};
+return module.exports;})();
+M['QRErrorCorrectLevel']=(function(){var module={exports:{}};var require=R;module.exports = {
+L : 1,
+M : 0,
+Q : 3,
+H : 2
+};
+return module.exports;})();
+M['QRMath']=(function(){var module={exports:{}};var require=R;var QRMath = {
+glog : function(n) {
+if (n < 1) {
+throw new Error("glog(" + n + ")");
+}
+return QRMath.LOG_TABLE[n];
+},
+gexp : function(n) {
+while (n < 0) {
+n += 255;
+}
+while (n >= 256) {
+n -= 255;
+}
+return QRMath.EXP_TABLE[n];
+},
+EXP_TABLE : new Array(256),
+LOG_TABLE : new Array(256)
+};
+for (var i = 0; i < 8; i++) {
+QRMath.EXP_TABLE[i] = 1 << i;
+}
+for (var i = 8; i < 256; i++) {
+QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4]
+^ QRMath.EXP_TABLE[i - 5]
+^ QRMath.EXP_TABLE[i - 6]
+^ QRMath.EXP_TABLE[i - 8];
+}
+for (var i = 0; i < 255; i++) {
+QRMath.LOG_TABLE[QRMath.EXP_TABLE[i] ] = i;
+}
+module.exports = QRMath;
+return module.exports;})();
+M['QRMaskPattern']=(function(){var module={exports:{}};var require=R;module.exports = {
+PATTERN000 : 0,
+PATTERN001 : 1,
+PATTERN010 : 2,
+PATTERN011 : 3,
+PATTERN100 : 4,
+PATTERN101 : 5,
+PATTERN110 : 6,
+PATTERN111 : 7
+};
+return module.exports;})();
+M['QRPolynomial']=(function(){var module={exports:{}};var require=R;var QRMath = require('./QRMath');
+function QRPolynomial(num, shift) {
+if (num.length === undefined) {
+throw new Error(num.length + "/" + shift);
+}
+var offset = 0;
+while (offset < num.length && num[offset] === 0) {
+offset++;
+}
+this.num = new Array(num.length - offset + shift);
+for (var i = 0; i < num.length - offset; i++) {
+this.num[i] = num[i + offset];
+}
+}
+QRPolynomial.prototype = {
+get : function(index) {
+return this.num[index];
+},
+getLength : function() {
+return this.num.length;
+},
+multiply : function(e) {
+var num = new Array(this.getLength() + e.getLength() - 1);
+for (var i = 0; i < this.getLength(); i++) {
+for (var j = 0; j < e.getLength(); j++) {
+num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i) ) + QRMath.glog(e.get(j) ) );
+}
+}
+return new QRPolynomial(num, 0);
+},
+mod : function(e) {
+if (this.getLength() - e.getLength() < 0) {
+return this;
+}
+var ratio = QRMath.glog(this.get(0) ) - QRMath.glog(e.get(0) );
+var num = new Array(this.getLength() );
+for (var i = 0; i < this.getLength(); i++) {
+num[i] = this.get(i);
+}
+for (var x = 0; x < e.getLength(); x++) {
+num[x] ^= QRMath.gexp(QRMath.glog(e.get(x) ) + ratio);
+}
+return new QRPolynomial(num, 0).mod(e);
+}
+};
+module.exports = QRPolynomial;
+return module.exports;})();
+M['QRUtil']=(function(){var module={exports:{}};var require=R;var QRMode = require('./QRMode');
+var QRPolynomial = require('./QRPolynomial');
+var QRMath = require('./QRMath');
+var QRMaskPattern = require('./QRMaskPattern');
+var QRUtil = {
+PATTERN_POSITION_TABLE : [
+[],
+[6, 18],
+[6, 22],
+[6, 26],
+[6, 30],
+[6, 34],
+[6, 22, 38],
+[6, 24, 42],
+[6, 26, 46],
+[6, 28, 50],
+[6, 30, 54],        
+[6, 32, 58],
+[6, 34, 62],
+[6, 26, 46, 66],
+[6, 26, 48, 70],
+[6, 26, 50, 74],
+[6, 30, 54, 78],
+[6, 30, 56, 82],
+[6, 30, 58, 86],
+[6, 34, 62, 90],
+[6, 28, 50, 72, 94],
+[6, 26, 50, 74, 98],
+[6, 30, 54, 78, 102],
+[6, 28, 54, 80, 106],
+[6, 32, 58, 84, 110],
+[6, 30, 58, 86, 114],
+[6, 34, 62, 90, 118],
+[6, 26, 50, 74, 98, 122],
+[6, 30, 54, 78, 102, 126],
+[6, 26, 52, 78, 104, 130],
+[6, 30, 56, 82, 108, 134],
+[6, 34, 60, 86, 112, 138],
+[6, 30, 58, 86, 114, 142],
+[6, 34, 62, 90, 118, 146],
+[6, 30, 54, 78, 102, 126, 150],
+[6, 24, 50, 76, 102, 128, 154],
+[6, 28, 54, 80, 106, 132, 158],
+[6, 32, 58, 84, 110, 136, 162],
+[6, 26, 54, 82, 110, 138, 166],
+[6, 30, 58, 86, 114, 142, 170]
+],
+G15 : (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0),
+G18 : (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0),
+G15_MASK : (1 << 14) | (1 << 12) | (1 << 10)    | (1 << 4) | (1 << 1),
+getBCHTypeInfo : function(data) {
+var d = data << 10;
+while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) >= 0) {
+d ^= (QRUtil.G15 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G15) ) );    
+}
+return ( (data << 10) | d) ^ QRUtil.G15_MASK;
+},
+getBCHTypeNumber : function(data) {
+var d = data << 12;
+while (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) >= 0) {
+d ^= (QRUtil.G18 << (QRUtil.getBCHDigit(d) - QRUtil.getBCHDigit(QRUtil.G18) ) );    
+}
+return (data << 12) | d;
+},
+getBCHDigit : function(data) {
+var digit = 0;
+while (data !== 0) {
+digit++;
+data >>>= 1;
+}
+return digit;
+},
+getPatternPosition : function(typeNumber) {
+return QRUtil.PATTERN_POSITION_TABLE[typeNumber - 1];
+},
+getMask : function(maskPattern, i, j) {
+switch (maskPattern) {
+case QRMaskPattern.PATTERN000 : return (i + j) % 2 === 0;
+case QRMaskPattern.PATTERN001 : return i % 2 === 0;
+case QRMaskPattern.PATTERN010 : return j % 3 === 0;
+case QRMaskPattern.PATTERN011 : return (i + j) % 3 === 0;
+case QRMaskPattern.PATTERN100 : return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 === 0;
+case QRMaskPattern.PATTERN101 : return (i * j) % 2 + (i * j) % 3 === 0;
+case QRMaskPattern.PATTERN110 : return ( (i * j) % 2 + (i * j) % 3) % 2 === 0;
+case QRMaskPattern.PATTERN111 : return ( (i * j) % 3 + (i + j) % 2) % 2 === 0;
+default :
+throw new Error("bad maskPattern:" + maskPattern);
+}
+},
+getErrorCorrectPolynomial : function(errorCorrectLength) {
+var a = new QRPolynomial([1], 0);
+for (var i = 0; i < errorCorrectLength; i++) {
+a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0) );
+}
+return a;
+},
+getLengthInBits : function(mode, type) {
+if (1 <= type && type < 10) {
+switch(mode) {
+case QRMode.MODE_NUMBER     : return 10;
+case QRMode.MODE_ALPHA_NUM  : return 9;
+case QRMode.MODE_8BIT_BYTE  : return 8;
+case QRMode.MODE_KANJI      : return 8;
+default :
+throw new Error("mode:" + mode);
+}
+} else if (type < 27) {
+switch(mode) {
+case QRMode.MODE_NUMBER     : return 12;
+case QRMode.MODE_ALPHA_NUM  : return 11;
+case QRMode.MODE_8BIT_BYTE  : return 16;
+case QRMode.MODE_KANJI      : return 10;
+default :
+throw new Error("mode:" + mode);
+}
+} else if (type < 41) {
+switch(mode) {
+case QRMode.MODE_NUMBER     : return 14;
+case QRMode.MODE_ALPHA_NUM  : return 13;
+case QRMode.MODE_8BIT_BYTE  : return 16;
+case QRMode.MODE_KANJI      : return 12;
+default :
+throw new Error("mode:" + mode);
+}
+} else {
+throw new Error("type:" + type);
+}
+},
+getLostPoint : function(qrCode) {
+var moduleCount = qrCode.getModuleCount();
+var lostPoint = 0;
+var row = 0; 
+var col = 0;
+for (row = 0; row < moduleCount; row++) {
+for (col = 0; col < moduleCount; col++) {
+var sameCount = 0;
+var dark = qrCode.isDark(row, col);
+for (var r = -1; r <= 1; r++) {
+if (row + r < 0 || moduleCount <= row + r) {
+continue;
+}
+for (var c = -1; c <= 1; c++) {
+if (col + c < 0 || moduleCount <= col + c) {
+continue;
+}
+if (r === 0 && c === 0) {
+continue;
+}
+if (dark === qrCode.isDark(row + r, col + c) ) {
+sameCount++;
+}
+}
+}
+if (sameCount > 5) {
+lostPoint += (3 + sameCount - 5);
+}
+}
+}
+for (row = 0; row < moduleCount - 1; row++) {
+for (col = 0; col < moduleCount - 1; col++) {
+var count = 0;
+if (qrCode.isDark(row,     col    ) ) count++;
+if (qrCode.isDark(row + 1, col    ) ) count++;
+if (qrCode.isDark(row,     col + 1) ) count++;
+if (qrCode.isDark(row + 1, col + 1) ) count++;
+if (count === 0 || count === 4) {
+lostPoint += 3;
+}
+}
+}
+for (row = 0; row < moduleCount; row++) {
+for (col = 0; col < moduleCount - 6; col++) {
+if (qrCode.isDark(row, col) && 
+!qrCode.isDark(row, col + 1) && 
+qrCode.isDark(row, col + 2) && 
+qrCode.isDark(row, col + 3) && 
+qrCode.isDark(row, col + 4) && 
+!qrCode.isDark(row, col + 5) && 
+qrCode.isDark(row, col + 6) ) {
+lostPoint += 40;
+}
+}
+}
+for (col = 0; col < moduleCount; col++) {
+for (row = 0; row < moduleCount - 6; row++) {
+if (qrCode.isDark(row, col) &&
+!qrCode.isDark(row + 1, col) &&
+qrCode.isDark(row + 2, col) &&
+qrCode.isDark(row + 3, col) &&
+qrCode.isDark(row + 4, col) &&
+!qrCode.isDark(row + 5, col) &&
+qrCode.isDark(row + 6, col) ) {
+lostPoint += 40;
+}
+}
+}
+var darkCount = 0;
+for (col = 0; col < moduleCount; col++) {
+for (row = 0; row < moduleCount; row++) {
+if (qrCode.isDark(row, col) ) {
+darkCount++;
+}
+}
+}
+var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+lostPoint += ratio * 10;
+return lostPoint;       
+}
+};
+module.exports = QRUtil;
+return module.exports;})();
+M['QRRSBlock']=(function(){var module={exports:{}};var require=R;var QRErrorCorrectLevel = require('./QRErrorCorrectLevel');
+function QRRSBlock(totalCount, dataCount) {
+this.totalCount = totalCount;
+this.dataCount  = dataCount;
+}
+QRRSBlock.RS_BLOCK_TABLE = [
+[1, 26, 19],
+[1, 26, 16],
+[1, 26, 13],
+[1, 26, 9],
+[1, 44, 34],
+[1, 44, 28],
+[1, 44, 22],
+[1, 44, 16],
+[1, 70, 55],
+[1, 70, 44],
+[2, 35, 17],
+[2, 35, 13],
+[1, 100, 80],
+[2, 50, 32],
+[2, 50, 24],
+[4, 25, 9],
+[1, 134, 108],
+[2, 67, 43],
+[2, 33, 15, 2, 34, 16],
+[2, 33, 11, 2, 34, 12],
+[2, 86, 68],
+[4, 43, 27],
+[4, 43, 19],
+[4, 43, 15],
+[2, 98, 78],
+[4, 49, 31],
+[2, 32, 14, 4, 33, 15],
+[4, 39, 13, 1, 40, 14],
+[2, 121, 97],
+[2, 60, 38, 2, 61, 39],
+[4, 40, 18, 2, 41, 19],
+[4, 40, 14, 2, 41, 15],
+[2, 146, 116],
+[3, 58, 36, 2, 59, 37],
+[4, 36, 16, 4, 37, 17],
+[4, 36, 12, 4, 37, 13],
+[2, 86, 68, 2, 87, 69],
+[4, 69, 43, 1, 70, 44],
+[6, 43, 19, 2, 44, 20],
+[6, 43, 15, 2, 44, 16],
+[4, 101, 81],
+[1, 80, 50, 4, 81, 51],
+[4, 50, 22, 4, 51, 23],
+[3, 36, 12, 8, 37, 13],
+[2, 116, 92, 2, 117, 93],
+[6, 58, 36, 2, 59, 37],
+[4, 46, 20, 6, 47, 21],
+[7, 42, 14, 4, 43, 15],
+[4, 133, 107],
+[8, 59, 37, 1, 60, 38],
+[8, 44, 20, 4, 45, 21],
+[12, 33, 11, 4, 34, 12],
+[3, 145, 115, 1, 146, 116],
+[4, 64, 40, 5, 65, 41],
+[11, 36, 16, 5, 37, 17],
+[11, 36, 12, 5, 37, 13],
+[5, 109, 87, 1, 110, 88],
+[5, 65, 41, 5, 66, 42],
+[5, 54, 24, 7, 55, 25],
+[11, 36, 12],
+[5, 122, 98, 1, 123, 99],
+[7, 73, 45, 3, 74, 46],
+[15, 43, 19, 2, 44, 20],
+[3, 45, 15, 13, 46, 16],
+[1, 135, 107, 5, 136, 108],
+[10, 74, 46, 1, 75, 47],
+[1, 50, 22, 15, 51, 23],
+[2, 42, 14, 17, 43, 15],
+[5, 150, 120, 1, 151, 121],
+[9, 69, 43, 4, 70, 44],
+[17, 50, 22, 1, 51, 23],
+[2, 42, 14, 19, 43, 15],
+[3, 141, 113, 4, 142, 114],
+[3, 70, 44, 11, 71, 45],
+[17, 47, 21, 4, 48, 22],
+[9, 39, 13, 16, 40, 14],
+[3, 135, 107, 5, 136, 108],
+[3, 67, 41, 13, 68, 42],
+[15, 54, 24, 5, 55, 25],
+[15, 43, 15, 10, 44, 16],
+[4, 144, 116, 4, 145, 117],
+[17, 68, 42],
+[17, 50, 22, 6, 51, 23],
+[19, 46, 16, 6, 47, 17],
+[2, 139, 111, 7, 140, 112],
+[17, 74, 46],
+[7, 54, 24, 16, 55, 25],
+[34, 37, 13],
+[4, 151, 121, 5, 152, 122],
+[4, 75, 47, 14, 76, 48],
+[11, 54, 24, 14, 55, 25],
+[16, 45, 15, 14, 46, 16],
+[6, 147, 117, 4, 148, 118],
+[6, 73, 45, 14, 74, 46],
+[11, 54, 24, 16, 55, 25],
+[30, 46, 16, 2, 47, 17],
+[8, 132, 106, 4, 133, 107],
+[8, 75, 47, 13, 76, 48],
+[7, 54, 24, 22, 55, 25],
+[22, 45, 15, 13, 46, 16],
+[10, 142, 114, 2, 143, 115],
+[19, 74, 46, 4, 75, 47],
+[28, 50, 22, 6, 51, 23],
+[33, 46, 16, 4, 47, 17],
+[8, 152, 122, 4, 153, 123],
+[22, 73, 45, 3, 74, 46],
+[8, 53, 23, 26, 54, 24],
+[12, 45, 15, 28, 46, 16],
+[3, 147, 117, 10, 148, 118],
+[3, 73, 45, 23, 74, 46],
+[4, 54, 24, 31, 55, 25],
+[11, 45, 15, 31, 46, 16],
+[7, 146, 116, 7, 147, 117],
+[21, 73, 45, 7, 74, 46],
+[1, 53, 23, 37, 54, 24],
+[19, 45, 15, 26, 46, 16],
+[5, 145, 115, 10, 146, 116],
+[19, 75, 47, 10, 76, 48],
+[15, 54, 24, 25, 55, 25],
+[23, 45, 15, 25, 46, 16],
+[13, 145, 115, 3, 146, 116],
+[2, 74, 46, 29, 75, 47],
+[42, 54, 24, 1, 55, 25],
+[23, 45, 15, 28, 46, 16],
+[17, 145, 115],
+[10, 74, 46, 23, 75, 47],
+[10, 54, 24, 35, 55, 25],
+[19, 45, 15, 35, 46, 16],
+[17, 145, 115, 1, 146, 116],
+[14, 74, 46, 21, 75, 47],
+[29, 54, 24, 19, 55, 25],
+[11, 45, 15, 46, 46, 16],
+[13, 145, 115, 6, 146, 116],
+[14, 74, 46, 23, 75, 47],
+[44, 54, 24, 7, 55, 25],
+[59, 46, 16, 1, 47, 17],
+[12, 151, 121, 7, 152, 122],
+[12, 75, 47, 26, 76, 48],
+[39, 54, 24, 14, 55, 25],
+[22, 45, 15, 41, 46, 16],
+[6, 151, 121, 14, 152, 122],
+[6, 75, 47, 34, 76, 48],
+[46, 54, 24, 10, 55, 25],
+[2, 45, 15, 64, 46, 16],
+[17, 152, 122, 4, 153, 123],
+[29, 74, 46, 14, 75, 47],
+[49, 54, 24, 10, 55, 25],
+[24, 45, 15, 46, 46, 16],
+[4, 152, 122, 18, 153, 123],
+[13, 74, 46, 32, 75, 47],
+[48, 54, 24, 14, 55, 25],
+[42, 45, 15, 32, 46, 16],
+[20, 147, 117, 4, 148, 118],
+[40, 75, 47, 7, 76, 48],
+[43, 54, 24, 22, 55, 25],
+[10, 45, 15, 67, 46, 16],
+[19, 148, 118, 6, 149, 119],
+[18, 75, 47, 31, 76, 48],
+[34, 54, 24, 34, 55, 25],
+[20, 45, 15, 61, 46, 16]
+];
+QRRSBlock.getRSBlocks = function(typeNumber, errorCorrectLevel) {
+var rsBlock = QRRSBlock.getRsBlockTable(typeNumber, errorCorrectLevel);
+if (rsBlock === undefined) {
+throw new Error("bad rs block @ typeNumber:" + typeNumber + "/errorCorrectLevel:" + errorCorrectLevel);
+}
+var length = rsBlock.length / 3;
+var list = [];
+for (var i = 0; i < length; i++) {
+var count = rsBlock[i * 3 + 0];
+var totalCount = rsBlock[i * 3 + 1];
+var dataCount  = rsBlock[i * 3 + 2];
+for (var j = 0; j < count; j++) {
+list.push(new QRRSBlock(totalCount, dataCount) );	
+}
+}
+return list;
+};
+QRRSBlock.getRsBlockTable = function(typeNumber, errorCorrectLevel) {
+switch(errorCorrectLevel) {
+case QRErrorCorrectLevel.L :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+case QRErrorCorrectLevel.M :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+case QRErrorCorrectLevel.Q :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+case QRErrorCorrectLevel.H :
+return QRRSBlock.RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+default :
+return undefined;
+}
+};
+module.exports = QRRSBlock;
+return module.exports;})();
+M['QRBitBuffer']=(function(){var module={exports:{}};var require=R;function QRBitBuffer() {
+this.buffer = [];
+this.length = 0;
+}
+QRBitBuffer.prototype = {
+get : function(index) {
+var bufIndex = Math.floor(index / 8);
+return ( (this.buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+},
+put : function(num, length) {
+for (var i = 0; i < length; i++) {
+this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+}
+},
+getLengthInBits : function() {
+return this.length;
+},
+putBit : function(bit) {
+var bufIndex = Math.floor(this.length / 8);
+if (this.buffer.length <= bufIndex) {
+this.buffer.push(0);
+}
+if (bit) {
+this.buffer[bufIndex] |= (0x80 >>> (this.length % 8) );
+}
+this.length++;
+}
+};
+module.exports = QRBitBuffer;
+return module.exports;})();
+M['QR8bitByte']=(function(){var module={exports:{}};var require=R;var QRMode = require('./QRMode');
+function QR8bitByte(data) {
+this.mode = QRMode.MODE_8BIT_BYTE;
+this.data = data;
+}
+QR8bitByte.prototype = {
+getLength : function() {
+return this.data.length;
+},
+write : function(buffer) {
+for (var i = 0; i < this.data.length; i++) {
+buffer.put(this.data.charCodeAt(i), 8);
+}
+}
+};
+module.exports = QR8bitByte;
+return module.exports;})();
+M['index']=(function(){var module={exports:{}};var require=R;
+var QR8bitByte = require('./QR8bitByte');
+var QRUtil = require('./QRUtil');
+var QRPolynomial = require('./QRPolynomial');
+var QRRSBlock = require('./QRRSBlock');
+var QRBitBuffer = require('./QRBitBuffer');
+function QRCode(typeNumber, errorCorrectLevel) {
+this.typeNumber = typeNumber;
+this.errorCorrectLevel = errorCorrectLevel;
+this.modules = null;
+this.moduleCount = 0;
+this.dataCache = null;
+this.dataList = [];
+}
+QRCode.prototype = {
+addData : function(data) {
+var newData = new QR8bitByte(data);
+this.dataList.push(newData);
+this.dataCache = null;
+},
+isDark : function(row, col) {
+if (row < 0 || this.moduleCount <= row || col < 0 || this.moduleCount <= col) {
+throw new Error(row + "," + col);
+}
+return this.modules[row][col];
+},
+getModuleCount : function() {
+return this.moduleCount;
+},
+make : function() {
+if (this.typeNumber < 1 ){
+var typeNumber = 1;
+for (typeNumber = 1; typeNumber < 40; typeNumber++) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, this.errorCorrectLevel);
+var buffer = new QRBitBuffer();
+var totalDataCount = 0;
+for (var i = 0; i < rsBlocks.length; i++) {
+totalDataCount += rsBlocks[i].dataCount;
+}
+for (var x = 0; x < this.dataList.length; x++) {
+var data = this.dataList[x];
+buffer.put(data.mode, 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+data.write(buffer);
+}
+if (buffer.getLengthInBits() <= totalDataCount * 8)
+break;
+}
+this.typeNumber = typeNumber;
+}
+this.makeImpl(false, this.getBestMaskPattern() );
+},
+makeImpl : function(test, maskPattern) {
+this.moduleCount = this.typeNumber * 4 + 17;
+this.modules = new Array(this.moduleCount);
+for (var row = 0; row < this.moduleCount; row++) {
+this.modules[row] = new Array(this.moduleCount);
+for (var col = 0; col < this.moduleCount; col++) {
+this.modules[row][col] = null;//(col + row) % 3;
+}
+}
+this.setupPositionProbePattern(0, 0);
+this.setupPositionProbePattern(this.moduleCount - 7, 0);
+this.setupPositionProbePattern(0, this.moduleCount - 7);
+this.setupPositionAdjustPattern();
+this.setupTimingPattern();
+this.setupTypeInfo(test, maskPattern);
+if (this.typeNumber >= 7) {
+this.setupTypeNumber(test);
+}
+if (this.dataCache === null) {
+this.dataCache = QRCode.createData(this.typeNumber, this.errorCorrectLevel, this.dataList);
+}
+this.mapData(this.dataCache, maskPattern);
+},
+setupPositionProbePattern : function(row, col)  {
+for (var r = -1; r <= 7; r++) {
+if (row + r <= -1 || this.moduleCount <= row + r) continue;
+for (var c = -1; c <= 7; c++) {
+if (col + c <= -1 || this.moduleCount <= col + c) continue;
+if ( (0 <= r && r <= 6 && (c === 0 || c === 6) ) || 
+(0 <= c && c <= 6 && (r === 0 || r === 6) ) || 
+(2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+this.modules[row + r][col + c] = true;
+} else {
+this.modules[row + r][col + c] = false;
+}
+}		
+}		
+},
+getBestMaskPattern : function() {
+var minLostPoint = 0;
+var pattern = 0;
+for (var i = 0; i < 8; i++) {
+this.makeImpl(true, i);
+var lostPoint = QRUtil.getLostPoint(this);
+if (i === 0 || minLostPoint >  lostPoint) {
+minLostPoint = lostPoint;
+pattern = i;
+}
+}
+return pattern;
+},
+createMovieClip : function(target_mc, instance_name, depth) {
+var qr_mc = target_mc.createEmptyMovieClip(instance_name, depth);
+var cs = 1;
+this.make();
+for (var row = 0; row < this.modules.length; row++) {
+var y = row * cs;
+for (var col = 0; col < this.modules[row].length; col++) {
+var x = col * cs;
+var dark = this.modules[row][col];
+if (dark) {
+qr_mc.beginFill(0, 100);
+qr_mc.moveTo(x, y);
+qr_mc.lineTo(x + cs, y);
+qr_mc.lineTo(x + cs, y + cs);
+qr_mc.lineTo(x, y + cs);
+qr_mc.endFill();
+}
+}
+}
+return qr_mc;
+},
+setupTimingPattern : function() {
+for (var r = 8; r < this.moduleCount - 8; r++) {
+if (this.modules[r][6] !== null) {
+continue;
+}
+this.modules[r][6] = (r % 2 === 0);
+}
+for (var c = 8; c < this.moduleCount - 8; c++) {
+if (this.modules[6][c] !== null) {
+continue;
+}
+this.modules[6][c] = (c % 2 === 0);
+}
+},
+setupPositionAdjustPattern : function() {
+var pos = QRUtil.getPatternPosition(this.typeNumber);
+for (var i = 0; i < pos.length; i++) {
+for (var j = 0; j < pos.length; j++) {
+var row = pos[i];
+var col = pos[j];
+if (this.modules[row][col] !== null) {
+continue;
+}
+for (var r = -2; r <= 2; r++) {
+for (var c = -2; c <= 2; c++) {
+if (Math.abs(r) === 2 || 
+Math.abs(c) === 2 ||
+(r === 0 && c === 0) ) {
+this.modules[row + r][col + c] = true;
+} else {
+this.modules[row + r][col + c] = false;
+}
+}
+}
+}
+}
+},
+setupTypeNumber : function(test) {
+var bits = QRUtil.getBCHTypeNumber(this.typeNumber);
+var mod;
+for (var i = 0; i < 18; i++) {
+mod = (!test && ( (bits >> i) & 1) === 1);
+this.modules[Math.floor(i / 3)][i % 3 + this.moduleCount - 8 - 3] = mod;
+}
+for (var x = 0; x < 18; x++) {
+mod = (!test && ( (bits >> x) & 1) === 1);
+this.modules[x % 3 + this.moduleCount - 8 - 3][Math.floor(x / 3)] = mod;
+}
+},
+setupTypeInfo : function(test, maskPattern) {
+var data = (this.errorCorrectLevel << 3) | maskPattern;
+var bits = QRUtil.getBCHTypeInfo(data);
+var mod;
+for (var v = 0; v < 15; v++) {
+mod = (!test && ( (bits >> v) & 1) === 1);
+if (v < 6) {
+this.modules[v][8] = mod;
+} else if (v < 8) {
+this.modules[v + 1][8] = mod;
+} else {
+this.modules[this.moduleCount - 15 + v][8] = mod;
+}
+}
+for (var h = 0; h < 15; h++) {
+mod = (!test && ( (bits >> h) & 1) === 1);
+if (h < 8) {
+this.modules[8][this.moduleCount - h - 1] = mod;
+} else if (h < 9) {
+this.modules[8][15 - h - 1 + 1] = mod;
+} else {
+this.modules[8][15 - h - 1] = mod;
+}
+}
+this.modules[this.moduleCount - 8][8] = (!test);
+},
+mapData : function(data, maskPattern) {
+var inc = -1;
+var row = this.moduleCount - 1;
+var bitIndex = 7;
+var byteIndex = 0;
+for (var col = this.moduleCount - 1; col > 0; col -= 2) {
+if (col === 6) col--;
+while (true) {
+for (var c = 0; c < 2; c++) {
+if (this.modules[row][col - c] === null) {
+var dark = false;
+if (byteIndex < data.length) {
+dark = ( ( (data[byteIndex] >>> bitIndex) & 1) === 1);
+}
+var mask = QRUtil.getMask(maskPattern, row, col - c);
+if (mask) {
+dark = !dark;
+}
+this.modules[row][col - c] = dark;
+bitIndex--;
+if (bitIndex === -1) {
+byteIndex++;
+bitIndex = 7;
+}
+}
+}
+row += inc;
+if (row < 0 || this.moduleCount <= row) {
+row -= inc;
+inc = -inc;
+break;
+}
+}
+}
+}
+};
+QRCode.PAD0 = 0xEC;
+QRCode.PAD1 = 0x11;
+QRCode.createData = function(typeNumber, errorCorrectLevel, dataList) {
+var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectLevel);
+var buffer = new QRBitBuffer();
+for (var i = 0; i < dataList.length; i++) {
+var data = dataList[i];
+buffer.put(data.mode, 4);
+buffer.put(data.getLength(), QRUtil.getLengthInBits(data.mode, typeNumber) );
+data.write(buffer);
+}
+var totalDataCount = 0;
+for (var x = 0; x < rsBlocks.length; x++) {
+totalDataCount += rsBlocks[x].dataCount;
+}
+if (buffer.getLengthInBits() > totalDataCount * 8) {
+throw new Error("code length overflow. (" + 
+buffer.getLengthInBits() + 
+">" +  
+totalDataCount * 8 + 
+")");
+}
+if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+buffer.put(0, 4);
+}
+while (buffer.getLengthInBits() % 8 !== 0) {
+buffer.putBit(false);
+}
+while (true) {
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(QRCode.PAD0, 8);
+if (buffer.getLengthInBits() >= totalDataCount * 8) {
+break;
+}
+buffer.put(QRCode.PAD1, 8);
+}
+return QRCode.createBytes(buffer, rsBlocks);
+};
+QRCode.createBytes = function(buffer, rsBlocks) {
+var offset = 0;
+var maxDcCount = 0;
+var maxEcCount = 0;
+var dcdata = new Array(rsBlocks.length);
+var ecdata = new Array(rsBlocks.length);
+for (var r = 0; r < rsBlocks.length; r++) {
+var dcCount = rsBlocks[r].dataCount;
+var ecCount = rsBlocks[r].totalCount - dcCount;
+maxDcCount = Math.max(maxDcCount, dcCount);
+maxEcCount = Math.max(maxEcCount, ecCount);
+dcdata[r] = new Array(dcCount);
+for (var i = 0; i < dcdata[r].length; i++) {
+dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+}
+offset += dcCount;
+var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+var rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+var modPoly = rawPoly.mod(rsPoly);
+ecdata[r] = new Array(rsPoly.getLength() - 1);
+for (var x = 0; x < ecdata[r].length; x++) {
+var modIndex = x + modPoly.getLength() - ecdata[r].length;
+ecdata[r][x] = (modIndex >= 0)? modPoly.get(modIndex) : 0;
+}
+}
+var totalCodeCount = 0;
+for (var y = 0; y < rsBlocks.length; y++) {
+totalCodeCount += rsBlocks[y].totalCount;
+}
+var data = new Array(totalCodeCount);
+var index = 0;
+for (var z = 0; z < maxDcCount; z++) {
+for (var s = 0; s < rsBlocks.length; s++) {
+if (z < dcdata[s].length) {
+data[index++] = dcdata[s][z];
+}
+}
+}
+for (var xx = 0; xx < maxEcCount; xx++) {
+for (var t = 0; t < rsBlocks.length; t++) {
+if (xx < ecdata[t].length) {
+data[index++] = ecdata[t][xx];
+}
+}
+}
+return data;
+};
+module.exports = QRCode;
+return module.exports;})();
+return M['index'];})();
+</script>
+<script>
+/* optional web font: non-blocking, page works fine without it (blocked/slow networks) */
+(function(){try{var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap";l.media="print";l.onload=function(){l.media="all"};l.onerror=function(){l.remove()};document.head.appendChild(l)}catch(e){}})();
+const TV={
+  sId:"{{ .sId }}",enabled:"{{ .enabled }}",isOnline:"{{ .isOnline }}",status:"",split:true,lifetime:"",created:"",
+  downloadByte:"{{ .downloadByte }}",uploadByte:"{{ .uploadByte }}",totalByte:"{{ .totalByte }}",
+  expire:"{{ .expire }}",lastOnline:"{{ .lastOnline }}",
+  subUrl:"{{ .subUrl }}",subJsonUrl:"{{ .subJsonUrl }}",subClashUrl:"{{ .subClashUrl }}",
+  subTitle:"{{ .subTitle }}",subSupportUrl:"{{ .subSupportUrl }}",
+  announce:`{{ .announce }}`,
+  links:`{{ range .links }}{{ . }}\n{{ end }}`,
+  emails:`{{ range .emails }}{{ . }}\n{{ end }}`,
+};
+/*NXT_CFG_BEGIN*/
+const CONFIG={"profileTitle":"","supportUrl":"","renewUrl":"","accent":"","logo":"","notice":""};
+/*NXT_CFG_END*/
+const $=id=>document.getElementById(id);
+const LS={g:(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeUrl=u=>{u=String(u||"").trim();return /^(https?:\/\/|tg:\/\/)/i.test(u)?u:""};
+const ic=(name,cls)=>'<svg class="i'+(cls?" "+cls:"")+'" aria-hidden="true"><use href="#i-'+name+'"/></svg>';
+const REDUCED=!!(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches);
 function toJalaliParts(gy,gm,gd){
   const g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];
   let jy=(gy<=1600)?0:979;gy-=(gy<=1600)?621:1600;
@@ -733,468 +1176,264 @@ function toJalaliParts(gy,gm,gd){
 }
 function pad2(n){return String(n).padStart(2,"0")}
 function toJalali(gy,gm,gd){const p=toJalaliParts(gy,gm,gd);return p.jy+"/"+pad2(p.jm)+"/"+pad2(p.jd)}
-function formatJalaliDateTime(v){
-  if(!v||v==="0"||v==="—"||v==="-")return"—";
-  let d=null;
-  if(/^\d+$/.test(String(v))){const n=Number(v);d=new Date(n>1e12?n:n*1000)}
-  else d=new Date(v);
-  if(!d||isNaN(d.getTime()))return String(v);
-  const date=toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
-  return date+" - "+pad2(d.getHours())+":"+pad2(d.getMinutes());
-}
-function formatLastOnline(v){return formatJalaliDateTime(v)}
-function formatExpireDate(v){
-  if(!v||v==="0"||v==="")return null;
-  let d=new Date(isNaN(v)?v:Number(v)*1000);
-  if(!d||isNaN(d.getTime())||d.getFullYear()<2000)return null;
-  return toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());
-}
-
-/* ===== Data ===== */
-
-/* ===== NexusNet CONFIG (injected by nxt-sub) ===== */
-const CONFIG={
-  profileTitle:"",
-  supportUrl:"",
-  renewUrl:"",
-};
-
-/* XUI: HTML data attrs + optional ?format=info fallback */
-const TV=(function(){
-  const d=document.getElementById("nn-data");
-  const g=k=>{if(!d)return"";const v=d.getAttribute("data-"+k);return v==null?"":String(v);};
-  const ta=id=>{const e=document.getElementById(id);return e?(e.value||e.textContent||"").trim():"";};
-  const o={
-    sId:g("sid"),
-    enabled:(g("enabled")==="true"||g("enabled")==="1")?"true":"false",
-    isOnline:(g("online")==="true"||g("online")==="1")?"true":"false",
-    downloadByte:g("down")||"0",
-    uploadByte:g("up")||"0",
-    totalByte:g("total")||"0",
-    expire:g("expire")||"0",
-    lastOnline:g("last")||"0",
-    subUrl:g("sub")||"",
-    subJsonUrl:g("json")||"",
-    subClashUrl:g("clash")||"",
-    subTitle:g("title")||"Subscription",
-    subSupportUrl:g("support")||"",
-    announce:g("announce")||"",
-    links:ta("nn-links"),
-    emails:ta("nn-emails")
-  };
-  if(typeof CONFIG!=="undefined"&&CONFIG.profileTitle&&String(CONFIG.profileTitle).trim()){
-    o.subTitle=String(CONFIG.profileTitle).trim();
-  }
-  if(!o.subUrl){try{o.subUrl=location.href.split("#")[0].split("?")[0];}catch(e){}}
-  return o;
-})();
-
-// If template injected empty traffic, hydrate from 3x-ui ?format=info
-(function hydrateInfo(){
-  const empty=!TV.downloadByte||TV.downloadByte==="0";
-  const noLinks=!TV.links||!String(TV.links).trim();
-  if(!empty&&!noLinks) return;
-  const url=(location.pathname||"/")+(location.search&&location.search.indexOf("format=")>=0?location.search:((location.search?"&":"?")+"format=info"));
-  // build clean info URL
-  let infoUrl;
-  try{
-    const u=new URL(location.href);
-    u.searchParams.set("format","info");
-    infoUrl=u.toString();
-  }catch(e){infoUrl=location.pathname+"?format=info";}
-  fetch(infoUrl,{credentials:"same-origin",headers:{"Accept":"application/json"}}).then(r=>r.ok?r.json():null).then(j=>{
-    if(!j||typeof j!=="object") return;
-    const pick=(...ks)=>{for(const k of ks){if(j[k]!=null&&j[k]!=="")return j[k];}return null;};
-    const asStr=v=>v==null?"":String(v);
-    if(pick("downloadByte","download_byte")!=null) TV.downloadByte=asStr(pick("downloadByte","download_byte"));
-    if(pick("uploadByte","upload_byte")!=null) TV.uploadByte=asStr(pick("uploadByte","upload_byte"));
-    if(pick("totalByte","total_byte")!=null) TV.totalByte=asStr(pick("totalByte","total_byte"));
-    if(pick("expire")!=null) TV.expire=asStr(pick("expire"));
-    if(pick("lastOnline","last_online")!=null) TV.lastOnline=asStr(pick("lastOnline","last_online"));
-    if(pick("sId","sid")!=null) TV.sId=asStr(pick("sId","sid"));
-    if(pick("subUrl","sub_url")!=null) TV.subUrl=asStr(pick("subUrl","sub_url"));
-    if(pick("subJsonUrl")!=null) TV.subJsonUrl=asStr(pick("subJsonUrl"));
-    if(pick("subClashUrl")!=null) TV.subClashUrl=asStr(pick("subClashUrl"));
-    if(pick("subTitle")!=null) TV.subTitle=asStr(pick("subTitle"));
-    if(pick("announce")!=null) TV.announce=asStr(pick("announce"));
-    if(pick("enabled")!=null) TV.enabled=(pick("enabled")===true||pick("enabled")==="true"||pick("enabled")===1)?"true":"false";
-    if(pick("isOnline")!=null) TV.isOnline=(pick("isOnline")===true||pick("isOnline")==="true")?"true":"false";
-    const em=pick("emails");
-    if(Array.isArray(em)) TV.emails=em.join("\n");
-    else if(em) TV.emails=asStr(em);
-    const lk=pick("links","result");
-    if(Array.isArray(lk)&&lk.length) TV.links=lk.join("\n");
-    // re-render
-    try{
-      subUrl=n(TV.subUrl,subUrl);
-      subTitle=n(TV.subTitle,subTitle);
-      links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
-      emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
-      if(typeof data==="function") data();
-      if(typeof renderTraffic==="function") renderTraffic();
-  applyMood();
-      if(typeof renderList==="function") renderList();
-      if(typeof renderQi==="function") renderQi();
-    }catch(e){}
-  }).catch(()=>{});
-})();
 const APPS=[
-  {p:"Android",i:"fa-brands fa-android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
-  {p:"iOS",i:"fa-brands fa-apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Streisand",u:"https://apps.apple.com/app/id6450534064"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"},{n:"Shadowrocket",u:"https://apps.apple.com/app/id932747118"}]},
-  {p:"Windows",i:"fa-brands fa-windows",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"v2rayN",u:"https://github.com/2dust/v2rayN/releases"}]},
-  {p:"macOS",i:"fa-brands fa-apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"}]},
-  {p:"Linux",i:"fa-brands fa-linux",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
+  {p:"Android",i:"android",a:[{n:"Happ",u:"https://play.google.com/store/apps/details?id=com.happproxy",r:1},{n:"v2rayNG",u:"https://github.com/2dust/v2rayNG/releases"},{n:"V2Box",u:"https://play.google.com/store/apps/details?id=dev.hexasoftware.v2box"},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
+  {p:"iOS",i:"apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Streisand",u:"https://apps.apple.com/app/id6450534064"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"},{n:"Shadowrocket",u:"https://apps.apple.com/app/id932747118"}]},
+  {p:"Windows",i:"windows",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"v2rayN",u:"https://github.com/2dust/v2rayN/releases"}]},
+  {p:"macOS",i:"apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"}]},
+  {p:"Linux",i:"linux",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
 ];
-const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
+const QI=[{n:"Happ",i:"bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"android",s:"v2rayng://install-config?url={E}",o:["Android"]},{n:"V2Box",i:"box-open",s:"v2box://install-sub?url={E}&title={T}",o:["Android","iOS","macOS"]}];
 const I={
-  fa:{n1:"داشبورد",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"حجم کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
-  en:{n1:"Dashboard",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
+  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
-function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}}
-function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
-let lang=lsGet("nn_lang","fa");
-let dark=(lsGet("nn_theme","dark")||"dark")==="dark";
-let latMode=localStorage.getItem("nn_lat_mode")||"auto";
-const t=k=>(I[lang]&&I[lang][k])||I.en[k]||k;
+Object.assign(I.fa,{renewSvc:"تمدید سرویس",life:"کل مصرف از ابتدا",needApp:"هنوز برنامه نصب نکرده‌ای؟",guide:"راهنمای اتصال",pingTest:"تست پینگ",
+pingNote:"پینگ مستقیماً از دستگاه تو به سرور گرفته می‌شود و فقط با زدن دکمه اجرا می‌شود. «—» یعنی قابل اندازه‌گیری نبود (لزوماً به معنی قطع بودن نیست).",
+copyLink:"کپی لینک",est:"تخمین پایان حجم",aLang:"زبان",aTheme:"تغییر تم",qr:"نمایش QR",
+st_on:"فعال",st_off:"غیرفعال",st_online:"آنلاین",st_full:"اتمام حجم",st_expired:"منقضی",st_hold:"در انتظار اولین اتصال",st_soon:"نزدیک انقضا",delayed:"از اولین اتصال",
+g1t:"چطور وصل شوم؟",g1:["از تب «برنامه‌ها» برنامه‌ی پیشنهادی را نصب کن.","دکمه‌ی «افزودن به …» را بزن؛ یا لینک اشتراک را کپی و در برنامه Import کن.","یک سرور را انتخاب کن و وصل شو."],
+g2t:"وصل نمی‌شوم؟",g2:["اشتراک را داخل برنامه Update/Refresh کن.","ساعت و تاریخ گوشی باید درست باشد.","کانفیگ دیگری را امتحان کن.","حجم یا زمان اشتراک را بررسی کن و در صورت اتمام تمدید کن.","اگر حل نشد به پشتیبانی پیام بده."],
+dayUnit:"روز",warnVolN:"حجم اشتراک رو به اتمام است",smart:"افزودن به"});
+Object.assign(I.en,{renewSvc:"Renew service",life:"Lifetime usage",needApp:"No app installed yet?",guide:"Setup guide",pingTest:"Test ping",
+pingNote:"Ping is measured directly from your device and only runs when you tap the button. “—” means it could not be measured (not necessarily down).",
+copyLink:"Copy link",est:"Est. quota end",aLang:"Language",aTheme:"Toggle theme",qr:"Show QR",
+st_on:"Active",st_off:"Inactive",st_online:"Online",st_full:"Quota full",st_expired:"Expired",st_hold:"Waiting first connect",st_soon:"Expiring soon",delayed:"from first connect",
+g1t:"How do I connect?",g1:["Install the recommended app from the Apps tab.","Tap “Add to …”, or copy the sub link and import it in the app.","Pick a server and connect."],
+g2t:"Can't connect?",g2:["Update/Refresh the subscription inside the app.","Your phone's date and time must be correct.","Try another config.","Check quota and expiry; renew if needed.","Still stuck? Message support."],
+dayUnit:"days",warnVolN:"Data quota is running low",smart:"Add to"});
+let lang=LS.g("nn_lang","fa");if(!I[lang])lang="fa";
+let dark=LS.g("nn_theme","dark")==="dark";
+const t=k=>{const v=(I[lang]&&I[lang][k]);return v!=null?v:(I.en[k]!=null?I.en[k]:k)};
 const n=(v,d)=>v==null||v===""?d:v;
-const num=v=>{const x=parseFloat(String(v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
-const esc=s=>{const d=document.createElement("div");d.textContent=s==null?"":String(s);return d.innerHTML;};
-const bytes=b=>{if(b<=0)return"0 B";const u=["B","KB","MB","GB","TB"];let i=0;while(b>=1024&&i<u.length-1){b/=1024;i++}return b.toFixed(i?1:0)+" "+u[i]};
+const num=v=>{const x=parseFloat(String(v==null?"":v).replace(/[^\d.-]/g,""));return isNaN(x)?0:x};
+const bytes=b=>{if(!(b>0))return"0 B";const u=["B","KB","MB","GB","TB"];let i=0;while(b>=1024&&i<u.length-1){b/=1024;i++}return b.toFixed(i?1:0)+" "+u[i]};
 const plat=()=>{const ua=(navigator.userAgent||"").toLowerCase(),p=(navigator.platform||"").toLowerCase();
-  if(/android/.test(ua))return"Android";if(/iphone|ipad|ipod/.test(ua))return"iOS";
-  if(/win/.test(p)||/windows/.test(ua))return"Windows";if(/mac/.test(p)&&!/iphone|ipad/.test(ua))return"macOS";
-  if(/linux/.test(p)||/linux/.test(ua))return"Linux";return""};
-const CIRC=314.16;
-let subUrl=n(TV.subUrl,location.href.split("?")[0]);
-let subTitle=n(TV.subTitle,"Subscription");
-let links=n(TV.links,"").split(/\r?\n/).filter(Boolean);
-let emails=n(TV.emails,"").split(/[,\s]+/).filter(Boolean);
+  if(/android/.test(ua))return"Android";if(/iphone|ipad|ipod/.test(ua)||(p==="macintel"&&navigator.maxTouchPoints>1))return"iOS";
+  if(/win/.test(p)||/windows/.test(ua))return"Windows";if(/mac/.test(p))return"macOS";if(/linux/.test(p)||/linux/.test(ua))return"Linux";return""};
+const CIRC=320.44;
+const subUrl=n(TV.subUrl,location.href.split("?")[0]);
+const subTitle=(String(CONFIG.profileTitle||"").trim())||n(TV.subTitle,"Subscription");
+const links=String(n(TV.links,"")).split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+const emails=String(n(TV.emails,"")).split(/[,\s]+/).filter(Boolean);
+const SPLIT=TV.split!==false;
 
-function countryLabel(code){const c=COUNTRY[code];return c?(lang==="fa"?c.fa:c.en):code}
+/* ---------- dates ---------- */
+function pdate(v){
+  if(v==null)return null;const s=String(v).trim();if(!s||s==="0"||s==="—"||s==="-")return null;let d;
+  if(/^-?\d+(\.\d+)?$/.test(s)){const x=Number(s);if(x<=0)return null;d=new Date(Math.abs(x)>1e11?x:x*1000)}
+  else d=new Date(/T/.test(s)&&!/(Z|[+-]\d{2}:?\d{2})$/i.test(s)?s+"Z":s);
+  return isNaN(d.getTime())||d.getFullYear()<2000?null:d}
+function fmtJ(d){return toJalali(d.getFullYear(),d.getMonth()+1,d.getDate())}
+function fmtJT(v){const d=pdate(v);return d?fmtJ(d)+" - "+pad2(d.getHours())+":"+pad2(d.getMinutes()):"—"}
+function expInfo(){
+  const raw=String(n(TV.expire,"")).trim();if(!raw||raw==="0")return{k:"none"};
+  if(/^-\d/.test(raw)){const x=Math.abs(Number(raw));const ms=x>1e8?x:x*1000;return{k:"delayed",days:Math.round(ms/864e5)}}
+  const d=pdate(raw);return d?{k:"date",d,ms:d.getTime()}:{k:"none"}}
+function isOnline(){const o=String(n(TV.isOnline,""));if(o==="true"||o==="1")return true;const d=pdate(TV.lastOnline);return !!d&&Date.now()-d.getTime()<120000}
+function calcStatus(){
+  const tot=num(TV.totalByte),used=num(TV.downloadByte)+num(TV.uploadByte),e=expInfo(),st=String(TV.status||"").toLowerCase(),en=String(n(TV.enabled,"true"));
+  let k="ok",key="on";
+  if(st==="limited"||(tot>0&&used>=tot)){k="bad";key="full"}
+  else if(st==="expired"||(e.k==="date"&&e.ms<Date.now())){k="bad";key="expired"}
+  else if(st==="disabled"||(!st&&(en==="false"||en==="0"))){k="bad";key="off"}
+  else if(st==="on_hold"){k="wn";key="hold"}
+  else if(e.k==="date"&&(e.ms-Date.now())/864e5<=7){k="wn";key="soon"}
+  else if(isOnline())key="online";
+  return{k,key,text:t("st_"+key)}}
 
-function uiLang(){
-  document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
-  const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  ["n1","n2","n3","n4"].forEach((id,i)=>set(id,t(["n1","n2","n3","n4"][i])));
-  set("sUsed",t("used"));set("sTotal",t("total")||(lang==="fa"?"حجم کل":"Total"));set("sLimit",t("limit"));set("sLeft",t("left"));
-  set("sDown",t("down"));set("sUp",t("up"));
-  set("pTotal",t("total"));
-  set("tCopy",t("copy"));set("tQi",t("qi"));set("tCfg",t("cfg"));
-  set("tAll",t("all"));set("tApps",t("apps"));set("tProf",t("prof"));
-  set("lTraffic",lang==="fa"?"باقی‌مانده":"Left");
-  set("tExp",t("exp"));set("tPeriod",t("period"));
-  set("lDay",t("day"));set("lHour",t("hour"));set("lMin",t("min"));
-  ["p1","p2","p3","p5","p6"].forEach(id=>set(id,t(id)));
-  set("tHomeRenew",t("renew"));set("tRenew",t("renew"));set("tSupport",t("support"));
-  lsSet("nn_lang",lang);
-  try{data();}catch(e){}
-}
-function uiTheme(){
-  document.documentElement.setAttribute("data-theme",dark?"dark":"light");
-  document.getElementById("themeBtn").innerHTML=dark?'<i class="fa-solid fa-sun"></i>':'<i class="fa-solid fa-moon"></i>';
-  lsSet("nn_theme",dark?"dark":"light");
-}
+/* ---------- liquid glass ---------- */
+const LQ={cur:0,tgt:0,unl:false,t:0,run:false,vis:true,tilt:0,skip:0};
+function wavePath(y,amp,ph,k,tilt){let d="M -4 "+(y+tilt*(-64)/60).toFixed(2);
+  for(let x=-4;x<=124;x+=4)d+=" L "+x+" "+(y-tilt*(x-60)/60+Math.sin((x/120)*Math.PI*2*k+ph)*amp).toFixed(2);
+  return d+" L 124 130 L -4 130 Z"}
+function lqDraw(){
+  const p=LQ.cur,y=103-86*p/100,A=(LQ.unl?3.4:2.4)*Math.min(1,p/10);
+  const wt=$("waveT"),wb=$("waveB"),dm=$("domeT");if(!wt)return;
+  if(p<=0.3){wt.setAttribute("d","");wb.setAttribute("d","")}
+  else{wt.setAttribute("d",wavePath(y,A,LQ.t,1,LQ.tilt));wb.setAttribute("d",wavePath(y+1.2,A*.8,LQ.t*1.35+2.1,1.6,LQ.tilt))}
+  if(LQ.unl){const ov=Math.pow(Math.max(0,Math.sin(LQ.t*.7)),2)*7;
+    dm.setAttribute("d",ov>.25?"M 48.6 18.5 C 52 "+(18.5-ov*1.6).toFixed(2)+" 68 "+(18.5-ov*1.6).toFixed(2)+" 71.4 18.5 Z":"")}
+  else dm.setAttribute("d","")}
+function lqFrame(){
+  if(!LQ.vis||document.hidden){LQ.run=false;return}
+  LQ.t+=0.05;LQ.skip^=1;
+  if(LQ.skip&&!REDUCED){requestAnimationFrame(lqFrame);return}
+  LQ.cur=REDUCED?LQ.tgt:LQ.cur+(LQ.tgt-LQ.cur)*0.07;
+  if(Math.abs(LQ.tgt-LQ.cur)<0.05)LQ.cur=LQ.tgt;
+  lqDraw();
+  if(REDUCED&&LQ.cur===LQ.tgt){LQ.run=false;return}
+  requestAnimationFrame(lqFrame)}
+function lqStart(){if(LQ.run||!LQ.vis||document.hidden)return;LQ.run=true;requestAnimationFrame(lqFrame)}
+function lqSet(p,unl){LQ.tgt=unl?100:p;LQ.unl=unl;lqStart()}
+(function(){
+  const w=$("ringWrap");
+  if("IntersectionObserver"in window&&w)new IntersectionObserver(es=>{LQ.vis=es[0].isIntersecting;if(LQ.vis)lqStart()}).observe(w);
+  document.addEventListener("visibilitychange",lqStart);
+  if(!REDUCED&&window.DeviceOrientationEvent&&typeof DeviceOrientationEvent.requestPermission!=="function")
+    addEventListener("deviceorientation",e=>{const g=Math.max(-1,Math.min(1,(e.gamma||0)/30))*5;LQ.tilt+=(g-LQ.tilt)*.15},{passive:true});
+})();
+function levelColors(rem,unl){
+  const w=$("ringWrap");if(!w)return;
+  let a="#67e8f9",b="#06b6d4";
+  if(!unl&&rem<15){a="#fca5a5";b="#ef4444"}else if(!unl&&rem<40){a="#fde68a";b="#f59e0b"}
+  w.style.setProperty("--l1",a);w.style.setProperty("--l2",b);
+  document.documentElement.style.setProperty("--l1",a);document.documentElement.style.setProperty("--l2",b);
+  $("bubs").parentNode.parentNode.classList.toggle("nobub",!(unl||rem>=55))}
 
-/* usage period: client-side samples in localStorage */
+/* ---------- render ---------- */
 function renderTraffic(){
-  try{
-    const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
-    const used=rawD+rawU;
-    const noLimit=!tot||tot<=0;
-    const left=noLimit?0:Math.max(0,tot-used);
-    const remPct=noLimit?80:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
-    const el=id=>document.getElementById(id);
-    const setTxt=(id,v)=>{const e=el(id);if(e)e.textContent=v;};
-    setTxt("down",bytes(rawD));
-    setTxt("up",bytes(rawU));
-    setTxt("used",bytes(used));
-    setTxt("left",noLimit?"∞":bytes(left));
-    setTxt("total",noLimit?"∞":bytes(tot));
-    setTxt("pctT",noLimit?"∞":(remPct+"%"));
-    window.__pctT=remPct;
-    
-    const bar=el("bar");
-    if(bar&&bar.style) bar.style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
-    const w=el("liqWater");
-    if(w){
-      const pct=Math.max(8, remPct)+"%";
-      try{ if(w.style&&typeof w.style.setProperty==="function") w.style.setProperty("--pct",pct); }catch(_e){}
-      try{ w.style.height=pct; }catch(_e){}
-      const ball=w.parentElement;
-      if(ball){ if(noLimit||remPct>=78) ball.classList.add("overflowing"); else ball.classList.remove("overflowing"); }
-    }
-  }catch(e){ try{console.error("renderTraffic",e);}catch(_e){} }
-}
-
-
-function subIdFromUrl(){
-  try{
-    const href=n(TV.subUrl,"")||location.href;
-    const u=new URL(href, location.origin);
-    const parts=u.pathname.split("/").filter(Boolean);
-    // .../sub/XXXX or /sub/XXXX/extra
-    const i=parts.findIndex(p=>p.toLowerCase()==="sub");
-    if(i>=0 && parts[i+1]) return decodeURIComponent(parts[i+1]);
-    if(parts.length) return decodeURIComponent(parts[parts.length-1]);
-  }catch(e){}
-  return n(TV.sId,"—")||"—";
-}
-
-
-function applyMood(){
-  try{
-    const tot=num(TV.totalByte)||0;
-    const used=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const last=num(TV.lastOnline);
-    const en=String(n(TV.enabled,"true")).toLowerCase();
-    let mood="ok";
-    if(en==="false"||en==="0"||en==="disabled"||en==="expired") mood="bad";
-    else if(tot>0 && used>=tot) mood="bad";
-    else {
-      var expMs=0, raw=TV.expire;
-      if(raw!=null && raw!=="" && raw!=="0"){
-        if(/^\d+(\.\d+)?$/.test(String(raw).trim())){
-          var nx=Number(raw); expMs=nx<1e12?nx*1000:nx;
-        } else {
-          var dd=new Date(raw); if(!isNaN(dd.getTime())) expMs=dd.getTime();
-        }
-      }
-      if(expMs>0){
-        if(expMs<Date.now()) mood="bad";
-        else if((expMs-Date.now())/86400000<=7) mood="warn";
-      }
-    }
-    if(mood==="ok" && tot>0){
-      var left=Math.max(0,tot-used);
-      if(left/tot<=0.15) mood="warn";
-    }
-    if(mood==="ok" && (!last || last===0) && used<=0) mood="fresh";
-    document.body.setAttribute("data-mood", mood);
-  }catch(e){ document.body.setAttribute("data-mood","ok"); }
-}
-
+  const d=num(TV.downloadByte),u=num(TV.uploadByte),tot=num(TV.totalByte),used=d+u,unl=tot<=0,left=unl?0:Math.max(0,tot-used);
+  const rem=unl?100:Math.max(0,Math.min(100,left/tot*100));
+  $("limit").textContent=unl?"∞":bytes(tot);$("used").textContent=bytes(used);$("left").textContent=unl?"∞":bytes(left);
+  $("cDown").style.display=$("cUp").style.display=SPLIT?"":"none";
+  $("down").textContent=bytes(d);$("up").textContent=bytes(u);
+  const lf=num(TV.lifetime);$("cLife").style.display=(!SPLIT&&lf>0)?"":"none";$("life").textContent=bytes(lf);
+  $("pctT").textContent=unl?"∞":(rem>0&&rem<1?"<1":Math.round(rem))+(unl?"":"%");
+  $("lTraffic").textContent=unl?t("unl"):t("left");
+  $("rTraffic").style.strokeDashoffset=String(CIRC*(1-rem/100));
+  $("bar").style.width=rem+"%";
+  levelColors(rem,unl);lqSet(rem,unl)}
+function renderStatus(){
+  const s=calcStatus(),b=$("badge");b.className="badge "+s.k;$("badgeTxt").textContent=s.text;$("statusDot").className="dot"+(s.k==="ok"?"":" "+s.k);return s}
 function data(){
-  const _tEl=document.getElementById("title");if(_tEl)_tEl.textContent=subTitle;
-
-  // warnings + formats + support (v2.1)
-  try{
-    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const wv=document.getElementById("warnVol"), we=document.getElementById("warnExp");
-    if(wv){var _wvt=document.getElementById("warnVolTxt");if(totB>0&&usedB/totB>=0.8){var _wtx=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)";if(_wvt)_wvt.textContent=_wtx;if(_wtx&&_wtx.replace(/\s/g,""))wv.classList.add("show");else wv.classList.remove("show");}else{wv.classList.remove("show");if(_wvt)_wvt.textContent="";}}
-    if(we){
-      const exp=num(TV.expire); let showE=false;
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
-      if(showE) we.classList.add("show"); else we.classList.remove("show");
-    }
-  }catch(e){}
-  const jsonU=n(TV.subJsonUrl,""), clashU=n(TV.subClashUrl,"");
-  const bJson=document.getElementById("btnFmtJson"), bClash=document.getElementById("btnFmtClash");
-  if(bJson){ if(jsonU){ bJson.classList.remove("hid"); bJson.textContent=t("fmtJson"); } else bJson.classList.add("hid"); }
-  if(bClash){ if(clashU){ bClash.classList.remove("hid"); bClash.textContent=t("fmtClash"); } else bClash.classList.add("hid"); }
-  const sup=n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
-  const ren=n(CONFIG.renewUrl,"")||sup;
-  const br=document.getElementById("btnRenew"), bs=document.getElementById("btnSupport");
-  if(br){ if(ren){ br.style.display=""; br.href=ren; const tr=document.getElementById("tRenew"); if(tr) tr.textContent=t("renew"); } else br.style.display="none"; }
-  if(bs){ if(sup){ bs.style.display=""; bs.href=sup; const ts=document.getElementById("tSupport"); if(ts) ts.textContent=t("support"); } else bs.style.display="none"; }
-
-  document.getElementById("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
-
-  // clearer status
-  let st="ok", stTxt=t("on");
-  try{
-    const totB=num(TV.totalByte)||0, usedB=(num(TV.downloadByte)||0)+(num(TV.uploadByte)||0);
-    const exp=num(TV.expire);
-    const en=n(TV.enabled,"true");
-    if(en==="false"||en==="0"){ st="bad"; stTxt=t("off"); }
-    else if(totB>0 && usedB>=totB){ st="bad"; stTxt=lang==="fa"?"اتمام حجم":"Quota full"; }
-    else if(exp){ const ms=exp<1e12?exp*1000:exp; if(ms<Date.now()){ st="bad"; stTxt=lang==="fa"?"منقضی":"Expired"; }
-      else if((ms-Date.now())/86400000<=7){ st="wn"; stTxt=lang==="fa"?"نزدیک انقضا":"Expiring"; }
-    }
-    if(st==="ok" && (n(TV.isOnline,"")==="true"||n(TV.isOnline,"")==="1")) stTxt=t("online");
-    const badge=document.getElementById("badge"), bt=document.getElementById("badgeTxt");
-    if(badge){ badge.className="badge "+(st==="ok"?"ok":st==="wn"?"wn":"bad"); }
-    if(bt) bt.textContent=stTxt;
-    const dot=document.getElementById("statusDot");
-    if(dot) dot.className=(st==="bad")?"dot off":"dot";
-    const hr=document.getElementById("homeRenew"), bhr=document.getElementById("btnHomeRenew");
-    const ren=n(CONFIG.renewUrl,"")||n(CONFIG.supportUrl,"")||n(TV.subSupportUrl,"");
-    let needRenew=false;
-    if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7) needRenew=true; }
-    if(totB>0 && usedB/totB>=0.85) needRenew=true;
-    if(hr&&bhr){ if(needRenew&&ren){ hr.classList.add("show"); bhr.href=ren; const th=document.getElementById("tHomeRenew"); if(th) th.textContent=t("renew"); } else hr.classList.remove("show"); }
-  }catch(e){}
-
-  // status already set above — only update statusDot
-  try{
-    const badge=document.getElementById("badge"),dot=document.getElementById("statusDot");
-    if(dot&&badge){
-      if(badge.classList.contains("bad")) dot.className="dot off";
-      else dot.className="dot";
-    }
-  }catch(e){}
+  document.title=subTitle;$("title").textContent=subTitle;
+  const tot=num(TV.totalByte),used=num(TV.downloadByte)+num(TV.uploadByte),e=expInfo(),s=renderStatus();
+  const wv=$("warnVol");if(tot>0&&used/tot>=.8&&used<tot){wv.classList.add("show");$("warnVolTxt").textContent=t("warnVolN")+" ("+Math.round(used/tot*100)+"%)"}else wv.classList.remove("show");
+  const we=$("warnExp"),dl=e.k==="date"?(e.ms-Date.now())/864e5:-1;
+  if(dl>=0&&dl<=3){we.classList.add("show");$("warnExpTxt").textContent=t("st_soon")+" ("+Math.ceil(dl)+" "+t("dayUnit")+")"}else we.classList.remove("show");
+  const sup=safeUrl(CONFIG.supportUrl)||safeUrl(TV.subSupportUrl),ren=safeUrl(CONFIG.renewUrl)||sup;
+  const br=$("btnRenew"),bs=$("btnSupport");
+  if(ren){br.style.display="";br.href=ren}else br.style.display="none";
+  if(sup){bs.style.display="";bs.href=sup}else bs.style.display="none";
+  const hr=$("homeRenew");let need=s.k==="bad"||s.key==="soon"||(tot>0&&used/tot>=.85);
+  if(need&&ren){hr.classList.add("show");$("btnHomeRenew").href=ren}else hr.classList.remove("show");
+  $("userLine").textContent=emails[0]||("ID "+n(TV.sId,"—"));
   renderTraffic();
+  if(e.k==="date"){const diff=Math.max(0,e.ms-Date.now());
+    $("expD").textContent=Math.floor(diff/864e5);$("expH").textContent=pad2(Math.floor((diff%864e5)/36e5));$("expM").textContent=pad2(Math.floor((diff%36e5)/6e4));
+    $("expTag").textContent=fmtJ(e.d);$("pv5").textContent=fmtJ(e.d)}
+  else if(e.k==="delayed"){["expD","expH","expM"].forEach(i=>$(i).textContent="—");$("expD").textContent=e.days;
+    $("expTag").textContent=t("delayed");$("pv5").textContent=e.days+" "+t("dayUnit")+" "+t("delayed")}
+  else{["expD","expH","expM"].forEach(i=>$(i).textContent="∞");$("expTag").textContent=t("unl");$("pv5").textContent=t("unl")}
+  $("pv1").textContent=emails[0]||"—";$("pv2").textContent=n(TV.sId,"—");$("pv3").textContent=s.text;$("pv6").textContent=fmtJT(TV.lastOnline);
+  const cr=pdate(TV.created),re=$("rowEst");
+  if(cr&&tot>0&&used>0&&used<tot){const days=Math.max(1,(Date.now()-cr.getTime())/864e5),est=Math.floor((tot-used)/(used/days));
+    re.style.display="";$("pv7").textContent="≈ "+est+" "+t("dayUnit")}else re.style.display="none";
+  const an=String(n(TV.announce,"")).trim()||String(CONFIG.notice||"").trim(),a=$("ann");
+  if(an){a.classList.add("show");$("annTxt").textContent=an}else a.classList.remove("show");
+  const jU=safeUrl(TV.subJsonUrl),cU=safeUrl(TV.subClashUrl);
+  $("btnFmtJson").classList.toggle("hid",!jU);$("btnFmtClash").classList.toggle("hid",!cU);
+  $("btnFmtJson").textContent=t("fmtJson");$("btnFmtClash").textContent=t("fmtClash")}
 
-  // expiry timer (precise)
-  let hasExp=false,expDate=null;
-  if(TV.expire&&TV.expire!=="0"&&TV.expire!==""){
-    expDate=new Date(isNaN(TV.expire)?TV.expire:Number(TV.expire)*1000);
-    if(!isNaN(expDate)&&expDate.getFullYear()>2000) hasExp=true;
-  }
-  if(hasExp){
-    const diff=Math.max(0,expDate-Date.now());
-    const dd=Math.floor(diff/864e5),hh=Math.floor((diff%864e5)/36e5),mm=Math.floor((diff%36e5)/6e4);
-    const _sx=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-    _sx("expD",String(dd));
-    _sx("expH",String(hh).padStart(2,"0"));
-    _sx("expM",String(mm).padStart(2,"0"));
-    _sx("expTag",toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate()));
-    _sx("pv5",toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate()));
-  }else{
-    const _sx=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-    _sx("expD","∞");_sx("expH","∞");_sx("expM","∞");_sx("expTag",t("unl"));_sx("pv5",t("unl"));
-  }
+function toast(m){const el=$("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
+function copy(txt){const ok=()=>toast(t("ok"));
+  const fb=()=>{const a=document.createElement("textarea");a.value=txt;a.style.cssText="position:fixed;opacity:0";document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}document.body.removeChild(a);ok()};
+  if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(txt).then(ok).catch(fb);else fb()}
+function qrSvg(text){
+  const s=unescape(encodeURIComponent(text));let q=null;
+  for(let v=1;v<=40&&!q;v++){try{const c=new QRC(v,0);c.addData(s);c.make();q=c}catch(e){q=null}}
+  if(!q)return null;const c=q.getModuleCount(),m=3;let d="";
+  for(let r=0;r<c;r++)for(let x=0;x<c;x++)if(q.isDark(r,x))d+="M"+(x+m)+" "+(r+m)+"h1v1h-1z";
+  const z=c+2*m;return'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 '+z+" "+z+'" shape-rendering="crispEdges"><rect width="'+z+'" height="'+z+'" fill="#fff"/><path d="'+d+'" fill="#000"/></svg>'}
+function qr(txt){const svg=qrSvg(txt);if(!svg){toast("QR: too long");return}window.__lastQr=txt;$("qr").innerHTML=svg;$("md").classList.add("open")}
+function closeQr(){$("md").classList.remove("open")}
 
-  const _setp=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
-  _setp("pv1",emails[0]||"—");
-  _setp("pv2",subIdFromUrl());
-  _setp("pv3",stTxt);
-  _setp("pv6",formatLastOnline(TV.lastOnline));
-  if(TV.announce){const ann=document.getElementById("ann");const at=document.getElementById("annTxt");if(ann&&at){at.textContent=TV.announce;ann.dataset.has="1";const home=document.getElementById("tab-home");ann.style.display=(home&&home.classList.contains("on"))?"flex":"none";}}else{const ann=document.getElementById("ann");if(ann){ann.dataset.has="0";ann.style.display="none";}}
+function renderQi(){
+  const U=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle),cur=plat();
+  const ok=QI.filter(q=>!cur||!q.o||q.o.indexOf(cur)>-1);
+  const mk=q=>q.s.replace("{U}",U).replace("{E}",U).replace("{T}",T);
+  const sm=$("btnSmart");
+  if(ok.length){const f=ok[0];sm.style.display="";sm.href=mk(f);sm.innerHTML=ic(f.i)+" "+esc(t("smart"))+" "+esc(f.n)}else sm.style.display="none";
+  $("qi").innerHTML=ok.slice(1).map(q=>'<a href="'+esc(mk(q))+'">'+ic(q.i)+" "+esc(q.n)+"</a>").join("")}
+function guideHtml(tk,ik,icon,open){return'<details class="gd"'+(open?" open":"")+"><summary>"+ic(icon)+esc(t(tk))+"</summary><"+(ik==="g1"?"ol":"ul")+">"+t(ik).map(x=>"<li>"+esc(x)+"</li>").join("")+"</"+(ik==="g1"?"ol":"ul")+"></details>"}
+function renderGuide(){$("guide").innerHTML=guideHtml("g1t","g1","wand-magic-sparkles",false)+guideHtml("g2t","g2","screwdriver-wrench",false)}
 
-  try{applyMood();}catch(e){}
-}
-function toast(m){const el=document.getElementById("toast");el.textContent=m;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),1600)}
-function copy(txt){navigator.clipboard.writeText(txt).then(()=>toast(t("ok"))).catch(()=>{const a=document.createElement("textarea");a.value=txt;document.body.appendChild(a);a.select();document.execCommand("copy");document.body.removeChild(a);toast(t("ok"))})}
-function qr(txt){ window.__lastQr=txt;const box=document.getElementById("qr");box.innerHTML="";new QRCode(box,{text:txt,width:180,height:180,correctLevel:QRCode.CorrectLevel.M});document.getElementById("md").classList.add("open")}
-function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
-  document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
-function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
-  const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
-
-function detectCC(name){
-  const s=String(name||"");
-  for(const em in FLAG_MAP){ if(s.indexOf(em)>=0) return FLAG_MAP[em]; }
-  const u=s.toUpperCase();
-  const codes=Object.keys(COUNTRY||{});
-  for(const c of codes){ if(new RegExp("(?:^|[^A-Z])"+c+"(?:[^A-Z]|$)").test(u)) return c; }
-  for(const c of codes){
-    const fa=(COUNTRY[c].fa||""), en=(COUNTRY[c].en||"");
-    if(fa&&s.indexOf(fa)>=0) return c;
-    if(en&&u.indexOf(en.toUpperCase())>=0) return c;
-  }
-  return "";
-}
-function renderLocCards(){var r=document.getElementById("locRow");if(r){r.innerHTML="";r.style.display="none";}}
-
-function renderList(){const box=document.getElementById("list");if(!box)return;
-  if((!links||!links.length)&&TV&&TV.links){links=String(TV.links).split(/\r?\n/).filter(Boolean);}
-  if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
-  box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${esc(nameOf(l))}</div>
-    <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
-    <button class="mb" type="button" data-q="${i}"><i class="fa-solid fa-qrcode"></i></button></div>`).join("");
+function nameOf(link){try{
+  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return j.ps||j.add||"vmess"}
+  const h=link.indexOf("#");if(h>-1)return decodeURIComponent(link.slice(h+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
+function parseLink(l){
+  const proto=(l.split("://")[0]||"").toLowerCase();let net="",sec="";
+  try{if(proto==="vmess"){const j=JSON.parse(atob(l.slice(8).replace(/-/g,"+").replace(/_/g,"/")));net=j.net||"";sec=j.tls||""}
+  else{const p=new URLSearchParams((l.split("?")[1]||"").split("#")[0]);net=p.get("type")||"";sec=p.get("security")||""}}catch(e){}
+  return{proto,net,sec}}
+const latKey=h=>h.host?h.host+":"+h.port:"";
+const pingMap={};
+function renderList(){
+  const box=$("list");
+  if(!links.length){box.innerHTML='<div class="card" style="text-align:center;color:var(--mu)">'+esc(t("none"))+"</div>";return}
+  box.innerHTML=links.map((l,i)=>{
+    const m=parseLink(l),k=latKey(extractHost(l)),tags=[m.proto,m.net&&m.net!=="tcp"?m.net:"",m.sec&&m.sec!=="none"?m.sec:""].filter(Boolean).map(x=>'<span class="tag">'+esc(x.toUpperCase())+"</span>").join("");
+    const pv=pingMap[k],pc=pingClass(pv);
+    return'<div class="item"><div class="meta"><div class="n">'+esc(nameOf(l))+'</div><div class="tags">'+tags+'</div></div><span class="ping '+pc+'" data-k="'+esc(k)+'">'+(pv==null?"—":pv+" ms")+'</span>'
+      +'<button class="mb" type="button" data-c="'+i+'" aria-label="'+esc(t("copy"))+'">'+ic("copy")+'</button><button class="mb" type="button" data-q="'+i+'" aria-label="'+esc(t("qr"))+'">'+ic("qrcode")+"</button></div>"}).join("");
   box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
-  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]));
-  try{renderLocCards();}catch(e){}
-}
-function renderApps(){
-  const cur=plat();
-  const order=["iOS","Android","Windows","macOS","Linux"];
-  const sorted=[...APPS].sort((a,b)=>{
-    if(a.p===cur) return -1;
-    if(b.p===cur) return 1;
-    return order.indexOf(a.p)-order.indexOf(b.p);
-  });
-  const box=document.getElementById("apps");
-  if(!box) return;
-  box.innerHTML=sorted.map(g=>{
-    const isCur=g.p===cur;
-    const hot=isCur?" hot":"";
-    const collapsed=isCur?"":" collapsed";
-    const body=g.a.map(a=>{
-      const cls=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"").slice(0,10);
-      const letter=String(a.n).slice(0,1).toUpperCase();
-      return `<a class="al" href="${a.u}" target="_blank" rel="noopener"><span class="app-badge ${cls}">${letter}</span><span>${a.n}</span>${a.r?'<span class="t">REC</span>':""}<span class="d"><i class="fa-solid fa-arrow-up-right-from-square"></i></span></a>`;
-    }).join("");
-    return `<div class="grp${hot}${collapsed}" data-plat="${g.p}"><h4 type="button"><i class="${g.i}"></i> ${g.p}${isCur?' <span class="t">★</span>':""}<i class="fa-solid fa-chevron-down chev"></i></h4><div class="grp-body">${body}</div></div>`;
-  }).join("");
-  box.querySelectorAll(".grp > h4").forEach(h=>{
-    h.onclick=()=>{ h.parentElement.classList.toggle("collapsed"); };
-  });
-}
+  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]))}
+function renderApps(){const cur=plat();
+  $("apps").innerHTML=APPS.map(g=>{const hot=g.p===cur;
+    return'<div class="grp'+(hot?" hot":"")+'"><h4>'+ic(g.i)+" "+esc(g.p)+(hot?' <span class="t" style="color:var(--p)">★</span>':"")+"</h4>"
+    +g.a.map(a=>{let c=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"");c=({v2rayng:"v2ray",v2rayn:"v2ray",shadowrocket:"shadow"})[c]||c;
+      return'<a class="al" href="'+esc(a.u)+'" target="_blank" rel="noopener"><span class="app-badge '+esc(c)+'">'+esc(String(a.n).slice(0,1).toUpperCase())+"</span><span>"+esc(a.n)+"</span>"+(a.r?'<span class="t">REC</span>':"")+'<span class="d">'+ic("arrow-up-right-from-square")+"</span></a>"}).join("")+"</div>"}).join("")}
+
+/* ---------- ping (manual only, no img/http probes) ---------- */
 function extractHost(link){try{
   if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
   if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
   const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
   const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
 }catch(e){}return{host:"",port:443,name:nameOf(link)}}
+function pingClass(ms){return ms==null?"wait":ms<120?"good":ms<280?"mid":"bad"}
+function measureFetch(h,ms){return new Promise(res=>{
+  const t0=performance.now(),c=window.AbortController?new AbortController():null,tm=setTimeout(()=>{try{c&&c.abort()}catch(e){}res(null)},ms);
+  fetch("https://"+h.host+(h.port&&+h.port!==443?":"+h.port:"")+"/",{mode:"no-cors",cache:"no-store",credentials:"omit",signal:c?c.signal:undefined})
+    .then(()=>{clearTimeout(tm);res(Math.round(performance.now()-t0))}).catch(()=>{clearTimeout(tm);res(null)})})}
+function measureWS(h,ms){return new Promise(res=>{
+  const t0=performance.now();let ws,done=false;
+  const fin=v=>{if(done)return;done=true;clearTimeout(tm);try{ws&&ws.close()}catch(e){}res(v)},tm=setTimeout(()=>fin(null),ms);
+  try{ws=new WebSocket("wss://"+h.host+(h.port&&+h.port!==443?":"+h.port:"")+"/");ws.onopen=()=>fin(Math.round(performance.now()-t0));ws.onerror=()=>fin(null)}catch(e){fin(null)}})}
+async function measureOne(h){let v=await measureFetch(h,2500);if(v==null)v=await measureWS(h,2000);return v}
+let latRunning=false;
+async function runLatency(){
+  if(latRunning)return;latRunning=true;const btn=$("btnLat");btn.classList.add("spin");
+  const uniq={};links.forEach(l=>{const h=extractHost(l),k=latKey(h);if(k)uniq[k]=h});
+  const keys=Object.keys(uniq);keys.forEach(k=>{pingMap[k]=null});renderList();
+  const q=keys.slice();
+  await Promise.all(Array.from({length:Math.min(4,q.length)},async()=>{while(q.length){const k=q.shift();const v=await measureOne(uniq[k]);pingMap[k]=v;
+    document.querySelectorAll('.ping[data-k="'+(window.CSS&&CSS.escape?CSS.escape(k):k)+'"]').forEach(el=>{el.textContent=v==null?"—":v+" ms";el.className="ping "+pingClass(v)})}}));
+  $("latUpdated").textContent=t("pingTest")+": "+new Date().toLocaleTimeString();
+  btn.classList.remove("spin");latRunning=false}
 
-/* Events */
-document.getElementById("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
-document.getElementById("langBtn").onclick=e=>{e.stopPropagation();document.getElementById("lw").classList.toggle("open")};
-document.querySelectorAll(".ld button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;uiLang();document.getElementById("lw").classList.remove("open")});
-document.addEventListener("click",()=>document.getElementById("lw").classList.remove("open"));
-document.querySelectorAll(".nav button").forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll(".nav button").forEach(x=>x.classList.remove("on"));
-    document.querySelectorAll(".tab").forEach(x=>x.classList.remove("on"));
-    btn.classList.add("on");
-    const tab=document.getElementById("tab-"+btn.dataset.t);
-    if(tab) tab.classList.add("on");
-    const ann=document.getElementById("ann");
-    if(ann){ ann.style.display=(btn.dataset.t==="home" && ann.dataset.has==="1")?"flex":"none"; }
-    requestAnimationFrame(()=>{window.scrollTo(0,0)});
-  };
-});
-document.getElementById("btnCopy").onclick=()=>copy(subUrl);
-document.getElementById("btnQr").onclick=()=>qr(subUrl);
-document.getElementById("btnAll").onclick=()=>copy(links.join("\n"));
+/* ---------- i18n / theme / events ---------- */
+function uiLang(){
+  document.documentElement.lang=lang;document.documentElement.dir=lang==="fa"?"rtl":"ltr";
+  document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=t(el.dataset.i18n));
+  document.querySelectorAll("[data-al]").forEach(el=>el.setAttribute("aria-label",t(el.dataset.al)));
+  LS.s("nn_lang",lang);data();renderQi();renderGuide();renderList()}
+function uiTheme(){document.documentElement.setAttribute("data-theme",dark?"dark":"light");$("themeBtn").innerHTML=ic(dark?"sun":"moon");LS.s("nn_theme",dark?"dark":"light")}
+function applyBrand(){
+  const a=String(CONFIG.accent||"").trim();
+  if(/^#[0-9a-f]{6}$/i.test(a)){const s=document.documentElement.style;s.setProperty("--p",a);s.setProperty("--p2","color-mix(in srgb,"+a+" 55%,#1d4ed8)");s.setProperty("--pg","color-mix(in srgb,"+a+" 14%,transparent)")}
+  const lg=String(CONFIG.logo||"").trim();if(/^https:\/\//i.test(lg)){const im=$("logo");im.src=lg;im.hidden=false;im.onerror=()=>{im.hidden=true}}}
+$("themeBtn").onclick=()=>{dark=!dark;uiTheme()};
+$("langBtn").onclick=e=>{e.stopPropagation();$("lw").classList.toggle("open")};
+document.querySelectorAll(".ld button").forEach(b=>b.onclick=()=>{lang=b.dataset.l;$("lw").classList.remove("open");uiLang()});
+document.addEventListener("click",()=>$("lw").classList.remove("open"));
+function gotoTab(name){
+  document.querySelectorAll(".nav button").forEach(x=>x.classList.toggle("on",x.dataset.t===name));
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.id==="tab-"+name));
+  window.scrollTo(0,0)}
+document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>gotoTab(b.dataset.t));
+$("btnGoApps").onclick=()=>gotoTab("apps");
+$("btnCopy").onclick=()=>copy(subUrl);$("btnQr").onclick=()=>qr(subUrl);
+$("btnAll").onclick=()=>copy(links.join("\n"));$("btnLat").onclick=runLatency;
+$("btnQrCopy").onclick=()=>{if(window.__lastQr)copy(window.__lastQr)};$("btnQrClose").onclick=closeQr;
+$("md").onclick=e=>{if(e.target===$("md"))closeQr()};
+addEventListener("keydown",e=>{if(e.key==="Escape")closeQr()});
+$("btnFmtJson").onclick=()=>{const u=safeUrl(TV.subJsonUrl);if(u)copy(u)};
+$("btnFmtClash").onclick=()=>{const u=safeUrl(TV.subClashUrl);if(u)copy(u)};
 
-
-function loadLinksFallback(){
-  if(links && links.length) return;
-  const url=n(TV.subUrl,subUrl)||(location.origin+location.pathname);
-  if(!url) return;
-  fetch(url,{credentials:"same-origin",headers:{"Accept":"text/plain,*/*"}}).then(r=>{
-    const ct=(r.headers.get("content-type")||"").toLowerCase();
-    if(ct.indexOf("text/html")>=0) return null;
-    return r.text();
-  }).then(txt=>{
-    if(!txt||!String(txt).trim()) return;
-    let raw=String(txt).trim();
-    // base64 subscription?
-    try{
-      if(!/^vless:|^vmess:|^trojan:|^ss:|^hysteria/i.test(raw) && /^[A-Za-z0-9+/=\s]+$/.test(raw.replace(/\s/g,""))){
-        raw=atob(raw.replace(/\s/g,""));
-      }
-    }catch(e){}
-    const arr=raw.split(/\r?\n/).map(s=>s.trim()).filter(s=>/^(vless|vmess|trojan|ss|ssr|hysteria|hy2|tuic|wireguard):\/\//i.test(s));
-    if(!arr.length) return;
-    links=arr;
-    TV.links=arr.join("\n");
-    try{renderList();renderQi();}catch(e){}
-  }).catch(()=>{});
-}
-
-try{uiTheme();}catch(e){}
-try{uiLang();}catch(e){}
-try{data();}catch(e){try{console.error(e);}catch(_e){}}
-try{renderTraffic();}catch(e){}
-try{renderList();}catch(e){}
-try{renderQi();}catch(e){}
-try{renderApps();}catch(e){}
-try{loadLinksFallback();}catch(e){}
-try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
-updateWaves();
-// refresh expiry every minute
+applyBrand();uiTheme();renderApps();uiLang();
 setInterval(data,60000);
-
-/* handlers */
-(function(){
-  const el=id=>document.getElementById(id);
-  if(el("btnQrCopy")) el("btnQrCopy").onclick=()=>{ if(window.__lastQr) copy(window.__lastQr); };
-  if(el("btnFmtJson")) el("btnFmtJson").onclick=()=>{const u=n(TV.subJsonUrl,""); if(u) copy(u)};
-  if(el("btnFmtClash")) el("btnFmtClash").onclick=()=>{const u=n(TV.subClashUrl,""); if(u) copy(u)};
-})();
 
 </script>
 </body>
