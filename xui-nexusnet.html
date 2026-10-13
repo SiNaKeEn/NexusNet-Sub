@@ -702,29 +702,33 @@ function uiTheme(){
 
 /* usage period: client-side samples in localStorage */
 function renderTraffic(){
-  const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
-  const used=rawD+rawU;
-  const noLimit=!tot||tot<=0;
-  const left=noLimit?0:Math.max(0,tot-used);
-  const remPct=noLimit?100:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
-  const el=id=>{const e=document.getElementById(id);return e;};
-  if(el("down")) el("down").textContent=bytes(rawD);
-  if(el("up")) el("up").textContent=bytes(rawU);
-  if(el("used")) el("used").textContent=bytes(used);
-  if(el("left")) el("left").textContent=noLimit?"∞":bytes(left);
-  if(el("total")) el("total").textContent=noLimit?"∞":bytes(tot);
-  if(el("pctT")) el("pctT").textContent=noLimit?"∞":(remPct+"%");
-  window.__pctT=remPct;
-  const circ=typeof CIRC==="number"?CIRC:(2*Math.PI*48);
-  if(el("rTraffic")) el("rTraffic").style.strokeDashoffset=String(circ-circ*remPct/100);
-  if(el("bar")) el("bar").style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
-  // CSS liquid (Windows-friendly)
-  const w=el("liqWater");
-  if(w){ w.style.setProperty("--pct", (noLimit?100:remPct)+"%"); }
-  // legacy SVG fill if present
-  const y=104-(remPct/100)*88;
-  const f=el("liqFillT");
-  if(f){ f.setAttribute("y",String(y)); f.setAttribute("height",String(Math.max(0,130-y))); }
+  try{
+    const rawD=num(TV.downloadByte)||0, rawU=num(TV.uploadByte)||0, tot=num(TV.totalByte)||0;
+    const used=rawD+rawU;
+    const noLimit=!tot||tot<=0;
+    const left=noLimit?0:Math.max(0,tot-used);
+    const remPct=noLimit?100:Math.min(100,Math.max(0,Math.round((left/tot)*100)));
+    const el=id=>document.getElementById(id);
+    const setTxt=(id,v)=>{const e=el(id);if(e)e.textContent=v;};
+    setTxt("down",bytes(rawD));
+    setTxt("up",bytes(rawU));
+    setTxt("used",bytes(used));
+    setTxt("left",noLimit?"∞":bytes(left));
+    setTxt("total",noLimit?"∞":bytes(tot));
+    setTxt("pctT",noLimit?"∞":(remPct+"%"));
+    window.__pctT=remPct;
+    const circ=(typeof CIRC==="number"&&CIRC)?CIRC:(2*Math.PI*48);
+    const rt=el("rTraffic");
+    if(rt&&rt.style) rt.style.strokeDashoffset=String(circ-circ*remPct/100);
+    const bar=el("bar");
+    if(bar&&bar.style) bar.style.width=(noLimit?0:Math.min(100,Math.round((used/Math.max(tot,1))*100)))+"%";
+    const w=el("liqWater");
+    if(w){
+      const pct=(noLimit?100:remPct)+"%";
+      try{ if(w.style&&typeof w.style.setProperty==="function") w.style.setProperty("--pct",pct); }catch(_e){}
+      try{ w.style.height=pct; }catch(_e){}
+    }
+  }catch(e){ try{console.error("renderTraffic",e);}catch(_e){} }
 }
 
 
@@ -840,17 +844,15 @@ function data(){
   if(hasExp){
     const diff=Math.max(0,expDate-Date.now());
     const dd=Math.floor(diff/864e5),hh=Math.floor((diff%864e5)/36e5),mm=Math.floor((diff%36e5)/6e4);
-    document.getElementById("expD").textContent=String(dd);
-    document.getElementById("expH").textContent=String(hh).padStart(2,"0");
-    document.getElementById("expM").textContent=String(mm).padStart(2,"0");
-    document.getElementById("expTag").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
-    document.getElementById("pv5").textContent=toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate());
+    const _sx=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    _sx("expD",String(dd));
+    _sx("expH",String(hh).padStart(2,"0"));
+    _sx("expM",String(mm).padStart(2,"0"));
+    _sx("expTag",toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate()));
+    _sx("pv5",toJalali(expDate.getFullYear(),expDate.getMonth()+1,expDate.getDate()));
   }else{
-    document.getElementById("expD").textContent="∞";
-    document.getElementById("expH").textContent="∞";
-    document.getElementById("expM").textContent="∞";
-    document.getElementById("expTag").textContent=t("unl");
-    document.getElementById("pv5").textContent=t("unl");
+    const _sx=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    _sx("expD","∞");_sx("expH","∞");_sx("expM","∞");_sx("expTag",t("unl"));_sx("pv5",t("unl"));
   }
 
   const _setp=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
@@ -867,7 +869,8 @@ function renderQi(){const U=encodeURIComponent(subUrl),E=encodeURIComponent(subU
   document.getElementById("qi").innerHTML=QI.map(q=>`<a href="${q.s.replace("{U}",U).replace("{E}",E).replace("{T}",T)}"><i class="${q.i}"></i> ${q.n}</a>`).join("")}
 function nameOf(link){try{if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8)));return j.ps||j.add||"vmess"}
   const hash=link.indexOf("#");if(hash>-1)return decodeURIComponent(link.slice(hash+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
-function renderList(){const box=document.getElementById("list");
+function renderList(){const box=document.getElementById("list");if(!box)return;
+  if((!links||!links.length)&&TV&&TV.links){links=String(TV.links).split(/\r?\n/).filter(Boolean);}
   if(!links.length){box.innerHTML=`<div class="card" style="text-align:center;color:var(--mu)">${t("none")}</div>`;return}
   box.innerHTML=links.map((l,i)=>`<div class="item"><div class="n">${esc(nameOf(l))}</div>
     <button class="mb" type="button" data-c="${i}"><i class="fa-solid fa-copy"></i></button>
@@ -956,9 +959,10 @@ function loadLinksFallback(){
 
 try{uiTheme();}catch(e){}
 try{uiLang();}catch(e){}
-try{data();}catch(e){}
-try{renderQi();}catch(e){}
+try{data();}catch(e){try{console.error(e);}catch(_e){}}
+try{renderTraffic();}catch(e){}
 try{renderList();}catch(e){}
+try{renderQi();}catch(e){}
 try{renderApps();}catch(e){}
 try{loadLinksFallback();}catch(e){}
 try{const sk=document.getElementById("skel"); if(sk) sk.classList.remove("on");}catch(e){}
