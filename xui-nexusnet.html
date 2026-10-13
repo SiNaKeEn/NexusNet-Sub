@@ -460,18 +460,92 @@ html[data-theme="light"] .ring-center .pct{
   text-shadow:0 1px 0 #fff!important;
 }
 
-/*safe-liq*/
-.liq-water{animation:safeLiqBob 3.2s ease-in-out infinite}
-@keyframes safeLiqBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+50%{transform:translateY(-2px)}}
 
 /*safe-flag*/
 .loc-card{display:flex!important;flex-direction:column;align-items:center;justify-content:flex-end;
   background:linear-gradient(180deg,rgba(15,23,42,.3),rgba(2,6,23,.92))!important}
 .loc-card .loc-name{font-size:.8rem!important;font-weight:800!important;padding-bottom:8px}
 .loc-card .loc-bg{opacity:.85}
+
+/*mood-v2 pure blue when active*/
+body[data-mood="ok"] .ambient,
+body:not([data-mood]) .ambient{
+  background:radial-gradient(130% 90% at 50% -12%,#0a1628 0%,#07101f 40%,#030712 70%,#010409 100%)!important;
+  filter:none!important;
+}
+body[data-mood="ok"] .orb.a,body:not([data-mood]) .orb.a{background:#1e3a8a!important}
+body[data-mood="ok"] .orb.b,body:not([data-mood]) .orb.b{background:#0e7490!important}
+body[data-mood="ok"] .orb.c,body:not([data-mood]) .orb.c{background:#312e81!important}
+body[data-mood="fresh"] .ambient{
+  background:radial-gradient(130% 90% at 50% -12%,#064e3b 0%,#022c22 45%,#01150f 100%)!important;
+}
+body[data-mood="fresh"] .orb.a{background:#16a34a!important}
+body[data-mood="fresh"] .orb.b{background:#0d9488!important}
+body[data-mood="fresh"] .orb.c{background:#15803d!important}
+body[data-mood="warn"] .ambient{
+  background:radial-gradient(130% 90% at 50% -12%,#422006 0%,#1c1005 50%,#0c0802 100%)!important;
+}
+body[data-mood="warn"] .orb.a{background:#ca8a04!important}
+body[data-mood="warn"] .orb.b{background:#d97706!important}
+body[data-mood="warn"] .orb.c{background:#b45309!important}
+body[data-mood="bad"] .ambient{
+  background:radial-gradient(130% 90% at 50% -12%,#450a0a 0%,#1c0505 50%,#0a0202 100%)!important;
+}
+body[data-mood="bad"] .orb.a{background:#dc2626!important}
+body[data-mood="bad"] .orb.b{background:#b91c1c!important}
+body[data-mood="bad"] .orb.c{background:#7f1d1d!important}
+
+
+/*liq-v2: water body fixed, only surface waves move*/
+.liq-ball{overflow:hidden!important}
+.liq-water{
+  left:-25%!important;right:-25%!important;bottom:0!important;
+  height:var(--pct,50%)!important;
+  min-height:14%!important;
+  transform:none!important;
+  animation:none!important;
+  transition:height .8s cubic-bezier(.4,0,.2,1)!important;
+  background:linear-gradient(180deg,#a5f3fc 0%,#22d3ee 28%,#0891b2 65%,#0e7490 100%)!important;
+}
+.liq-water::before,.liq-water::after{
+  content:""!important;position:absolute!important;left:0!important;width:200%!important;
+  height:22px!important;top:-14px!important;pointer-events:none!important;
+  background-repeat:repeat-x!important;
+}
+.liq-water::before{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,50 C150,90 350,10 600,50 C850,90 1050,10 1200,50 L1200,120 L0,120 Z' fill='%23a5f3fc'/%3E%3C/svg%3E")!important;
+  background-size:600px 22px!important;
+  animation:waveX 3s linear infinite!important;
+  opacity:.95!important;
+}
+.liq-water::after{
+  top:-10px!important;height:16px!important;opacity:.45!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M0,60 C200,20 400,100 600,60 C800,20 1000,100 1200,60 L1200,120 L0,120 Z' fill='%2367e8f9'/%3E%3C/svg%3E")!important;
+  background-size:420px 16px!important;
+  animation:waveX 4.5s linear infinite reverse!important;
+}
+@keyframes waveX{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/*loc-scenes-v2*/
+.loc-card[data-cc="US"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%230c4a6e%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231e3a8a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Ccircle%20cx%3D%22130%22%20cy%3D%2222%22%20r%3D%2210%22%20fill%3D%22%23fde68a%22%20opacity%3D%22.9%22/%3E%3Crect%20x%3D%2220%22%20y%3D%2255%22%20width%3D%2212%22%20height%3D%2245%22%20fill%3D%22%231e293b%22/%3E%3Crect%20x%3D%2236%22%20y%3D%2248%22%20width%3D%2216%22%20height%3D%2252%22%20fill%3D%22%23334155%22/%3E%3Crect%20x%3D%2256%22%20y%3D%2240%22%20width%3D%2214%22%20height%3D%2260%22%20fill%3D%22%231e293b%22/%3E%3Crect%20x%3D%2274%22%20y%3D%2250%22%20width%3D%2218%22%20height%3D%2250%22%20fill%3D%22%23475569%22/%3E%3Crect%20x%3D%2296%22%20y%3D%2235%22%20width%3D%2214%22%20height%3D%2265%22%20fill%3D%22%231e293b%22/%3E%3Cpath%20d%3D%22M118%2070%20L122%2040%20L126%2070%20Z%22%20fill%3D%22%2394a3b8%22/%3E%3Ccircle%20cx%3D%22122%22%20cy%3D%2236%22%20r%3D%224%22%20fill%3D%22%23e2e8f0%22/%3E%3Crect%20x%3D%220%22%20y%3D%2288%22%20width%3D%22160%22%20height%3D%2212%22%20fill%3D%22%230f172a%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+.loc-card[data-cc="DE"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%231e293b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230f172a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2242%22%20width%3D%22100%22%20height%3D%2246%22%20fill%3D%22%23334155%22/%3E%3Crect%20x%3D%2238%22%20y%3D%2228%22%20width%3D%2210%22%20height%3D%2260%22%20fill%3D%22%23e2e8f0%22/%3E%3Crect%20x%3D%2255%22%20y%3D%2228%22%20width%3D%2210%22%20height%3D%2260%22%20fill%3D%22%23e2e8f0%22/%3E%3Crect%20x%3D%2272%22%20y%3D%2228%22%20width%3D%2210%22%20height%3D%2260%22%20fill%3D%22%23e2e8f0%22/%3E%3Crect%20x%3D%2289%22%20y%3D%2228%22%20width%3D%2210%22%20height%3D%2260%22%20fill%3D%22%23e2e8f0%22/%3E%3Crect%20x%3D%22106%22%20y%3D%2228%22%20width%3D%2210%22%20height%3D%2260%22%20fill%3D%22%23e2e8f0%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2222%22%20width%3D%22100%22%20height%3D%2210%22%20fill%3D%22%23cbd5e1%22/%3E%3Crect%20x%3D%220%22%20y%3D%2288%22%20width%3D%22160%22%20height%3D%2212%22%20fill%3D%22%23020617%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+.loc-card[data-cc="TR"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%230e7490%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%239a3412%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2258%22%20r%3D%2228%22%20fill%3D%22%23fef3c7%22/%3E%3Cpath%20d%3D%22M52%2058%20Q80%2020%20108%2058%22%20fill%3D%22%23fde68a%22/%3E%3Crect%20x%3D%2276%22%20y%3D%2230%22%20width%3D%228%22%20height%3D%2258%22%20fill%3D%22%23fef3c7%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2250%22%20width%3D%226%22%20height%3D%2238%22%20fill%3D%22%23fef3c7%22/%3E%3Crect%20x%3D%22124%22%20y%3D%2250%22%20width%3D%226%22%20height%3D%2238%22%20fill%3D%22%23fef3c7%22/%3E%3Crect%20x%3D%220%22%20y%3D%2288%22%20width%3D%22160%22%20height%3D%2212%22%20fill%3D%22%237c2d12%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+.loc-card[data-cc="FR"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%231e1b4b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23312e81%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M80%2012%20L88%2088%20L72%2088%20Z%22%20fill%3D%22%2394a3b8%22/%3E%3Cpath%20d%3D%22M70%2045%20H90%20M65%2060%20H95%20M60%2075%20H100%22%20stroke%3D%22%23cbd5e1%22%20stroke-width%3D%222%22/%3E%3Crect%20x%3D%2220%22%20y%3D%2270%22%20width%3D%2225%22%20height%3D%2218%22%20fill%3D%22%234338ca%22/%3E%3Crect%20x%3D%22115%22%20y%3D%2265%22%20width%3D%2230%22%20height%3D%2223%22%20fill%3D%22%233730a3%22/%3E%3Crect%20x%3D%220%22%20y%3D%2288%22%20width%3D%22160%22%20height%3D%2212%22%20fill%3D%22%231e1b4b%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+.loc-card[data-cc="NL"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%230369a1%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230c4a6e%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Crect%20x%3D%2272%22%20y%3D%2240%22%20width%3D%2216%22%20height%3D%2248%22%20fill%3D%22%23f8fafc%22/%3E%3Cpath%20d%3D%22M80%2048%20L40%2030%20L42%2026%20L80%2044%20Z%22%20fill%3D%22%23e2e8f0%22/%3E%3Cpath%20d%3D%22M80%2048%20L120%2030%20L118%2026%20L80%2044%20Z%22%20fill%3D%22%23e2e8f0%22/%3E%3Cpath%20d%3D%22M80%2048%20L62%2085%20L66%2088%20L80%2052%20Z%22%20fill%3D%22%23cbd5e1%22/%3E%3Cpath%20d%3D%22M80%2048%20L98%2085%20L94%2088%20L80%2052%20Z%22%20fill%3D%22%23cbd5e1%22/%3E%3Crect%20x%3D%220%22%20y%3D%2282%22%20width%3D%22160%22%20height%3D%2218%22%20fill%3D%22%230284c7%22%20opacity%3D%22.5%22/%3E%3Crect%20x%3D%220%22%20y%3D%2290%22%20width%3D%22160%22%20height%3D%2210%22%20fill%3D%22%230f172a%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+.loc-card[data-cc="GB"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%231e3a8a%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230f172a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Crect%20x%3D%2268%22%20y%3D%2225%22%20width%3D%2224%22%20height%3D%2263%22%20fill%3D%22%2394a3b8%22/%3E%3Crect%20x%3D%2264%22%20y%3D%2218%22%20width%3D%2232%22%20height%3D%2212%22%20fill%3D%22%23cbd5e1%22/%3E%3Cpolygon%20points%3D%2280%2C5%2092%2C18%2068%2C18%22%20fill%3D%22%23e2e8f0%22/%3E%3Ccircle%20cx%3D%2280%22%20cy%3D%2240%22%20r%3D%227%22%20fill%3D%22%23fef3c7%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2255%22%20width%3D%2228%22%20height%3D%2233%22%20fill%3D%22%23334155%22/%3E%3Crect%20x%3D%22105%22%20y%3D%2250%22%20width%3D%2230%22%20height%3D%2238%22%20fill%3D%22%231e293b%22/%3E%3Crect%20x%3D%220%22%20y%3D%2288%22%20width%3D%22160%22%20height%3D%2212%22%20fill%3D%22%23020617%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+.loc-card[data-cc="JP"] .loc-bg{background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20160%20100%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22s%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%220%22%20y2%3D%221%22%3E%3Cstop%20stop-color%3D%22%230c4a6e%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%231e3a8a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%22160%22%20height%3D%22100%22%20fill%3D%22url%28%23s%29%22/%3E%3Cpath%20d%3D%22M20%2088%20L80%2025%20L140%2088%20Z%22%20fill%3D%22%23334155%22/%3E%3Cpath%20d%3D%22M60%2045%20L80%2025%20L100%2045%20Z%22%20fill%3D%22%23f8fafc%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2270%22%20width%3D%226%22%20height%3D%2218%22%20fill%3D%22%23b91c1c%22/%3E%3Crect%20x%3D%2250%22%20y%3D%2270%22%20width%3D%226%22%20height%3D%2218%22%20fill%3D%22%23b91c1c%22/%3E%3Crect%20x%3D%2230%22%20y%3D%2268%22%20width%3D%2226%22%20height%3D%224%22%20fill%3D%22%23b91c1c%22/%3E%3Crect%20x%3D%220%22%20y%3D%2288%22%20width%3D%22160%22%20height%3D%2212%22%20fill%3D%22%230f172a%22/%3E%3C/svg%3E")!important;background-size:cover!important;background-position:center!important;opacity:1!important}
+
+.loc-card{height:92px!important;flex:0 0 132px!important}
+.loc-card .loc-bg{display:block!important;opacity:1!important}
+.loc-card .loc-fade{display:block!important;
+  background:linear-gradient(180deg,transparent 20%,rgba(0,0,0,.55) 70%,rgba(0,0,0,.88) 100%)!important}
+.loc-card .loc-name{z-index:3!important;font-size:.8rem!important;font-weight:800!important;
+  text-shadow:0 2px 8px rgba(0,0,0,.9)!important}
+
 </style>
 </head>
-<body>
+<body data-mood="ok">
 
 <div id="nn-data" style="display:none!important" hidden
   data-sid="{{.sId}}"
@@ -760,8 +834,8 @@ const APPS=[
 ];
 const QI=[{n:"Happ",i:"fa-solid fa-bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"fa-solid fa-shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"fa-brands fa-android",s:"v2rayng://install-config?url={E}"},{n:"V2Box",i:"fa-solid fa-box-open",s:"v2box://install-sub?url={E}&title={T}"}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"حجم کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
+  fa:{n1:"داشبورد",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"حجم کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  en:{n1:"Dashboard",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
 function lsGet(k,d){try{const v=localStorage.getItem(k);return v==null?d:v;}catch(e){return d;}}
 function lsSet(k,v){try{localStorage.setItem(k,v);}catch(e){}}
@@ -892,7 +966,7 @@ function data(){
     if(wv){ if(totB>0 && usedB/totB>=0.8){ wv.classList.add("show"); document.getElementById("warnVolTxt").textContent=t("warnVol")+" ("+Math.round(usedB/totB*100)+"%)"; } else wv.classList.remove("show"); }
     if(we){
       const exp=num(TV.expire); let showE=false;
-      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=3){ showE=true; document.getElementById("warnExpTxt").textContent=t("warnExp")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
+      if(exp){ const ms=exp<1e12?exp*1000:exp; const days=(ms-Date.now())/86400000; if(days>=0&&days<=7){ showE=true; document.getElementById("warnExpTxt").textContent=(lang==="fa"?"در حال اتمام — تمدید کنید":"Expiring soon — please renew")+" ("+Math.ceil(days)+" "+t("days")+")"; }}
       if(showE) we.classList.add("show"); else we.classList.remove("show");
     }
   }catch(e){}
