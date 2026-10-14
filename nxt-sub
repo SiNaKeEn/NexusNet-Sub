@@ -2,11 +2,11 @@
 # NexusNet Sub Manager — GitHub-ready CLI
 set -euo pipefail
 
-VERSION="3.2.1"
+VERSION="3.3"
 REF="${NXT_REF:-Themes}"
 BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
 
-RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; BOLD='\033[1m'; NC='\033[0m'
+RED=$'\033[0;31m'; GREEN=$'\033[0;32m'; CYAN=$'\033[0;36m'; YELLOW=$'\033[1;33m'; BOLD=$'\033[1m'; NC=$'\033[0m'
 
 XUI_DIR="/etc/x-ui/sub"
 XUI_FILE="${XUI_DIR}/sub.html"
@@ -46,30 +46,31 @@ verify_sum(){
     want="$(awk -v n="$2" '$2==n || $2=="*"n {print $1; exit}' "$sums")"
     got="$(sha256sum "$1" | awk '{print $1}')"
     rm -f "$sums"
-    [[ -z "$want" ]] && { warn "no checksum entry for $2"; return 0; }
+    info "no checksum entry for $2 (optional)"
     [[ "$want" == "$got" ]] || { echo -e "${RED}checksum mismatch for $2${NC}"; return 1; }
     ok "checksum $2"
   else
     rm -f "$sums"
-    warn "SHA256SUMS unavailable — skipped"
+    info "SHA256SUMS not on repo (optional) — skipped"
   fi
 }
 
 get_theme(){
-  # $1 = remote filename — prints ONLY temp path on stdout; logs on stderr
+  # $1 = remote filename — sets global THEME_TMP (never prints path on stdout)
   local tmp; tmp="$(mktemp)"
+  THEME_TMP=""
   if [[ -n "${LOCAL_FILE:-}" ]]; then
     [[ -f "$LOCAL_FILE" ]] || die "LOCAL_FILE not found: $LOCAL_FILE"
     cp -f "$LOCAL_FILE" "$tmp"
-    info "using local file: $LOCAL_FILE" >&2
+    info "using local file: $LOCAL_FILE"
   else
-    info "downloading $1  (ref=${REF})" >&2
+    info "downloading $1  (ref=${REF})"
     fetch "${BASE}/$1" "$tmp" || { rm -f "$tmp"; die "download failed — set NXT_REF / NXT_BASE or use --file"; }
-    verify_sum "$tmp" "$1" >&2 || { rm -f "$tmp"; exit 1; }
+    verify_sum "$tmp" "$1" || { rm -f "$tmp"; exit 1; }
   fi
   [[ -s "$tmp" ]] || { rm -f "$tmp"; die "empty download"; }
   grep -q "$MARK" "$tmp" || { rm -f "$tmp"; die "file is not a valid NexusNet theme (missing ${MARK})"; }
-  printf '%s' "$tmp"
+  THEME_TMP="$tmp"
 }
 
 load_cfg(){
@@ -151,8 +152,8 @@ place(){
 
 install_xui(){
   local tmp
-  tmp="$(get_theme xui-nexusnet.html)"
-  place "$tmp" "$XUI_FILE"
+  get_theme xui-nexusnet.html
+  place "$THEME_TMP" "$XUI_FILE"
   info "Panel setting: Sub Theme Directory = ${XUI_DIR}/"
 }
 
@@ -168,8 +169,8 @@ install_pg(){
   dir="$(pg_tpl_dir)"
   f="$(pg_file)"
   mkdir -p "${dir}/subscription"
-  tmp="$(get_theme pasarguard-nexusnet.html)"
-  place "$tmp" "$f"
+  get_theme pasarguard-nexusnet.html
+  place "$THEME_TMP" "$f"
   if [[ -f "$PG_ENV" ]] && ! grep -qE '^CUSTOM_TEMPLATES_DIRECTORY=' "$PG_ENV" 2>/dev/null; then
     echo "CUSTOM_TEMPLATES_DIRECTORY=${dir}" >> "$PG_ENV"
     ok "wrote CUSTOM_TEMPLATES_DIRECTORY in ${PG_ENV}"
@@ -301,10 +302,9 @@ esac
 
 # ── interactive menu ──────────────────────────────────
 while true; do
-  echo -e "\n${CYAN}${BOLD}"
-  echo "  ╔══════════════════════════════════════╗"
-  echo "  ║     NexusNet Sub Manager  v${VERSION}      ║"
-  echo "  ╚══════════════════════════════════════╝${NC}"
+  echo -e "\n${CYAN}${BOLD}  ╔══════════════════════════════════════╗"
+  echo -e "  ║     NexusNet Sub Manager  v${VERSION}      ║"
+  echo -e "  ╚══════════════════════════════════════╝${NC}"
   echo "  1) Install / update  3x-ui theme"
   echo "  2) Install / update  PasarGuard theme"
   echo "  3) Install both"
