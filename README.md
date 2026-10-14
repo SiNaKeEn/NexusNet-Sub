@@ -1,80 +1,21 @@
-[Uploading README.md…]()
-# NexusNet Sub **v3.3**
+[README.md](https://github.com/user-attachments/files/33428972/README.md)
+# NexusNet Sub v3.3.2
+Subscription themes for **3x-ui (Sanaei)** and **PasarGuard** — v3.0.1 dashboard/apps layout on the 2.2 core. Works with no CDN.
 
-Premium subscription page for **3x-ui** and **PasarGuard** — same UI, dual data injection.
-
-[![version](https://img.shields.io/badge/version-3.3-blue)](#)
-[![license](https://img.shields.io/badge/license-MIT-green)](#)
-
-## Quick install
-
+## Install
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template/install.sh)
+sudo nxt-sub                              # menu
+sudo nxt-sub install xui|pg [--file f]    # non-interactive / offline
+sudo nxt-sub restore xui|pg               # roll back to last backup
 ```
+Pin a release with `NXT_REF=<tag-or-commit>`, use a mirror with `NXT_BASE=<url>`. Checksums come from `SHA256SUMS`.
 
-This installs the `nxt-sub` CLI and opens the interactive menu.
+## Settings (`nxt-sub` -> 3)
+Title, Telegram bot, support URL, renew URL, accent color, logo (https), top notice.
 
-## CLI (`nxt-sub`)
+## Build
+Sources are in `src/`; `python3 build.py` regenerates both themes into `out/`.
 
-```text
-sudo nxt-sub                 # interactive menu
-sudo nxt-sub install xui     # 3x-ui only
-sudo nxt-sub install pg      # PasarGuard only
-sudo nxt-sub install both
-sudo nxt-sub settings        # profile title / support / renew / logo
-sudo nxt-sub status
-sudo nxt-sub update          # self-update CLI from GitHub
-sudo nxt-sub restore xui|pg
-sudo nxt-sub version
-```
-
-### Options
-
-| Flag / Env | Meaning |
-|------------|---------|
-| `--file PATH` | Install from a local HTML file (no download) |
-| `--ref NAME` / `NXT_REF` | Git branch or tag (default `Themes`) |
-| `NXT_BASE` | Mirror base URL |
-
-### Local install (no GitHub)
-
-```bash
-sudo nxt-sub install xui --file ./xui-nexusnet.html
-sudo nxt-sub install pg  --file ./pasarguard-nexusnet.html
-```
-
-## Manual copy
-
-```bash
-# 3x-ui
-sudo mkdir -p /etc/x-ui/sub
-sudo cp -f xui-nexusnet.html /etc/x-ui/sub/sub.html
-# Panel → Sub Theme Directory = /etc/x-ui/sub/
-
-# PasarGuard
-sudo mkdir -p /var/lib/pasarguard/templates/subscription
-sudo cp -f pasarguard-nexusnet.html /var/lib/pasarguard/templates/subscription/index.html
-```
-
-## Features
-
-- Unified UI for 3x-ui + PasarGuard  
-- Liquid traffic ring, mood background, offline-friendly assets  
-- Quick import: Happ · Hiddify · V2Box · v2rayNG (Android) · v2rayN (Windows)  
-- No live ping / latency probes  
-- Safe config injection via `/*NXT_CFG_BEGIN*/` markers  
-- Automatic backups on every install  
-
-## Repo layout
-
-```text
-install.sh                 # one-liner entry
-nxt-sub                    # CLI manager
-xui-nexusnet.html          # 3x-ui theme
-pasarguard-nexusnet.html   # PasarGuard theme
-SHA256SUMS                 # integrity
-```
-
-## License
-
-MIT
+## Troubleshooting numbers (PasarGuard)
+Open the subscription page with `#debug` at the end of the URL (e.g. `https://host/sub/TOKEN#debug`) to see the raw values PasarGuard sent (used_traffic, data_limit, lifetime, status, dates).
