@@ -3,7 +3,7 @@
 set -euo pipefail
 
 VERSION="3.2"
-REF="${NXT_REF:-main}"
+REF="${NXT_REF:-Themes}"
 BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
 
 RED='\033[0;31m'; GREEN='\033[0;32m'; CYAN='\033[0;36m'; YELLOW='\033[1;33m'; BOLD='\033[1m'; NC='\033[0m'
@@ -241,7 +241,7 @@ while [[ $# -gt 0 ]]; do
   case "$1" in
     --file) LOCAL_FILE="${2:-}"; shift 2 || true;;
     --ref)
-      REF="${2:-main}"
+      REF="${2:-Themes}"
       BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
       shift 2 || true
       ;;
@@ -289,7 +289,7 @@ Usage:
 
 Options:
   --file PATH     Use local HTML instead of GitHub download
-  --ref  NAME     Git branch / tag (default: main)
+  --ref  NAME     Git branch / tag (default: Themes)
 
 Env:
   NXT_REF   same as --ref
