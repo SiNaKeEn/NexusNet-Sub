@@ -185,6 +185,11 @@ html[data-theme=light] .orb3d{filter:drop-shadow(0 10px 18px rgba(20,80,140,.22)
 .orb.c,body[data-mood="fresh"] .orb.c,body[data-mood="ok"] .orb.c{background:#312e81!important}
 #warnVol:not(.show),#warnExp:not(.show){display:none!important}
 
+
+/* v3.3.2: centre stat cells (label + value) */
+.vol{text-align:center}.vol .k{justify-content:center}.vol .v{text-align:center}
+.vol .k .ck{text-align:center;position:relative;z-index:1}.vol .v{position:relative;z-index:1;unicode-bidi:plaintext}
+.vol .ci{inset:0;top:0;inset-inline-end:0;display:grid;place-items:center;font-size:2rem;opacity:.09;pointer-events:none}
 </style>
 </head>
 <body>
@@ -1284,7 +1289,7 @@ copyLink:"کپی لینک",est:"تخمین پایان",aLang:"زبان",aTheme:"
 st_on:"فعال",st_off:"غیرفعال",st_online:"آنلاین",st_full:"اتمام حجم",st_expired:"منقضی",st_hold:"در انتظار اولین اتصال",st_soon:"نزدیک انقضا",delayed:"از اولین اتصال",
 g1t:"چطور وصل شوم؟",g1:["از تب «برنامه‌ها» برنامه‌ی پیشنهادی را نصب کن.","دکمه‌ی «افزودن به …» را بزن؛ یا لینک اشتراک را کپی و در برنامه Import کن.","یک سرور را انتخاب کن و وصل شو."],
 g2t:"وصل نمی‌شوم؟",g2:["اشتراک را داخل برنامه Update/Refresh کن.","ساعت و تاریخ گوشی باید درست باشد.","کانفیگ دیگری را امتحان کن.","حجم یا زمان اشتراک را بررسی کن و در صورت اتمام تمدید کن.","اگر حل نشد به پشتیبانی پیام بده."],
-dayUnit:"روز",warnVolN:"حجم اشتراک رو به اتمام است",smart:"افزودن به",sec:"ثانیه",step1:"نصب برنامه",step2:"افزودن اشتراک",inst:"نصب",addSub:"افزودن",
+dayUnit:"روز",usedPct:"درصد مصرف",daysLeft:"تا انقضا",warnVolN:"حجم اشتراک رو به اتمام است",smart:"افزودن به",sec:"ثانیه",step1:"نصب برنامه",step2:"افزودن اشتراک",inst:"نصب",addSub:"افزودن",
 h_full:"حجم تموم شده؛ وقت تمدیده",h_expired:"اشتراکت منقضی شده",h_off:"اشتراک غیرفعاله",h_hold:"منتظر اولین اتصال هستیم",h_soon:"فقط {n} روز تا پایان اشتراک",h_low:"فقط {p}٪ از حجم مونده",h_unl:"حجم نامحدود؛ با خیال راحت",h_ok:"{p}٪ از حجمت باقی مانده"});
 Object.assign(I.en,{renewSvc:"Renew service",life:"Lifetime",needApp:"No app installed yet?",guide:"Setup guide",pingTest:"Test ping",
 pingNote:"Ping is measured directly from your device and only runs when you tap the button. “—” means it could not be measured (not necessarily down).",
@@ -1292,7 +1297,7 @@ copyLink:"Copy link",est:"Est. end",aLang:"Language",aTheme:"Toggle theme",qr:"S
 st_on:"Active",st_off:"Inactive",st_online:"Online",st_full:"Quota full",st_expired:"Expired",st_hold:"Waiting first connect",st_soon:"Expiring soon",delayed:"from first connect",
 g1t:"How do I connect?",g1:["Install the recommended app from the Apps tab.","Tap “Add to …”, or copy the sub link and import it in the app.","Pick a server and connect."],
 g2t:"Can't connect?",g2:["Update/Refresh the subscription inside the app.","Your phone's date and time must be correct.","Try another config.","Check quota and expiry; renew if needed.","Still stuck? Message support."],
-dayUnit:"days",warnVolN:"Data quota is running low",smart:"Add to",sec:"Sec",step1:"Install app",step2:"Add subscription",inst:"Install",addSub:"Add",
+dayUnit:"days",usedPct:"Used %",daysLeft:"Expires in",warnVolN:"Data quota is running low",smart:"Add to",sec:"Sec",step1:"Install app",step2:"Add subscription",inst:"Install",addSub:"Add",
 h_full:"Quota used up — time to renew",h_expired:"Your subscription expired",h_off:"Subscription is inactive",h_hold:"Waiting for first connection",h_soon:"Only {n} days left",h_low:"Only {p}% data left",h_unl:"Unlimited data — enjoy",h_ok:"{p}% of your data left"});
 let lang=LS.g("nn_lang","fa");if(!I[lang])lang="fa";
 let dark=LS.g("nn_theme","")?LS.g("nn_theme","")==="dark":!(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches);
@@ -1404,9 +1409,11 @@ function renderTraffic(){
   const rem=unl?100:Math.max(0,Math.min(100,left/tot*100));
   $("limit").textContent=unl?"∞":bytes(tot);
   if(SPLIT){setCell("c1","download",t("down"),d);setCell("c2","upload",t("up"),u);setCell("c3","chart-simple",t("used"),used);setCell("c4","battery-three-quarters",t("left"),unl?"∞":left,true)}
-  else{const lf=num(TV.lifetime),es=estDays();
+  else{const lf=num(TV.lifetime),es=estDays(),ex=expInfo();
+    const dl=ex.k==="date"?Math.max(0,Math.ceil((ex.ms-Date.now())/864e5)):ex.k==="delayed"?ex.days:null;
     setCell("c1","chart-simple",t("used"),used);setCell("c2","battery-three-quarters",t("left"),unl?"∞":left,true);
-    setCell("c3","signal",t("life"),lf>0?lf:null);setCell("c4","hourglass-end",t("est"),es!=null?"≈ "+es+" "+t("dayUnit"):null)}
+    if(lf>0)setCell("c3","signal",t("life"),lf);else setCell("c3","chart-simple",t("usedPct"),unl?"—":Math.round(used/tot*100)+"%");
+    if(es!=null)setCell("c4","hourglass-end",t("est"),"≈ "+es+" "+t("dayUnit"));else setCell("c4","clock",t("daysLeft"),dl==null?"∞":dl+" "+t("dayUnit"))}
   const pc=$("pctT");if(unl){pc.textContent="∞";delete pc.dataset.v}else animNum(pc,Math.round(rem),v=>Math.round(v)+"%",1000);
   $("rTraffic").style.strokeDashoffset=String(CIRC*(1-rem/100));
   $("bar").style.width=rem+"%";
@@ -1565,6 +1572,7 @@ $("btnFmtJson").onclick=()=>{const u=safeUrl(TV.subJsonUrl);if(u)copy(u)};
 $("btnFmtClash").onclick=()=>{const u=safeUrl(TV.subClashUrl);if(u)copy(u)};
 
 applyBrand();uiTheme();uiLang();
+if(/(^|[#&])debug/.test(location.hash)){const pre=document.createElement("pre");pre.style.cssText="position:relative;z-index:5;margin:1rem 0;padding:.8rem;border-radius:12px;background:rgba(0,0,0,.75);color:#9ef;font:11px/1.6 monospace;direction:ltr;text-align:left;white-space:pre-wrap;word-break:break-all";const o=Object.assign({},TV);o.links=links.length+" links";o.subUrl="(hidden)";pre.textContent=JSON.stringify(o,null,2);document.querySelector(".app").appendChild(pre)}
 setInterval(data,60000);
 setInterval(()=>{if(!document.hidden&&$("tab-home").classList.contains("on"))tickCountdown()},1000);
 addEventListener("resize",navInd);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(navInd);
