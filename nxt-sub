@@ -1,53 +1,41 @@
 #!/usr/bin/env bash
-# NexusNet Sub Manager — GitHub-ready CLI
+# NexusNet Sub Manager v3.3.2
 set -euo pipefail
-
-VERSION="3.3"
+VERSION="3.3.2"
 REF="${NXT_REF:-Themes}"
 BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
-
 RED=$'\033[0;31m'; GREEN=$'\033[0;32m'; CYAN=$'\033[0;36m'; YELLOW=$'\033[1;33m'; BOLD=$'\033[1m'; NC=$'\033[0m'
 
-XUI_DIR="/etc/x-ui/sub"
-XUI_FILE="${XUI_DIR}/sub.html"
-PG_ENV="${PG_ENV:-/opt/pasarguard/.env}"
-PG_DEFAULT_TPL="/var/lib/pasarguard/templates"
-CFG_DIR="/etc/nxt-sub"
-CFG_FILE="${CFG_DIR}/config"
+XUI_DIR="/etc/x-ui/sub"; XUI_FILE="${XUI_DIR}/sub.html"
+PG_ENV="${PG_ENV:-/opt/pasarguard/.env}"; PG_DEFAULT_TPL="/var/lib/pasarguard/templates"
+CFG_DIR="/etc/nxt-sub"; CFG_FILE="${CFG_DIR}/config"
 MARK='NXT_CFG_BEGIN'
+THEME_TMP=""
 
 die(){ echo -e "${RED}error:${NC} $*" >&2; exit 1; }
 ok(){ echo -e "${GREEN}ok${NC}  $*" >&2; }
-info(){ echo -e "${CYAN}→${NC}  $*" >&2; }
+info(){ echo -e "${CYAN}->${NC}  $*" >&2; }
 warn(){ echo -e "${YELLOW}warn${NC} $*" >&2; }
 
-[[ ${EUID} -eq 0 ]] || die "run as root:  sudo nxt-sub"
+[[ ${EUID} -eq 0 ]] || die "run as root: sudo nxt-sub"
 
-ask(){
-  local a
-  if [[ -r /dev/tty ]]; then read -r -p "$1" a </dev/tty || a=""
-  else read -r -p "$1" a || a=""; fi
-  printf '%s' "$a"
-}
-confirm(){ [[ "$(ask "$1 [y/N]: ")" =~ ^[Yy]$ ]]; }
+ask(){ local a; if [[ -r /dev/tty ]]; then read -r -p "$1" a </dev/tty || a=""; else read -r -p "$1" a || a=""; fi; printf '%s' "$a"; }
 
 fetch(){
-  if command -v curl >/dev/null 2>&1; then
-    curl -fsSL --retry 3 --connect-timeout 15 --max-time 90 "$1" -o "$2"
-  elif command -v wget >/dev/null 2>&1; then
-    wget -q -T 90 -O "$2" "$1"
-  else die "curl or wget is required"; fi
+  if command -v curl >/dev/null 2>&1; then curl -fsSL --retry 3 --connect-timeout 15 --max-time 90 "$1" -o "$2"
+  elif command -v wget >/dev/null 2>&1; then wget -q -T 90 -O "$2" "$1"
+  else die "curl or wget required"; fi
 }
 
 verify_sum(){
   local sums want got
   sums="$(mktemp)"
   if fetch "${BASE}/SHA256SUMS" "$sums" 2>/dev/null && command -v sha256sum >/dev/null 2>&1; then
-    want="$(awk -v n="$2" '$2==n || $2=="*"n {print $1; exit}' "$sums")"
+    want="$(awk -v n="$2" '$2==n||$2=="*"n{print $1;exit}' "$sums")"
     got="$(sha256sum "$1" | awk '{print $1}')"
     rm -f "$sums"
-    info "no checksum entry for $2 (optional)"
-    [[ "$want" == "$got" ]] || { echo -e "${RED}checksum mismatch for $2${NC}"; return 1; }
+    [[ -z "$want" ]] && { info "no checksum for $2 (optional)"; return 0; }
+    [[ "$want" == "$got" ]] || { echo -e "${RED}checksum mismatch $2${NC}" >&2; return 1; }
     ok "checksum $2"
   else
     rm -f "$sums"
@@ -55,21 +43,21 @@ verify_sum(){
   fi
 }
 
+# Sets THEME_TMP only — never prints path on stdout
 get_theme(){
-  # $1 = remote filename — sets global THEME_TMP (never prints path on stdout)
   local tmp; tmp="$(mktemp)"
   THEME_TMP=""
   if [[ -n "${LOCAL_FILE:-}" ]]; then
-    [[ -f "$LOCAL_FILE" ]] || die "LOCAL_FILE not found: $LOCAL_FILE"
+    [[ -f "$LOCAL_FILE" ]] || die "file not found: $LOCAL_FILE"
     cp -f "$LOCAL_FILE" "$tmp"
-    info "using local file: $LOCAL_FILE"
+    info "local file: $LOCAL_FILE"
   else
-    info "downloading $1  (ref=${REF})"
-    fetch "${BASE}/$1" "$tmp" || { rm -f "$tmp"; die "download failed — set NXT_REF / NXT_BASE or use --file"; }
+    info "download $1 (ref=$REF)"
+    fetch "${BASE}/$1" "$tmp" || { rm -f "$tmp"; die "download failed"; }
     verify_sum "$tmp" "$1" || { rm -f "$tmp"; exit 1; }
   fi
-  [[ -s "$tmp" ]] || { rm -f "$tmp"; die "empty download"; }
-  grep -q "$MARK" "$tmp" || { rm -f "$tmp"; die "file is not a valid NexusNet theme (missing ${MARK})"; }
+  [[ -s "$tmp" ]] || { rm -f "$tmp"; die "empty file"; }
+  grep -q "$MARK" "$tmp" || { rm -f "$tmp"; die "not a NexusNet theme"; }
   THEME_TMP="$tmp"
 }
 
@@ -78,256 +66,143 @@ load_cfg(){
   # shellcheck disable=SC1090
   [[ -f "$CFG_FILE" ]] && source "$CFG_FILE" 2>/dev/null || true
   local bot="${TELEGRAM_BOT#@}"
-  [[ -z "${RENEW_URL}" && -n "$bot" ]] && RENEW_URL="https://t.me/${bot}"
-  [[ -z "${SUPPORT_URL}" && -n "$bot" ]] && SUPPORT_URL="https://t.me/${bot}"
-  return 0
+  [[ -z "$RENEW_URL" && -n "$bot" ]] && RENEW_URL="https://t.me/${bot}"
+  [[ -z "$SUPPORT_URL" && -n "$bot" ]] && SUPPORT_URL="https://t.me/${bot}"
 }
-
 save_cfg(){
   mkdir -p "$CFG_DIR"; umask 077
-  {
-    echo "# NexusNet Sub — managed by nxt-sub v${VERSION}"
-    for k in PROFILE_TITLE SUPPORT_URL RENEW_URL TELEGRAM_BOT ACCENT LOGO_URL NOTICE; do
-      printf '%s=%q\n' "$k" "${!k}"
-    done
-  } > "$CFG_FILE"
-  chmod 600 "$CFG_FILE"
-  ok "saved ${CFG_FILE}"
+  { echo "# nxt-sub v${VERSION}"
+    for k in PROFILE_TITLE SUPPORT_URL RENEW_URL TELEGRAM_BOT ACCENT LOGO_URL NOTICE; do printf '%s=%q\n' "$k" "${!k}"; done
+  } > "$CFG_FILE"; chmod 600 "$CFG_FILE"; ok "saved $CFG_FILE"
 }
-
-json_str(){
-  local s="$1"
-  s="${s//\\/\\\\}"; s="${s//\"/\\\"}"
-  s="${s//$'\n'/ }"; s="${s//$'\r'/}"; s="${s//$'\t'/ }"
-  s="${s//</\\u003c}"; s="${s//>/\\u003e}"; s="${s//&/\\u0026}"
-  printf '"%s"' "$s"
-}
+json_str(){ local s="$1"; s="${s//\\/\\\\}"; s="${s//\"/\\\"}"; s="${s//$'\n'/ }"; s="${s//</\\u003c}"; s="${s//>/\\u003e}"; s="${s//&/\\u0026}"; printf '"%s"' "$s"; }
 url_ok(){ [[ -z "$1" || "$1" =~ ^(https?|tg)://[^[:space:]\"\<\>\\]+$ ]]; }
 
 inject_theme(){
-  local file="$1"
-  load_cfg
-  [[ -f "$file" ]] || return 1
-  url_ok "$SUPPORT_URL" || SUPPORT_URL=""
-  url_ok "$RENEW_URL" || RENEW_URL=""
+  local file="$1"; load_cfg; [[ -f "$file" ]] || return 1
+  url_ok "$SUPPORT_URL" || SUPPORT_URL=""; url_ok "$RENEW_URL" || RENEW_URL=""
   [[ "$LOGO_URL" =~ ^https://[^[:space:]\"\<\>\\]+$ ]] || LOGO_URL=""
   [[ "$ACCENT" =~ ^#[0-9a-fA-F]{6}$ ]] || ACCENT=""
   local json tmp
   json="{\"profileTitle\":$(json_str "$PROFILE_TITLE"),\"supportUrl\":$(json_str "$SUPPORT_URL"),\"renewUrl\":$(json_str "$RENEW_URL"),\"accent\":$(json_str "$ACCENT"),\"logo\":$(json_str "$LOGO_URL"),\"notice\":$(json_str "$NOTICE")}"
   tmp="$(mktemp)"
-  NXT_JSON="$json" awk 'BEGIN{j=ENVIRON["NXT_JSON"]}
-    /\/\*NXT_CFG_BEGIN\*\//{print; print "const CONFIG=" j ";"; skip=1; next}
-    /\/\*NXT_CFG_END\*\//{skip=0}
-    !skip{print}' "$file" > "$tmp"
-  grep -q 'const CONFIG=' "$tmp" || { rm -f "$tmp"; die "config injection failed — original left untouched"; }
-  cat "$tmp" > "$file"
-  rm -f "$tmp"
+  NXT_JSON="$json" awk 'BEGIN{j=ENVIRON["NXT_JSON"]} /\/\*NXT_CFG_BEGIN\*\//{print;print "const CONFIG=" j ";";skip=1;next} /\/\*NXT_CFG_END\*\//{skip=0} !skip{print}' "$file" > "$tmp"
+  grep -q 'const CONFIG=' "$tmp" || { rm -f "$tmp"; die "inject failed"; }
+  cat "$tmp" > "$file"; rm -f "$tmp"
 }
 
-backup(){
-  local f="$1"
-  [[ -f "$f" ]] || return 0
-  cp -a "$f" "${f}.bak.$(date +%Y%m%d%H%M%S)"
-  ok "backup ${f}"
-  ls -1t "${f}".bak.* 2>/dev/null | tail -n +4 | xargs -r rm -f
-}
-
-restore_latest(){
-  local f="$1" b
-  b="$(ls -1t "${f}".bak.* 2>/dev/null | head -1 || true)"
-  [[ -n "$b" ]] || { warn "no backup for $f"; return 1; }
-  cp -a "$b" "$f"
-  ok "restored $b"
-}
+backup(){ local f="$1"; [[ -f "$f" ]] || return 0; cp -a "$f" "${f}.bak.$(date +%Y%m%d%H%M%S)"; ok "backup $f"; ls -1t "${f}".bak.* 2>/dev/null | tail -n +4 | xargs -r rm -f; }
+restore_latest(){ local f="$1" b; b="$(ls -1t "${f}".bak.* 2>/dev/null | head -1 || true)"; [[ -n "$b" ]] || { warn "no backup"; return 1; }; cp -a "$b" "$f"; ok "restored $b"; }
 
 place(){
-  local tmp="$1" dest="$2"
+  local src="$1" dest="$2"
+  [[ -n "$src" && -f "$src" ]] || die "theme temp missing"
   mkdir -p "$(dirname "$dest")"
   backup "$dest"
-  install -m 644 "$tmp" "$dest"
-  rm -f "$tmp"
+  install -m 644 "$src" "$dest"
+  rm -f "$src"
   inject_theme "$dest"
-  ok "$dest  ($(wc -c <"$dest") bytes)"
+  ok "$dest ($(wc -c <"$dest") bytes)"
 }
 
-install_xui(){
-  local tmp
-  get_theme xui-nexusnet.html
-  place "$THEME_TMP" "$XUI_FILE"
-  info "Panel setting: Sub Theme Directory = ${XUI_DIR}/"
-}
-
-pg_tpl_dir(){
-  local cur=""
-  [[ -f "$PG_ENV" ]] && cur="$(grep -E '^CUSTOM_TEMPLATES_DIRECTORY=' "$PG_ENV" 2>/dev/null | tail -1 | cut -d= -f2- | tr -d "\"'" || true)"
-  printf '%s' "${cur:-$PG_DEFAULT_TPL}"
-}
+install_xui(){ get_theme xui-nexusnet.html; place "$THEME_TMP" "$XUI_FILE"; info "Sub Theme Directory = $XUI_DIR/"; }
+pg_tpl_dir(){ local cur=""; [[ -f "$PG_ENV" ]] && cur="$(grep -E '^CUSTOM_TEMPLATES_DIRECTORY=' "$PG_ENV" 2>/dev/null | tail -1 | cut -d= -f2- | tr -d "\"'" || true)"; printf '%s' "${cur:-$PG_DEFAULT_TPL}"; }
 pg_file(){ printf '%s/subscription/index.html' "$(pg_tpl_dir)"; }
-
 install_pg(){
-  local dir f tmp
-  dir="$(pg_tpl_dir)"
-  f="$(pg_file)"
-  mkdir -p "${dir}/subscription"
-  get_theme pasarguard-nexusnet.html
-  place "$THEME_TMP" "$f"
+  local dir f; dir="$(pg_tpl_dir)"; f="$(pg_file)"; mkdir -p "${dir}/subscription"
+  get_theme pasarguard-nexusnet.html; place "$THEME_TMP" "$f"
   if [[ -f "$PG_ENV" ]] && ! grep -qE '^CUSTOM_TEMPLATES_DIRECTORY=' "$PG_ENV" 2>/dev/null; then
-    echo "CUSTOM_TEMPLATES_DIRECTORY=${dir}" >> "$PG_ENV"
-    ok "wrote CUSTOM_TEMPLATES_DIRECTORY in ${PG_ENV}"
+    echo "CUSTOM_TEMPLATES_DIRECTORY=${dir}" >> "$PG_ENV"; ok "updated $PG_ENV"
   fi
-  if command -v pasarguard >/dev/null 2>&1; then
-    pasarguard restart 2>/dev/null || true
-  fi
+  command -v pasarguard >/dev/null 2>&1 && pasarguard restart 2>/dev/null || true
 }
 
 settings_menu(){
   load_cfg
   echo -e "\n${BOLD}Settings${NC}"
-  echo "  1) Profile title     ${PROFILE_TITLE:-—}"
-  echo "  2) Support URL       ${SUPPORT_URL:-—}"
-  echo "  3) Renew URL         ${RENEW_URL:-—}"
-  echo "  4) Telegram bot      ${TELEGRAM_BOT:-—}"
-  echo "  5) Accent color      ${ACCENT:-—}"
-  echo "  6) Logo URL          ${LOGO_URL:-—}"
-  echo "  7) Notice            ${NOTICE:-—}"
+  echo "  1) Profile title  ${PROFILE_TITLE:-—}"
+  echo "  2) Support URL    ${SUPPORT_URL:-—}"
+  echo "  3) Renew URL      ${RENEW_URL:-—}"
+  echo "  4) Telegram bot   ${TELEGRAM_BOT:-—}"
+  echo "  5) Accent         ${ACCENT:-—}"
+  echo "  6) Logo URL       ${LOGO_URL:-—}"
+  echo "  7) Notice         ${NOTICE:-—}"
   echo "  0) Back"
-  local c; c="$(ask "Choice: ")"
-  case "$c" in
-    1) PROFILE_TITLE="$(ask "Profile title: ")"; save_cfg;;
-    2) SUPPORT_URL="$(ask "Support URL: ")"; save_cfg;;
-    3) RENEW_URL="$(ask "Renew URL: ")"; save_cfg;;
-    4) TELEGRAM_BOT="$(ask "Telegram bot (@name): ")"; save_cfg;;
-    5) ACCENT="$(ask "Accent #RRGGBB: ")"; save_cfg;;
-    6) LOGO_URL="$(ask "Logo URL (https): ")"; save_cfg;;
-    7) NOTICE="$(ask "Notice text: ")"; save_cfg;;
-    *) return;;
+  case "$(ask "Choice: ")" in
+    1) PROFILE_TITLE="$(ask "title: ")"; save_cfg;;
+    2) SUPPORT_URL="$(ask "url: ")"; save_cfg;;
+    3) RENEW_URL="$(ask "url: ")"; save_cfg;;
+    4) TELEGRAM_BOT="$(ask "@bot: ")"; save_cfg;;
+    5) ACCENT="$(ask "#hex: ")"; save_cfg;;
+    6) LOGO_URL="$(ask "https: ")"; save_cfg;;
+    7) NOTICE="$(ask "text: ")"; save_cfg;;
   esac
-  [[ -f "$XUI_FILE" ]] && inject_theme "$XUI_FILE" && ok "re-injected 3x-ui" || true
-  local pf; pf="$(pg_file)"
-  [[ -f "$pf" ]] && inject_theme "$pf" && ok "re-injected PasarGuard" || true
+  [[ -f "$XUI_FILE" ]] && inject_theme "$XUI_FILE" && ok "re-injected xui" || true
+  local pf; pf="$(pg_file)"; [[ -f "$pf" ]] && inject_theme "$pf" && ok "re-injected pg" || true
 }
 
 status(){
-  echo -e "\n${BOLD}NexusNet status${NC}  v${VERSION}  ref=${REF}"
-  echo "  BASE  ${BASE}"
-  if [[ -f "$XUI_FILE" ]]; then
-    echo -e "  3x-ui ${GREEN}installed${NC}  $(wc -c <"$XUI_FILE") bytes  $XUI_FILE"
-  else
-    echo -e "  3x-ui ${YELLOW}not installed${NC}"
-  fi
+  echo -e "\n${BOLD}Status${NC} v${VERSION} ref=${REF}"
+  echo "  BASE $BASE"
+  [[ -f "$XUI_FILE" ]] && echo -e "  xui  ${GREEN}ok${NC} $(wc -c <"$XUI_FILE")B" || echo -e "  xui  ${YELLOW}missing${NC}"
   local pf; pf="$(pg_file)"
-  if [[ -f "$pf" ]]; then
-    echo -e "  PG    ${GREEN}installed${NC}  $(wc -c <"$pf") bytes  $pf"
-  else
-    echo -e "  PG    ${YELLOW}not installed${NC}"
-  fi
-  [[ -f "$CFG_FILE" ]] && echo "  cfg   $CFG_FILE" || echo "  cfg   (none)"
+  [[ -f "$pf" ]] && echo -e "  pg   ${GREEN}ok${NC} $(wc -c <"$pf")B" || echo -e "  pg   ${YELLOW}missing${NC}"
 }
 
 self_update(){
   local tmp; tmp="$(mktemp)"
-  info "updating CLI from ${BASE}/nxt-sub"
+  info "update CLI from $BASE/nxt-sub"
   fetch "${BASE}/nxt-sub" "$tmp" || die "download failed"
-  head -1 "$tmp" | grep -q '^#!/usr/bin/env bash' || die "invalid CLI payload"
-  bash -n "$tmp" || die "CLI syntax error"
+  head -1 "$tmp" | grep -q '^#!/usr/bin/env bash' || die "invalid"
+  bash -n "$tmp" || die "syntax error"
   install -m 755 "$tmp" /usr/local/bin/nxt-sub
   cp -f /usr/local/bin/nxt-sub /usr/bin/nxt-sub 2>/dev/null || true
-  hash -r 2>/dev/null || true
-  ok "CLI → $(command -v nxt-sub)  ($(/usr/local/bin/nxt-sub version 2>/dev/null || echo '?'))"
+  ok "CLI $(/usr/local/bin/nxt-sub version)"
 }
 
-# ── args ──────────────────────────────────────────────
 LOCAL_FILE=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --file) LOCAL_FILE="${2:-}"; shift 2 || true;;
-    --ref)
-      REF="${2:-Themes}"
-      BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
-      shift 2 || true
-      ;;
+    --file) LOCAL_FILE="${2:-}"; shift 2||true;;
+    --ref) REF="${2:-Themes}"; BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"; shift 2||true;;
     *) break;;
   esac
 done
 
 case "${1:-}" in
   install)
-    case "${2:-}" in
-      xui|3xui) install_xui;;
-      pg|pasarguard) install_pg;;
-      both) install_xui; install_pg;;
-      *) die "usage: nxt-sub install xui|pg|both [--file path] [--ref branch]";;
-    esac
-    exit 0
-    ;;
+    case "${2:-}" in xui|3xui) install_xui;; pg|pasarguard) install_pg;; both) install_xui; install_pg;;
+      *) die "usage: nxt-sub install xui|pg|both [--file path]";; esac; exit 0;;
   restore)
-    case "${2:-}" in
-      xui|3xui) restore_latest "$XUI_FILE";;
-      pg|pasarguard)
-        restore_latest "$(pg_file)"
-        command -v pasarguard >/dev/null 2>&1 && pasarguard restart 2>/dev/null || true
-        ;;
-      *) die "usage: nxt-sub restore xui|pg";;
-    esac
-    exit 0
-    ;;
+    case "${2:-}" in xui|3xui) restore_latest "$XUI_FILE";; pg|pasarguard) restore_latest "$(pg_file)";;
+      *) die "usage: nxt-sub restore xui|pg";; esac; exit 0;;
   status) status; exit 0;;
   update) self_update; exit 0;;
   settings) settings_menu; exit 0;;
   version|-v|--version) echo "$VERSION"; exit 0;;
   help|-h|--help)
-    cat << H
-NexusNet Sub Manager v${VERSION}
-
-Usage:
-  sudo nxt-sub                         Interactive menu
-  sudo nxt-sub install xui|pg|both     Install theme(s)
-  sudo nxt-sub restore xui|pg          Restore last backup
-  sudo nxt-sub settings                Edit profile / support / renew
-  sudo nxt-sub status
-  sudo nxt-sub update                  Update this CLI from GitHub
-  sudo nxt-sub version
-
-Options:
-  --file PATH     Use local HTML instead of GitHub download
-  --ref  NAME     Git branch / tag (default: Themes)
-
-Env:
-  NXT_REF   same as --ref
-  NXT_BASE  mirror base URL (default: raw.githubusercontent.com/.../NexusNet-Sub/\$REF)
-H
-    exit 0
-    ;;
+    echo "NexusNet v${VERSION}"; echo "sudo nxt-sub | install xui|pg|both | restore | settings | status | update"
+    exit 0;;
 esac
 
-# ── interactive menu ──────────────────────────────────
 while true; do
-  echo -e "\n${CYAN}${BOLD}  ╔══════════════════════════════════════╗"
-  echo -e "  ║     NexusNet Sub Manager  v${VERSION}      ║"
-  echo -e "  ╚══════════════════════════════════════╝${NC}"
-  echo "  1) Install / update  3x-ui theme"
-  echo "  2) Install / update  PasarGuard theme"
+  echo -e "\n${CYAN}${BOLD}  NexusNet Sub Manager  v${VERSION}${NC}"
+  echo "  1) Install 3x-ui"
+  echo "  2) Install PasarGuard"
   echo "  3) Install both"
-  echo "  4) Settings  (title · support · renew · logo)"
+  echo "  4) Settings"
   echo "  5) Status"
-  echo "  6) Restore backup  (3x-ui)"
-  echo "  7) Restore backup  (PasarGuard)"
-  echo "  8) Update nxt-sub CLI from GitHub"
+  echo "  6) Restore 3x-ui backup"
+  echo "  7) Restore PasarGuard backup"
+  echo "  8) Update CLI"
   echo "  0) Exit"
-  c="$(ask "  Choice: ")"
-  case "$c" in
-    1) install_xui;;
-    2) install_pg;;
-    3) install_xui; install_pg;;
-    4) settings_menu;;
-    5) status;;
+  case "$(ask "Choice: ")" in
+    1) install_xui;; 2) install_pg;; 3) install_xui; install_pg;;
+    4) settings_menu;; 5) status;;
     6) restore_latest "$XUI_FILE";;
-    7)
-      restore_latest "$(pg_file)"
-      command -v pasarguard >/dev/null 2>&1 && pasarguard restart 2>/dev/null || true
-      ;;
+    7) restore_latest "$(pg_file)";;
     8) self_update;;
     0|q|Q) exit 0;;
-    *) warn "invalid choice";;
+    *) warn "invalid";;
   esac
 done
