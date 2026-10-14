@@ -174,6 +174,9 @@ html[data-theme=light] .orb3d{filter:drop-shadow(0 10px 18px rgba(20,80,140,.22)
 .vol .k{font-size:.62rem;gap:0}.vol .k .ck{letter-spacing:0}
 @media(max-width:390px){.orb3d,.ring-wrap,.ring-wrap svg{width:112px;height:112px}.total-under{min-width:100px}.usage{gap:.55rem}.vol{padding:.5rem .5rem}.ring-center .pct{font-size:1.3rem}.vol .v{font-size:.76rem}}
 
+
+/*nn-no-ping*/
+.lat-btn,.lat-note,#latUpdated,#btnLat{display:none!important}
 </style>
 </head>
 <body>
@@ -273,14 +276,9 @@ html[data-theme=light] .orb3d{filter:drop-shadow(0 10px 18px rgba(20,80,140,.22)
   </div>
 
   <div id="tab-cfg" class="tab">
-    <div class="lat-head">
-      <div class="st"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg> <span data-i18n="cfg"></span></div>
-      <button class="lat-btn" type="button" id="btnLat"><svg class="i" aria-hidden="true"><use href="#i-rotate"/></svg> <span data-i18n="pingTest"></span></button>
-    </div>
-    <div class="lat-note" data-i18n="pingNote"></div>
+    <div class="st"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg> <span data-i18n="cfg"></span></div>
     <div id="list"></div>
     <div class="row"><button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1"><svg class="i" aria-hidden="true"><use href="#i-copy"/></svg> <span data-i18n="all"></span></button></div>
-    <div class="lat-note" id="latUpdated" style="text-align:end"></div>
   </div>
 
   <div id="tab-apps" class="tab"><div class="st"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg> <span data-i18n="apps"></span></div><div class="steps"><span class="stp"><b>1</b><span data-i18n="step1"></span></span><span class="stp-ar"><svg class="i" aria-hidden="true"><use href="#i-chevron-down"/></svg></span><span class="stp"><b>2</b><span data-i18n="step2"></span></span></div><div id="apps"></div></div>
@@ -1248,10 +1246,10 @@ const APPS=[
   {p:"macOS",i:"apple",a:[{n:"Happ",u:"https://apps.apple.com/app/id6504287215",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"},{n:"V2Box",u:"https://apps.apple.com/app/id6446814690"}]},
   {p:"Linux",i:"linux",a:[{n:"Happ",u:"https://github.com/Happ-proxy/happ-desktop/releases",r:1},{n:"Throne",u:"https://github.com/throneproj/Throne/releases",r:1},{n:"Hiddify",u:"https://github.com/hiddify/hiddify-app/releases"}]},
 ];
-const QI=[{n:"Happ",i:"bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"shield-halved",s:"hiddify://import/{U}"},{n:"v2rayNG",i:"android",s:"v2rayng://install-config?url={E}",o:["Android"]},{n:"V2Box",i:"box-open",s:"v2box://install-sub?url={E}&title={T}",o:["Android","iOS","macOS"]}];
+const QI=[{n:"Happ",i:"bolt",s:"happ://add/{U}"},{n:"Hiddify",i:"shield-halved",s:"hiddify://import/{U}"},{n:"V2Box",i:"box-open",s:"v2box://install-sub?url={E}&title={T}"},{n:"v2rayNG",i:"android",s:"v2rayng://install-config?url={E}",o:["Android"]},{n:"v2rayN",i:"display",s:"v2rayn://install-config?url={E}",o:["Windows"]}];
 const I={
-  fa:{n1:"خانه",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
-  en:{n1:"Home",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
+  fa:{n1:"داشبورد",n2:"کانفیگ",n3:"برنامه‌ها",n4:"پروفایل",used:"مصرف‌شده",limit:"حجم کل",left:"باقی‌مانده",down:"دانلود شده",up:"آپلود شده",copy:"کپی اشتراک",qi:"افزودن سریع",cfg:"کانفیگ‌ها",all:"کپی همه",apps:"کلاینت‌ها",prof:"پروفایل",on:"فعال",off:"غیرفعال",online:"آنلاین",unl:"نامحدود",days:"روز",hours:"ساعت",mins:"دقیقه",ok:"کپی شد!",none:"موردی نیست",traffic:"ترافیک",time:"زمان",exp:"زمان باقی‌مانده",p1:"نام کاربری",p2:"شناسه",p3:"وضعیت",p5:"تاریخ انقضا",p6:"آخرین اتصال",period:"بازه مصرف",lat:"تأخیر زنده",updated:"آخرین بروزرسانی",noping:"سرور موقعیتی یافت نشد",wait:"...",ms:"ms",day:"روز",hour:"ساعت",min:"دقیقه",total:"کل",renew:"تمدید",support:"پشتیبانی",warnVol:"حجم اشتراک رو به اتمام است",warnExp:"اشتراک به‌زودی منقضی می‌شود",fmtSub:"کپی Sub",fmtJson:"کپی JSON",fmtClash:"کپی Clash"},
+  en:{n1:"Dashboard",n2:"Configs",n3:"Apps",n4:"Profile",used:"Used",limit:"Total quota",left:"Remaining",down:"Downloaded",up:"Uploaded",copy:"Copy sub",qi:"Quick import",cfg:"Configs",all:"Copy all",apps:"Clients",prof:"Profile",on:"Active",off:"Inactive",online:"Online",unl:"Unlimited",days:"days",hours:"hours",mins:"mins",ok:"Copied!",none:"Nothing here",traffic:"Traffic",time:"Time",exp:"Time remaining",p1:"Username",p2:"User ID",p3:"Status",p5:"Expire date",p6:"Last connection",period:"Usage period",lat:"Live Latency",updated:"Last update",noping:"No location servers",wait:"...",ms:"ms",day:"Days",hour:"Hours",min:"Mins",total:"Total",renew:"Renew",support:"Support",warnVol:"Data quota is running low",warnExp:"Subscription expires soon",fmtSub:"Copy Sub",fmtJson:"Copy JSON",fmtClash:"Copy Clash"}
 };
 Object.assign(I.fa,{renewSvc:"تمدید سرویس",life:"کل مصرف",needApp:"هنوز برنامه نصب نکرده‌ای؟",guide:"راهنمای اتصال",pingTest:"تست پینگ",
 pingNote:"پینگ مستقیماً از دستگاه تو به سرور گرفته می‌شود و فقط با زدن دکمه اجرا می‌شود. «—» یعنی قابل اندازه‌گیری نبود (لزوماً به معنی قطع بودن نیست).",
@@ -1507,15 +1505,7 @@ function measureWS(h,ms){return new Promise(res=>{
   try{ws=new WebSocket("wss://"+h.host+(h.port&&+h.port!==443?":"+h.port:"")+"/");ws.onopen=()=>fin(Math.round(performance.now()-t0));ws.onerror=()=>fin(null)}catch(e){fin(null)}})}
 async function measureOne(h){let v=await measureFetch(h,2500);if(v==null)v=await measureWS(h,2000);return v}
 let latRunning=false;
-async function runLatency(){
-  if(latRunning)return;latRunning=true;const btn=$("btnLat");btn.classList.add("spin");
-  const uniq={};links.forEach(l=>{const h=extractHost(l),k=latKey(h);if(k)uniq[k]=h});
-  const keys=Object.keys(uniq);keys.forEach(k=>{pingMap[k]=null});renderList();
-  const q=keys.slice();
-  await Promise.all(Array.from({length:Math.min(4,q.length)},async()=>{while(q.length){const k=q.shift();const v=await measureOne(uniq[k]);pingMap[k]=v;
-    document.querySelectorAll('.ping[data-k="'+(window.CSS&&CSS.escape?CSS.escape(k):k)+'"]').forEach(el=>{el.textContent=v==null?"—":v+" ms";el.className="ping "+pingClass(v)})}}));
-  $("latUpdated").textContent=t("pingTest")+": "+new Date().toLocaleTimeString();
-  btn.classList.remove("spin");latRunning=false}
+async function runLatency(){return;}
 
 /* ---------- i18n / theme / events ---------- */
 function uiLang(){
@@ -1540,7 +1530,7 @@ function gotoTab(name){
 document.querySelectorAll(".nav button").forEach(b=>b.onclick=()=>gotoTab(b.dataset.t));
 $("btnGoApps").onclick=()=>gotoTab("apps");
 $("btnCopy").onclick=()=>copy(subUrl);$("btnQr").onclick=()=>qr(subUrl);
-$("btnAll").onclick=()=>copy(links.join("\n"));$("btnLat").onclick=runLatency;
+$("btnAll").onclick=()=>copy(links.join("\n"));
 $("btnQrCopy").onclick=()=>{if(window.__lastQr)copy(window.__lastQr)};$("btnQrClose").onclick=closeQr;
 $("md").onclick=e=>{if(e.target===$("md"))closeQr()};
 addEventListener("keydown",e=>{if(e.key==="Escape")closeQr()});
