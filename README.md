@@ -1,21 +1,17 @@
-[README.md](https://github.com/user-attachments/files/33428972/README.md)
-# NexusNet Sub v3.3.2
-Subscription themes for **3x-ui (Sanaei)** and **PasarGuard** — v3.0.1 dashboard/apps layout on the 2.2 core. Works with no CDN.
-
-## Install
-```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Template/install.sh)
-sudo nxt-sub                              # menu
-sudo nxt-sub install xui|pg [--file f]    # non-interactive / offline
-sudo nxt-sub restore xui|pg               # roll back to last backup
-```
-Pin a release with `NXT_REF=<tag-or-commit>`, use a mirror with `NXT_BASE=<url>`. Checksums come from `SHA256SUMS`.
-
-## Settings (`nxt-sub` -> 3)
-Title, Telegram bot, support URL, renew URL, accent color, logo (https), top notice.
-
-## Build
-Sources are in `src/`; `python3 build.py` regenerates both themes into `out/`.
-
-## Troubleshooting numbers (PasarGuard)
-Open the subscription page with `#debug` at the end of the URL (e.g. `https://host/sub/TOKEN#debug`) to see the raw values PasarGuard sent (used_traffic, data_limit, lifetime, status, dates).
+[install.sh](https://github.com/user-attachments/files/33428979/install.sh)
+#!/usr/bin/env bash
+# bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
+set -euo pipefail
+REF="${NXT_REF:-Themes}"
+BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
+[[ ${EUID} -eq 0 ]] || { echo "sudo bash install.sh"; exit 1; }
+tmp="$(mktemp)"; trap 'rm -f "$tmp"' EXIT
+if command -v curl >/dev/null 2>&1; then curl -fsSL --retry 3 --max-time 90 "${BASE}/nxt-sub" -o "$tmp"
+elif command -v wget >/dev/null 2>&1; then wget -q -T 90 -O "$tmp" "${BASE}/nxt-sub"
+else echo "need curl/wget"; exit 1; fi
+head -1 "$tmp" | grep -q '^#!/usr/bin/env bash' || { echo "bad download"; exit 1; }
+bash -n "$tmp" || { echo "syntax error"; exit 1; }
+install -m 755 "$tmp" /usr/local/bin/nxt-sub
+cp -f /usr/local/bin/nxt-sub /usr/bin/nxt-sub 2>/dev/null || true
+echo "nxt-sub $(/usr/local/bin/nxt-sub version)"
+exec nxt-sub
