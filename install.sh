@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # NexusNet one-line installer — installs nxt-sub then opens the menu
-#   bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/install.sh)
+#   bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
 set -euo pipefail
-REF="${NXT_REF:-main}"
+REF="${NXT_REF:-Themes}"
 BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
 
 [[ ${EUID} -eq 0 ]] || { echo "Run as root:  sudo bash install.sh"; exit 1; }
