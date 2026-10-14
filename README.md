@@ -1,9 +1,9 @@
-[README.md](https://github.com/user-attachments/files/33423839/README.md)
-# NexusNet Sub **v3.2**
+[Uploading README.md…]()
+# NexusNet Sub **v3.3**
 
 Premium subscription page for **3x-ui** and **PasarGuard** — same UI, dual data injection.
 
-[![version](https://img.shields.io/badge/version-3.2-blue)](#)
+[![version](https://img.shields.io/badge/version-3.3-blue)](#)
 [![license](https://img.shields.io/badge/license-MIT-green)](#)
 
 ## Quick install
