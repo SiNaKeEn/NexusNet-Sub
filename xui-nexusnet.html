@@ -205,6 +205,26 @@ body[data-mood="fresh"] .orb.c{background:#312e81!important}
 /* force blue even if JS sets fresh */
 body[data-mood="fresh"]{--p:#38bdf8}
 
+
+/*v33-fixes*/
+#warnVol:not(.show),#warnExp:not(.show){display:none!important}
+#warnVol.show:has(span:empty),#warnExp.show:has(span:empty){display:none!important}
+#btnSmart{display:none!important}
+.qi{display:grid!important;grid-template-columns:1fr 1fr!important;gap:.45rem!important}
+.qi a{display:flex!important;align-items:center!important;justify-content:center!important;gap:.35rem!important;
+  padding:.7rem .45rem!important;border-radius:14px!important;font-weight:700!important;text-decoration:none!important}
+.ambient,body[data-mood="fresh"] .ambient,body[data-mood="ok"] .ambient,body:not([data-mood]) .ambient{
+  background:radial-gradient(140% 100% at 50% -20%,#0f172a 0%,#020617 48%,#000 100%)!important;
+  filter:none!important;animation:none!important}
+.orb.a,.orb.b,.orb.c,
+body[data-mood="fresh"] .orb.a,body[data-mood="ok"] .orb.a,
+body[data-mood="fresh"] .orb.b,body[data-mood="ok"] .orb.b,
+body[data-mood="fresh"] .orb.c,body[data-mood="ok"] .orb.c{
+  background:#1e3a8a!important}
+body[data-mood="ok"] .orb.b,body[data-mood="fresh"] .orb.b,body:not([data-mood]) .orb.b{background:#1d4ed8!important}
+body[data-mood="ok"] .orb.c,body[data-mood="fresh"] .orb.c,body:not([data-mood]) .orb.c{background:#312e81!important}
+.lat-btn,.lat-note,#latUpdated,#btnLat{display:none!important}
+
 </style>
 </head>
 <body data-mood="ok">
@@ -1428,11 +1448,11 @@ function setHeadline(s,rem,unl,e){
 function renderStatus(){
   const s=calcStatus(),b=$("badge");b.className="badge "+s.k;$("badgeTxt").textContent=s.text;$("statusDot").className="dot"+(s.k==="ok"?"":" "+s.k);return s}
 function data(){
-  document.title=subTitle;$("title").textContent=subTitle;
+  document.title=subTitle;if($("title"))$("title").textContent=subTitle;
   const tot=num(TV.totalByte),used=num(TV.downloadByte)+num(TV.uploadByte),e=expInfo(),s=renderStatus();
-  const wv=$("warnVol");if(tot>0&&used/tot>=.8&&used<tot){wv.classList.add("show");$("warnVolTxt").textContent=t("warnVolN")+" ("+Math.round(used/tot*100)+"%)"}else wv.classList.remove("show");
+  const wv=$("warnVol");if(wv){if(tot>0&&used/tot>=.8&&used<tot){const _wt=t("warnVolN")+" ("+Math.round(used/tot*100)+"%)";const _we=$("warnVolTxt");if(_we)_we.textContent=_wt;if(_wt&&_wt.trim())wv.classList.add("show");else wv.classList.remove("show")}else{wv.classList.remove("show");const _we=$("warnVolTxt");if(_we)_we.textContent=""}}
   const we=$("warnExp"),dl=e.k==="date"?(e.ms-Date.now())/864e5:-1;
-  if(dl>=0&&dl<=3){we.classList.add("show");$("warnExpTxt").textContent=t("st_soon")+" ("+Math.ceil(dl)+" "+t("dayUnit")+")"}else we.classList.remove("show");
+  if(we){if(dl>=0&&dl<=7){const _et=t("st_soon")+" ("+Math.ceil(dl)+" "+t("dayUnit")+")";const _ee=$("warnExpTxt");if(_ee)_ee.textContent=_et;if(_et&&_et.trim())we.classList.add("show");else we.classList.remove("show")}else{we.classList.remove("show");const _ee=$("warnExpTxt");if(_ee)_ee.textContent=""}}
   const sup=safeUrl(CONFIG.supportUrl)||safeUrl(TV.subSupportUrl),ren=safeUrl(CONFIG.renewUrl)||sup;
   const br=$("btnRenew"),bs=$("btnSupport");
   if(ren){br.style.display="";br.href=ren}else br.style.display="none";
@@ -1477,50 +1497,9 @@ function renderQi(){
   const ok=QI.filter(q=>!cur||!q.o||q.o.indexOf(cur)>-1);
   const mk=q=>q.s.replace("{U}",U).replace("{E}",U).replace("{T}",T);
   const sm=$("btnSmart");
-  if(ok.length){const f=ok[0];sm.style.display="";sm.href=mk(f);sm.innerHTML=ic(f.i)+" "+esc(t("smart"))+" "+esc(f.n)}else sm.style.display="none";
-  $("qi").innerHTML=ok.slice(1).map(q=>'<a href="'+esc(mk(q))+'">'+ic(q.i)+" "+esc(q.n)+"</a>").join("")}
-function guideHtml(tk,ik,icon,open){return'<details class="gd"'+(open?" open":"")+"><summary>"+ic(icon)+esc(t(tk))+"</summary><"+(ik==="g1"?"ol":"ul")+">"+t(ik).map(x=>"<li>"+esc(x)+"</li>").join("")+"</"+(ik==="g1"?"ol":"ul")+"></details>"}
-function renderGuide(){$("guide").innerHTML=guideHtml("g1t","g1","wand-magic-sparkles",false)+guideHtml("g2t","g2","screwdriver-wrench",false)}
-
-function nameOf(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return j.ps||j.add||"vmess"}
-  const h=link.indexOf("#");if(h>-1)return decodeURIComponent(link.slice(h+1))||"config";return link.split("://")[0]||"config"}catch(e){return"config"}}
-function parseLink(l){
-  const proto=(l.split("://")[0]||"").toLowerCase();let net="",sec="";
-  try{if(proto==="vmess"){const j=JSON.parse(atob(l.slice(8).replace(/-/g,"+").replace(/_/g,"/")));net=j.net||"";sec=j.tls||""}
-  else{const p=new URLSearchParams((l.split("?")[1]||"").split("#")[0]);net=p.get("type")||"";sec=p.get("security")||""}}catch(e){}
-  return{proto,net,sec}}
-const latKey=h=>h.host?h.host+":"+h.port:"";
-const pingMap={};
-function renderList(){
-  const box=$("list");
-  if(!links.length){box.innerHTML='<div class="card" style="text-align:center;color:var(--mu)">'+esc(t("none"))+"</div>";return}
-  box.innerHTML=links.map((l,i)=>{
-    const m=parseLink(l),k=latKey(extractHost(l)),tags=[m.proto,m.net&&m.net!=="tcp"?m.net:"",m.sec&&m.sec!=="none"?m.sec:""].filter(Boolean).map(x=>'<span class="tag">'+esc(x.toUpperCase())+"</span>").join("");
-    const pv=pingMap[k],pc=pingClass(pv);
-    return'<div class="item"><div class="meta"><div class="n">'+esc(nameOf(l))+'</div><div class="tags">'+tags+'</div></div><span class="ping '+pc+'" data-k="'+esc(k)+'">'+(pv==null?"—":pv+" ms")+'</span>'
-      +'<button class="mb" type="button" data-c="'+i+'" aria-label="'+esc(t("copy"))+'">'+ic("copy")+'</button><button class="mb" type="button" data-q="'+i+'" aria-label="'+esc(t("qr"))+'">'+ic("qrcode")+"</button></div>"}).join("");
-  box.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>copy(links[+b.dataset.c]));
-  box.querySelectorAll("[data-q]").forEach(b=>b.onclick=()=>qr(links[+b.dataset.q]))}
-function renderApps(){
-  const cur=plat(),order=["iOS","Android","Windows","macOS","Linux"],U=encodeURIComponent(subUrl),T=encodeURIComponent(subTitle);
-  const sorted=[...APPS].sort((a,b)=>a.p===cur?-1:b.p===cur?1:order.indexOf(a.p)-order.indexOf(b.p));
-  const anyHot=sorted.some(g=>g.p===cur);
-  $("apps").innerHTML=sorted.map((g,gi)=>{const hot=g.p===cur,open=hot||(!anyHot&&gi===0);
-    const rows=g.a.map(a=>{let c=String(a.n).toLowerCase().replace(/[^a-z0-9]/g,"");c=({v2rayng:"v2ray",v2rayn:"v2ray",shadowrocket:"shadow"})[c]||c;
-      const q=QI.find(x=>x.n===a.n),add=q?'<a class="mini pri" href="'+esc(q.s.replace("{U}",U).replace("{E}",U).replace("{T}",T))+'">'+ic("bolt")+esc(t("addSub"))+"</a>":"";
-      return'<div class="al"><span class="app-badge '+esc(c)+'">'+esc(String(a.n).slice(0,1).toUpperCase())+"</span><span>"+esc(a.n)+"</span>"+(a.r?'<span class="t">REC</span>':"")
-        +'<span class="acts"><a class="mini" href="'+esc(a.u)+'" target="_blank" rel="noopener">'+ic("download")+esc(t("inst"))+"</a>"+add+"</span></div>"}).join("");
-    return'<div class="grp'+(hot?" hot":"")+(open?"":" collapsed")+'"><h4 role="button" tabindex="0" aria-expanded="'+open+'">'+ic(g.i)+esc(g.p)+(hot?' <span style="color:var(--p)">★</span>':"")+ic("chevron-down","chev")+'</h4><div class="gb"><div>'+rows+"</div></div></div>"}).join("");
-  $("apps").querySelectorAll(".grp>h4").forEach(h=>{const tg=()=>{const g=h.parentNode;g.classList.toggle("collapsed");h.setAttribute("aria-expanded",String(!g.classList.contains("collapsed")))};
-    h.onclick=tg;h.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();tg()}}})}
-
-/* ---------- ping (manual only, no img/http probes) ---------- */
-function extractHost(link){try{
-  if(link.startsWith("vmess://")){const j=JSON.parse(atob(link.slice(8).replace(/-/g,"+").replace(/_/g,"/")));return{host:j.add||j.host||"",port:j.port||443,name:j.ps||""}}
-  if(link.startsWith("ss://")){const m=link.match(/@([^:#/?]+)/);if(m)return{host:m[1],port:443,name:nameOf(link)}}
-  const m=link.match(/@([^:#/?]+):?(\d+)?/);if(m)return{host:m[1],port:parseInt(m[2]||"443",10),name:nameOf(link)};
-  const m2=link.match(/:\/\/(?:[^@/]+@)?([^:#/?]+)/);if(m2)return{host:m2[1],port:443,name:nameOf(link)};
+  if(sm){sm.style.display="none";sm.removeAttribute("href");sm.innerHTML=""}
+  if(!$("qi"))return;
+  $("qi").innerHTML=(ok.length?ok:QI).map(q=>'<a href="'+esc(mk(q))+'">'+ic(q.i)+" "+esc(q.n)+"</a>").join("")
 }catch(e){}return{host:"",port:443,name:nameOf(link)}}
 function pingClass(ms){return ms==null?"wait":ms<120?"good":ms<280?"mid":"bad"}
 function measureFetch(h,ms){return new Promise(res=>{
