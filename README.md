@@ -1,4 +1,4 @@
-[README.md](https://github.com/user-attachments/files/33423691/README.md)
+[README.md](https://github.com/user-attachments/files/33423839/README.md)
 # NexusNet Sub **v3.2**
 
 Premium subscription page for **3x-ui** and **PasarGuard** — same UI, dual data injection.
@@ -9,7 +9,7 @@ Premium subscription page for **3x-ui** and **PasarGuard** — same UI, dual dat
 ## Quick install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
 ```
 
 This installs the `nxt-sub` CLI and opens the interactive menu.
@@ -33,7 +33,7 @@ sudo nxt-sub version
 | Flag / Env | Meaning |
 |------------|---------|
 | `--file PATH` | Install from a local HTML file (no download) |
-| `--ref NAME` / `NXT_REF` | Git branch or tag (default `main`) |
+| `--ref NAME` / `NXT_REF` | Git branch or tag (default `Themes`) |
 | `NXT_BASE` | Mirror base URL |
 
 ### Local install (no GitHub)
