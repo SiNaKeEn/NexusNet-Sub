@@ -2,7 +2,7 @@
 # NexusNet Sub Manager — GitHub-ready CLI
 set -euo pipefail
 
-VERSION="3.2"
+VERSION="3.2.1"
 REF="${NXT_REF:-Themes}"
 BASE="${NXT_BASE:-https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/${REF}}"
 
@@ -17,9 +17,9 @@ CFG_FILE="${CFG_DIR}/config"
 MARK='NXT_CFG_BEGIN'
 
 die(){ echo -e "${RED}error:${NC} $*" >&2; exit 1; }
-ok(){ echo -e "${GREEN}ok${NC}  $*"; }
-info(){ echo -e "${CYAN}→${NC}  $*"; }
-warn(){ echo -e "${YELLOW}warn${NC} $*"; }
+ok(){ echo -e "${GREEN}ok${NC}  $*" >&2; }
+info(){ echo -e "${CYAN}→${NC}  $*" >&2; }
+warn(){ echo -e "${YELLOW}warn${NC} $*" >&2; }
 
 [[ ${EUID} -eq 0 ]] || die "run as root:  sudo nxt-sub"
 
@@ -56,16 +56,16 @@ verify_sum(){
 }
 
 get_theme(){
-  # $1 = remote filename
+  # $1 = remote filename — prints ONLY temp path on stdout; logs on stderr
   local tmp; tmp="$(mktemp)"
   if [[ -n "${LOCAL_FILE:-}" ]]; then
     [[ -f "$LOCAL_FILE" ]] || die "LOCAL_FILE not found: $LOCAL_FILE"
     cp -f "$LOCAL_FILE" "$tmp"
-    info "using local file: $LOCAL_FILE"
+    info "using local file: $LOCAL_FILE" >&2
   else
-    info "downloading $1  (ref=${REF})"
+    info "downloading $1  (ref=${REF})" >&2
     fetch "${BASE}/$1" "$tmp" || { rm -f "$tmp"; die "download failed — set NXT_REF / NXT_BASE or use --file"; }
-    verify_sum "$tmp" "$1" || { rm -f "$tmp"; exit 1; }
+    verify_sum "$tmp" "$1" >&2 || { rm -f "$tmp"; exit 1; }
   fi
   [[ -s "$tmp" ]] || { rm -f "$tmp"; die "empty download"; }
   grep -q "$MARK" "$tmp" || { rm -f "$tmp"; die "file is not a valid NexusNet theme (missing ${MARK})"; }
