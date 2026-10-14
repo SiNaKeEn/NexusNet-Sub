@@ -1,98 +1,80 @@
-# NexusNet Sub Theme
+[README.md](https://github.com/user-attachments/files/33423691/README.md)
+# NexusNet Sub **v3.2**
 
-**Version 3.0.0** — subscription page themes for **3x-ui (Sanaei)** and **PasarGuard**.
+Premium subscription page for **3x-ui** and **PasarGuard** — same UI, dual data injection.
 
-Based on the stable **2.1-opt** UI (fonts, layout, buttons) with renew/support and without live latency.
-
----
+[![version](https://img.shields.io/badge/version-3.2-blue)](#)
+[![license](https://img.shields.io/badge/license-MIT-green)](#)
 
 ## Quick install
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/Themes/install.sh)
+bash <(curl -fsSL https://raw.githubusercontent.com/SiNaKeEn/NexusNet-Sub/main/install.sh)
 ```
 
-Then:
+This installs the `nxt-sub` CLI and opens the interactive menu.
+
+## CLI (`nxt-sub`)
+
+```text
+sudo nxt-sub                 # interactive menu
+sudo nxt-sub install xui     # 3x-ui only
+sudo nxt-sub install pg      # PasarGuard only
+sudo nxt-sub install both
+sudo nxt-sub settings        # profile title / support / renew / logo
+sudo nxt-sub status
+sudo nxt-sub update          # self-update CLI from GitHub
+sudo nxt-sub restore xui|pg
+sudo nxt-sub version
+```
+
+### Options
+
+| Flag / Env | Meaning |
+|------------|---------|
+| `--file PATH` | Install from a local HTML file (no download) |
+| `--ref NAME` / `NXT_REF` | Git branch or tag (default `main`) |
+| `NXT_BASE` | Mirror base URL |
+
+### Local install (no GitHub)
 
 ```bash
-sudo nxt-sub
+sudo nxt-sub install xui --file ./xui-nexusnet.html
+sudo nxt-sub install pg  --file ./pasarguard-nexusnet.html
 ```
 
----
+## Manual copy
 
-## CLI menu (`sudo nxt-sub`)
+```bash
+# 3x-ui
+sudo mkdir -p /etc/x-ui/sub
+sudo cp -f xui-nexusnet.html /etc/x-ui/sub/sub.html
+# Panel → Sub Theme Directory = /etc/x-ui/sub/
 
+# PasarGuard
+sudo mkdir -p /var/lib/pasarguard/templates/subscription
+sudo cp -f pasarguard-nexusnet.html /var/lib/pasarguard/templates/subscription/index.html
 ```
-1) Install / Reinstall  →  3x-ui
-2) Install / Reinstall  →  PasarGuard
-3) Update installed themes
-4) Update manager (nxt-sub only)
-5) Settings (title / bot / support / renew)
-6) Restore from backup
-7) Status
-8) Uninstall
-9) About
-0) Exit
-```
-
-### Injectable settings
-
-| Setting | Description |
-|---------|-------------|
-| Profile Title | Header title on the sub page |
-| Telegram Bot | `@username` |
-| Support URL | Support button link |
-| Renew URL | Renew button (home + profile) |
-
-Values are stored as base64 and injected safely into the theme `CONFIG` object.
-
----
 
 ## Features
 
-| Feature | Detail |
-|---------|--------|
-| Dual panel | 3x-ui / Sanaei + PasarGuard |
-| UI | Inter + Vazirmatn, glass cards, bottom nav |
-| Background | Dark blue ambient orbs + stars |
-| Dark / Light | Theme toggle |
-| Traffic | Liquid ring (remaining) + down / up / used / left |
-| Expire | Day / hour / minute + Jalali |
-| Renew & Support | From `nxt-sub` settings |
-| Quick import | Happ, Hiddify, v2rayNG, V2Box |
-| Apps list | Android, iOS, Windows, macOS, Linux |
-| Language | Persian / English |
+- Unified UI for 3x-ui + PasarGuard  
+- Liquid traffic ring, mood background, offline-friendly assets  
+- Quick import: Happ · Hiddify · V2Box · v2rayNG (Android) · v2rayN (Windows)  
+- No live ping / latency probes  
+- Safe config injection via `/*NXT_CFG_BEGIN*/` markers  
+- Automatic backups on every install  
 
----
+## Repo layout
 
-## Manual paths
-
-| Panel | Path |
-|-------|------|
-| 3x-ui | `/etc/x-ui/sub/sub.html` |
-| PasarGuard | `/var/lib/pasarguard/templates/subscription/index.html` |
-
-**3x-ui:** if available, set `Sub Theme Directory = /etc/x-ui/sub/`.  
-Older panels: copy `sub.html` to the default sub folder and restart x-ui.
-
----
-
-## Update / Uninstall
-
-```bash
-sudo nxt-sub
-# 3) Update themes
-# 4) Update manager only (no bash install needed)
-# 8) Uninstall
+```text
+install.sh                 # one-liner entry
+nxt-sub                    # CLI manager
+xui-nexusnet.html          # 3x-ui theme
+pasarguard-nexusnet.html   # PasarGuard theme
+SHA256SUMS                 # integrity
 ```
 
----
+## License
 
-## Package files
-
-| File | Purpose |
-|------|---------|
-| `xui-nexusnet.html` | 3x-ui theme |
-| `pasarguard-nexusnet.html` | PasarGuard theme |
-| `nxt-sub` | Interactive CLI |
-| `install.sh` | One-line installer |
+MIT
