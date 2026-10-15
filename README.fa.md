@@ -1,7 +1,7 @@
 [Uploading README.fa.md…]()
 <div align="center">
 
-<img src="docs/banner.png" alt="NexusNet Sub" width="100%">
+<img src="banner.png" alt="NexusNet Sub" width="100%">
 
 # NexusNet Sub
 
@@ -42,9 +42,9 @@
 
 | عادی | نامحدود | مشکل ← قرمز |
 |:--:|:--:|:--:|
-| <img src="docs/xui_blue.png" width="250"> | <img src="docs/xui_unlimited.png" width="250"> | <img src="docs/xui_red.png" width="250"> |
+| <img src="xui_blue.png" width="250"> | <img src="xui_unlimited.png" width="250"> | <img src="xui_red.png" width="250"> |
 | **پاسارگارد** | **تم روشن** | **برنامه‌ها** |
-| <img src="docs/pg.png" width="250"> | <img src="docs/light.png" width="250"> | <img src="docs/apps.png" width="250"> |
+| <img src="pg.png" width="250"> | <img src="light.png" width="250"> | <img src="apps.png" width="250"> |
 
 </div>
 
@@ -119,7 +119,7 @@ sudo nxt-sub install both --ref v3.5.0                   # ثابت کردن ت�
 
 <div align="center">
 
-<img src="docs/terminal_menu.png" width="49%"> <img src="docs/terminal_settings.png" width="49%">
+<img src="terminal_menu.png" width="49%"> <img src="terminal_settings.png" width="49%">
 
 </div>
 
@@ -180,22 +180,6 @@ sudo nxt-sub set accent "#a855f7"
 | وضعیت | فعال / انقضا / حجم | وضعیت واقعی (`active`، `limited`، `expired`، `disabled`، `on_hold`) |
 
 > **عددها توی پاسارگارد درست نیستن؟** آخر لینک اشتراک `#debug` بذار (`https://host/sub/TOKEN#debug`) تا مقادیر خامی که پاسارگارد فرستاده رو ببینی.
-
----
-
-## 🛠 ساخت از روی سورس
-
-سورس‌ها توی `src/` هستن و هر دو قالب از یک فایل‌ها ساخته می‌شن:
-
-</div>
-
-```bash
-python3 build.py        # ← out/xui-nexusnet.html, out/pasarguard-nexusnet.html
-```
-
-<div dir="rtl">
-
-لوگوی برنامه‌ها: فایل‌های `happ.png`، `hiddify.png`، `v2rayng.png`، `v2box.png` و… رو بذار توی `src/appicons/` و دوباره بساز؛ به ۷۲ پیکسل کوچک می‌شن و داخل خود HTML قرار می‌گیرن (بدون درخواست بیرونی). برنامه‌ای که لوگو نداشته باشه مربع رنگی با حرف اولش رو نگه می‌داره.
 
 ---
 
