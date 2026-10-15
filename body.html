@@ -1,0 +1,133 @@
+<!--NXT_ICONS-->
+<div class="ambient" aria-hidden="true"></div>
+<div class="app">
+  <div class="hd">
+    <div class="hd-l">
+      <img id="logo" class="logo" alt="" hidden>
+      <div class="hd-info"><h1 id="title">—</h1><div class="sub"><span class="dot" id="statusDot"></span><span id="userLine">—</span></div></div>
+    </div>
+    <div class="tools">
+      <div class="lw" id="lw">
+        <button class="ib" type="button" id="langBtn" data-al="aLang">[[i:language]]</button>
+        <div class="ld"><button type="button" data-l="fa">فارسی</button><button type="button" data-l="en">English</button></div>
+      </div>
+      <button class="ib" type="button" id="themeBtn" data-al="aTheme">[[i:sun]]</button>
+    </div>
+  </div>
+
+  <div id="ann" class="ann">[[i:bullhorn]]<span id="annTxt"></span></div>
+  <div id="warnVol" class="warn vol">[[i:triangle-exclamation]]<span id="warnVolTxt"></span></div>
+  <div id="warnExp" class="warn exp">[[i:hourglass-end]]<span id="warnExpTxt"></span></div>
+
+  <div id="tab-home" class="tab on">
+    <div class="home-renew" id="homeRenew"><a class="btn bp big" id="btnHomeRenew" href="#" target="_blank" rel="noopener">[[i:telegram]] <span data-i18n="renewSvc"></span></a></div>
+
+    <div class="card hero">
+      <div class="hero-top">
+        <div class="headline" id="headline"><span id="hlIcon"></span><span id="hlTxt">—</span></div>
+        <div class="badge ok" id="badge"><span id="badgeTxt">—</span></div>
+      </div>
+      <div class="usage">
+        <div class="ring-col">
+          <div class="orb3d" id="orb">
+            <div class="orb-shadow"></div>
+            <div class="ring-wrap" id="ringWrap">
+              <svg viewBox="0 0 120 120" role="img" aria-hidden="true">
+                <defs>
+                  <clipPath id="clipT"><circle cx="60" cy="60" r="43"/></clipPath>
+                  <linearGradient id="liqT" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--l1)"/><stop offset="1" style="stop-color:var(--l2)"/></linearGradient>
+                  <radialGradient id="glassG" cx=".5" cy=".45" r=".55"><stop offset=".62" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".18"/></radialGradient>
+                </defs>
+                <circle class="trk" cx="60" cy="60" r="51" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="5"/>
+                <circle id="rTraffic" cx="60" cy="60" r="51" fill="none" stroke="var(--l1)" stroke-width="5" stroke-linecap="round" stroke-dasharray="320.44" stroke-dashoffset="320.44" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 1s ease;filter:drop-shadow(0 0 4px var(--l1))"/>
+                <circle class="gbody" cx="60" cy="60" r="45" fill="rgba(255,255,255,.05)"/>
+                <g clip-path="url(#clipT)">
+                  <path id="waveB" fill="url(#liqT)" opacity=".5"/>
+                  <path id="waveT" fill="url(#liqT)" opacity=".92"/>
+                  <g id="bubs"><circle class="bub" cx="44" cy="100" r="2" style="animation-delay:0s"/><circle class="bub" cx="70" cy="100" r="1.6" style="animation-delay:1.4s"/><circle class="bub" cx="56" cy="100" r="2.4" style="animation-delay:2.6s"/><circle class="bub" cx="80" cy="100" r="1.4" style="animation-delay:3.4s"/></g>
+                </g>
+                <circle class="grim" cx="60" cy="60" r="45" fill="url(#glassG)" stroke="rgba(255,255,255,.3)" stroke-width="1.5"/>
+                <path id="domeT" fill="url(#liqT)" opacity=".92"/>
+                <path d="M 27 46 A 36 36 0 0 1 50 26" stroke="#fff" stroke-opacity=".6" stroke-width="3" stroke-linecap="round" fill="none"/>
+              </svg>
+              <div class="orb-spec"></div>
+              <div class="ring-center"><div class="pct" id="pctT">—</div></div>
+            </div>
+          </div>
+          <div class="total-under"><div class="k"><span class="ci">[[i:database]]</span><span class="ck" data-i18n="limit"></span></div><b id="limit">—</b></div>
+        </div>
+        <div class="vol-grid">
+          <div class="vol" id="c1"><div class="k"><span class="ci"></span><span class="ck"></span></div><div class="v">—</div></div>
+          <div class="vol" id="c2"><div class="k"><span class="ci"></span><span class="ck"></span></div><div class="v">—</div></div>
+          <div class="vol" id="c3"><div class="k"><span class="ci"></span><span class="ck"></span></div><div class="v">—</div></div>
+          <div class="vol accent" id="c4"><div class="k"><span class="ci"></span><span class="ck"></span></div><div class="v">—</div></div>
+        </div>
+      </div>
+      <div class="bar"><i id="bar"></i></div>
+      <div class="row">
+        <button class="btn bp" type="button" id="btnCopy">[[i:copy]] <span data-i18n="copy"></span></button>
+        <button class="btn bg" type="button" id="btnQr">[[i:qrcode]] QR</button>
+      </div>
+      <div class="fmt"><button type="button" id="btnFmtJson" class="hid">JSON</button><button type="button" id="btnFmtClash" class="hid">Clash</button></div>
+    </div>
+
+    <div class="card" id="expCard">
+      <div class="exp-hd"><span class="t">[[i:clock]] <span data-i18n="exp"></span> <span class="live"></span></span><span class="exp-tag" id="expTag">—</span></div>
+      <div class="timers">
+        <div class="timer"><div class="n" id="expD">—</div><div class="l" data-i18n="day"></div></div>
+        <div class="timer"><div class="n" id="expH">—</div><div class="l" data-i18n="hour"></div></div>
+        <div class="timer"><div class="n" id="expM">—</div><div class="l" data-i18n="min"></div></div>
+        <div class="timer"><div class="n" id="expS">—</div><div class="l" data-i18n="sec"></div></div>
+      </div>
+    </div>
+
+    <div class="st">[[i:bolt]] <span data-i18n="qi"></span></div>
+    <div class="card">
+      <a class="btn bp big" id="btnSmart" href="#" style="display:none"></a>
+      <div class="qi" id="qi"></div>
+      <button class="linkbtn" type="button" id="btnGoApps">[[i:download]] <span data-i18n="needApp"></span></button>
+    </div>
+
+    <div class="st">[[i:book-open]] <span data-i18n="guide"></span></div>
+    <div id="guide"></div>
+  </div>
+
+  <div id="tab-cfg" class="tab">
+    <div class="st">[[i:server]] <span data-i18n="cfg"></span></div>
+    <div id="list"></div>
+    <div class="row"><button class="btn bg" type="button" id="btnAll" style="grid-column:1/-1">[[i:copy]] <span data-i18n="all"></span></button></div>
+  </div>
+
+  <div id="tab-apps" class="tab"><div class="st">[[i:download]] <span data-i18n="apps"></span></div><div class="steps"><span class="stp"><b>1</b><span data-i18n="step1"></span></span><span class="stp-ar">[[i:chevron-down]]</span><span class="stp"><b>2</b><span data-i18n="step2"></span></span></div><div id="apps"></div></div>
+
+  <div id="tab-profile" class="tab">
+    <div class="act-row">
+      <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none">[[i:telegram]] <span data-i18n="renew"></span></a>
+      <a class="btn bg" id="btnChannel" href="#" target="_blank" rel="noopener" style="display:none">[[i:telegram]] <span data-i18n="channel"></span></a>
+      <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none">[[i:headset]] <span data-i18n="support"></span></a>
+    </div>
+    <div class="st">[[i:id-card]] <span data-i18n="prof"></span></div>
+    <div class="card pinfo">
+      <div class="prow"><span data-i18n="p1"></span><b id="pv1">—</b></div>
+      <div class="prow"><span data-i18n="p2"></span><b id="pv2">—</b></div>
+      <div class="prow"><span data-i18n="p3"></span><b id="pv3">—</b></div>
+      <div class="prow"><span data-i18n="p5"></span><b id="pv5">—</b></div>
+      <div class="prow"><span data-i18n="p6"></span><b id="pv6">—</b></div>
+      <div class="prow" id="rowLife" style="display:none"><span data-i18n="life"></span><b id="pv8">—</b></div>
+      <div class="prow" id="rowEst" style="display:none"><span data-i18n="est"></span><b id="pv7">—</b></div>
+    </div>
+  </div>
+  <div class="foot" id="foot"></div>
+</div>
+
+<nav class="nav" aria-label="main">
+  <span class="nav-ind" id="navInd" aria-hidden="true"></span>
+  <button type="button" class="on" data-t="home">[[i:house]]<span data-i18n="n1"></span></button>
+  <button type="button" data-t="cfg">[[i:server]]<span data-i18n="n2"></span></button>
+  <button type="button" data-t="apps">[[i:download]]<span data-i18n="n3"></span></button>
+  <button type="button" data-t="profile">[[i:user]]<span data-i18n="n4"></span></button>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+<div id="md" role="dialog" aria-modal="true"><div class="mbx"><div id="qr"></div>
+  <button class="btn bp" type="button" id="btnQrCopy" style="width:100%;margin-bottom:.45rem">[[i:copy]] <span data-i18n="copyLink"></span></button>
+  <button class="btn bg" type="button" id="btnQrClose" style="width:100%">OK</button></div></div>
