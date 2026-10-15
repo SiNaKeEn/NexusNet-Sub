@@ -1,7 +1,7 @@
-[README.md](https://github.com/user-attachments/files/33518050/README.md)
+[Uploading README.md…]()
 <div align="center">
 
-<img src="docs/banner.png" alt="NexusNet Sub" width="100%">
+<img src="banner.png" alt="NexusNet Sub" width="100%">
 
 # NexusNet Sub
 
@@ -40,9 +40,9 @@
 
 | Normal | Unlimited | Problem → red |
 |:--:|:--:|:--:|
-| <img src="docs/xui_blue.png" width="250"> | <img src="docs/xui_unlimited.png" width="250"> | <img src="docs/xui_red.png" width="250"> |
+| <img src="xui_blue.png" width="250"> | <img src="xui_unlimited.png" width="250"> | <img src="xui_red.png" width="250"> |
 | **PasarGuard** | **Light theme** | **Apps** |
-| <img src="docs/pg.png" width="250"> | <img src="docs/light.png" width="250"> | <img src="docs/apps.png" width="250"> |
+| <img src="pg.png" width="250"> | <img src="light.png" width="250"> | <img src="apps.png" width="250"> |
 
 </div>
 
@@ -98,7 +98,7 @@ sudo nxt-sub install both --ref v3.5.0                   # pin a tag/commit
 
 <div align="center">
 
-<img src="docs/terminal_menu.png" width="49%"> <img src="docs/terminal_settings.png" width="49%">
+<img src="terminal_menu.png" width="49%"> <img src="terminal_settings.png" width="49%">
 
 </div>
 
@@ -153,29 +153,6 @@ Both panels share the same layout. They differ only in the data the panel hands 
 | Status | enabled / expiry / quota | real status (`active`, `limited`, `expired`, `disabled`, `on_hold`) |
 
 > **Numbers look off on PasarGuard?** Open the subscription page with `#debug` at the end of the URL (`https://host/sub/TOKEN#debug`) to see the raw values PasarGuard sent.
-
----
-
-## 🛠 Build from source
-
-Sources live in `src/` and both themes are generated from the same files:
-
-```bash
-python3 build.py        # → out/xui-nexusnet.html, out/pasarguard-nexusnet.html
-```
-
-App logos: drop `happ.png`, `hiddify.png`, `v2rayng.png`, `v2box.png`, … into `src/appicons/` and rebuild — they are resized to 72 px and embedded in the HTML (no external requests). Apps without a logo keep a colored letter tile.
-
-```
-NexusNet-Sub/
-├─ install.sh                 # one-line installer → installs nxt-sub
-├─ nxt-sub                    # terminal manager
-├─ xui-nexusnet.html          # 3x-ui theme   (ready to use)
-├─ pasarguard-nexusnet.html   # PasarGuard theme (ready to use)
-├─ SHA256SUMS                 # checksums verified by nxt-sub
-├─ build.py · src/            # sources
-└─ docs/                      # screenshots
-```
 
 ---
 
