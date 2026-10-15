@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <meta name="color-scheme" content="dark light"/>
+<!-- NexusNet-Sub v3.5.0 -->
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%2306b6d4'/%3E%3Cpath d='M8 16h16M16 8v16' stroke='%23fff' stroke-width='2.5' stroke-linecap='round'/%3E%3C/svg%3E"/>
 <title>Subscription</title>
 <style>
@@ -168,6 +169,7 @@ html[data-mood=bad] .ambient{background:linear-gradient(#1a0508,#0a0204)}
 html[data-theme=light][data-mood=bad] .ambient{background:linear-gradient(#fbeaea,#f6dcdc)}
 html[data-mood=bad] .tab.on .hero{border-color:rgba(248,113,113,.35)}
 .app-img{width:28px;height:28px;border-radius:8px;object-fit:cover;flex-shrink:0;background:rgba(255,255,255,.06)}.app-img.sm{width:20px;height:20px;border-radius:6px}
+.foot{text-align:center;font-size:.68rem;color:var(--mu);margin:.6rem 0 0;opacity:.85}.foot:empty{display:none}
 </style>
 </head>
 <body>
@@ -277,6 +279,7 @@ html[data-mood=bad] .tab.on .hero{border-color:rgba(248,113,113,.35)}
   <div id="tab-profile" class="tab">
     <div class="act-row">
       <a class="btn bp" id="btnRenew" href="#" target="_blank" rel="noopener" style="display:none"><svg class="i" aria-hidden="true"><use href="#i-telegram"/></svg> <span data-i18n="renew"></span></a>
+      <a class="btn bg" id="btnChannel" href="#" target="_blank" rel="noopener" style="display:none"><svg class="i" aria-hidden="true"><use href="#i-telegram"/></svg> <span data-i18n="channel"></span></a>
       <a class="btn bg" id="btnSupport" href="#" target="_blank" rel="noopener" style="display:none"><svg class="i" aria-hidden="true"><use href="#i-headset"/></svg> <span data-i18n="support"></span></a>
     </div>
     <div class="st"><svg class="i" aria-hidden="true"><use href="#i-id-card"/></svg> <span data-i18n="prof"></span></div>
@@ -290,6 +293,7 @@ html[data-mood=bad] .tab.on .hero{border-color:rgba(248,113,113,.35)}
       <div class="prow" id="rowEst" style="display:none"><span data-i18n="est"></span><b id="pv7">—</b></div>
     </div>
   </div>
+  <div class="foot" id="foot"></div>
 </div>
 
 <nav class="nav" aria-label="main">
@@ -1197,8 +1201,7 @@ return module.exports;})();
 return M['index'];})();
 </script>
 <script>
-/* optional web font: non-blocking, page works fine without it (blocked/slow networks) */
-(function(){try{var l=document.createElement("link");l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&display=swap";l.media="print";l.onload=function(){l.media="all"};l.onerror=function(){l.remove()};document.head.appendChild(l)}catch(e){}})();
+
 /* PasarGuard (Jinja2) injects: user, links, announce */
 const _UD = {% if user %}{% set user_data = {
   'id': user.id,
@@ -1227,7 +1230,7 @@ const TV=(function(){
   };
 })();
 /*NXT_CFG_BEGIN*/
-const CONFIG={"profileTitle":"","supportUrl":"","renewUrl":"","accent":"","logo":"","notice":""};
+const CONFIG={"profileTitle":"","supportUrl":"","renewUrl":"","channelUrl":"","accent":"","logo":"","notice":"","footer":"","lang":"","theme":"","pgCells":""};
 /*NXT_CFG_END*/
 const $=id=>document.getElementById(id);
 const LS={g:(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:v}catch(e){return d}},s:(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}}};
@@ -1267,16 +1270,17 @@ Object.assign(I.fa,{renewSvc:"تمدید سرویس",life:"کل مصرف",needAp
 st_on:"فعال",st_off:"غیرفعال",st_online:"آنلاین",st_full:"اتمام حجم",st_expired:"منقضی",st_hold:"در انتظار اولین اتصال",st_soon:"نزدیک انقضا",delayed:"از اولین اتصال",
 g1t:"چطور وصل شوم؟",g1:["از تب «برنامه‌ها» برنامه‌ی پیشنهادی را نصب کن.","دکمه‌ی «افزودن به …» را بزن؛ یا لینک اشتراک را کپی و در برنامه Import کن.","یک سرور را انتخاب کن و وصل شو."],
 g2t:"وصل نمی‌شوم؟",g2:["اشتراک را داخل برنامه Update/Refresh کن.","ساعت و تاریخ گوشی باید درست باشد.","کانفیگ دیگری را امتحان کن.","حجم یا زمان اشتراک را بررسی کن و در صورت اتمام تمدید کن.","اگر حل نشد به پشتیبانی پیام بده."],
-dayUnit:"روز",usedPct:"٪ مصرف",leftPct:"٪ مانده",warnVolN:"حجم اشتراک رو به اتمام است",smart:"افزودن به",sec:"ثانیه",step1:"نصب برنامه",step2:"افزودن اشتراک",inst:"نصب",addSub:"افزودن",
+dayUnit:"روز",channel:"کانال",usedPct:"٪ مصرف",leftPct:"٪ مانده",warnVolN:"حجم اشتراک رو به اتمام است",smart:"افزودن به",sec:"ثانیه",step1:"نصب برنامه",step2:"افزودن اشتراک",inst:"نصب",addSub:"افزودن",
 h_full:"حجم تموم شده؛ وقت تمدیده",h_expired:"اشتراکت منقضی شده",h_off:"اشتراک غیرفعاله",h_hold:"منتظر اولین اتصال هستیم",h_soon:"فقط {n} روز تا پایان اشتراک",h_low:"فقط {p}٪ از حجم مونده",h_unl:"حجم نامحدود؛ با خیال راحت",h_ok:"{p}٪ از حجمت باقی مانده"});
 Object.assign(I.en,{renewSvc:"Renew service",life:"Lifetime",needApp:"No app installed yet?",guide:"Setup guide",copyLink:"Copy link",est:"Est. end",aLang:"Language",aTheme:"Toggle theme",qr:"Show QR",
 st_on:"Active",st_off:"Inactive",st_online:"Online",st_full:"Quota full",st_expired:"Expired",st_hold:"Waiting first connect",st_soon:"Expiring soon",delayed:"from first connect",
 g1t:"How do I connect?",g1:["Install the recommended app from the Apps tab.","Tap “Add to …”, or copy the sub link and import it in the app.","Pick a server and connect."],
 g2t:"Can't connect?",g2:["Update/Refresh the subscription inside the app.","Your phone's date and time must be correct.","Try another config.","Check quota and expiry; renew if needed.","Still stuck? Message support."],
-dayUnit:"days",usedPct:"Used %",leftPct:"Left %",down:"Download",up:"Upload",left:"Left",warnVolN:"Data quota is running low",smart:"Add to",sec:"Sec",step1:"Install app",step2:"Add subscription",inst:"Install",addSub:"Add",
+dayUnit:"days",channel:"Channel",usedPct:"Used %",leftPct:"Left %",down:"Download",up:"Upload",left:"Left",warnVolN:"Data quota is running low",smart:"Add to",sec:"Sec",step1:"Install app",step2:"Add subscription",inst:"Install",addSub:"Add",
 h_full:"Quota used up — time to renew",h_expired:"Your subscription expired",h_off:"Subscription is inactive",h_hold:"Waiting for first connection",h_soon:"Only {n} days left",h_low:"Only {p}% data left",h_unl:"Unlimited data — enjoy",h_ok:"{p}% of your data left"});
-let lang=LS.g("nn_lang","fa");if(!I[lang])lang="fa";
-let dark=LS.g("nn_theme","")?LS.g("nn_theme","")==="dark":!(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches);
+let lang=LS.g("nn_lang",CONFIG.lang==="en"?"en":"fa");if(!I[lang])lang="fa";
+const _ct=String(CONFIG.theme||"auto");
+let dark=LS.g("nn_theme","")?LS.g("nn_theme","")==="dark":(_ct==="dark"?true:_ct==="light"?false:!(window.matchMedia&&matchMedia("(prefers-color-scheme: light)").matches));
 const vibe=ms=>{try{navigator.vibrate&&navigator.vibrate(ms)}catch(e){}};
 const t=k=>{const v=(I[lang]&&I[lang][k]);return v!=null?v:(I.en[k]!=null?I.en[k]:k)};
 const n=(v,d)=>v==null||v===""?d:v;
@@ -1385,9 +1389,12 @@ function renderTraffic(){
   const rem=unl?100:Math.max(0,Math.min(100,left/tot*100));
   $("limit").textContent=unl?"∞":bytes(tot);
   if(SPLIT){setCell("c1","download",t("down"),d);setCell("c2","upload",t("up"),u);setCell("c3","chart-simple",t("used"),used);setCell("c4","battery-three-quarters",t("left"),unl?"∞":left,true)}
-  else{const pu=unl?"—":Math.min(100,Math.round(used/tot*100))+"%",pl=unl?"∞":Math.round(rem)+"%";
+  else if(String(CONFIG.pgCells)==="simple"){const pu=unl?"—":Math.min(100,Math.round(used/tot*100))+"%",pl=unl?"∞":Math.round(rem)+"%";
     setCell("c1","chart-simple",t("used"),used);setCell("c2","battery-three-quarters",t("left"),unl?"∞":left,true);
     setCell("c3","chart-simple",t("usedPct"),pu);setCell("c4","battery-three-quarters",t("leftPct"),pl)}
+  else{/* PasarGuard sends one total number: same four cells/labels as 3x-ui, upload is not reported */
+    setCell("c1","download",t("down"),used);setCell("c2","upload",t("up"),"—");
+    setCell("c3","chart-simple",t("used"),used);setCell("c4","battery-three-quarters",t("left"),unl?"∞":left,true)}
   const pc=$("pctT");if(unl){pc.textContent="∞";delete pc.dataset.v}else animNum(pc,Math.round(rem),v=>Math.round(v)+"%",1000);
   $("rTraffic").style.strokeDashoffset=String(CIRC*(1-rem/100));
   $("bar").style.width=rem+"%";
@@ -1410,7 +1417,9 @@ function data(){
   const we=$("warnExp"),dl=e.k==="date"?(e.ms-Date.now())/864e5:-1;
   if(dl>=0&&dl<=3){we.classList.add("show");$("warnExpTxt").textContent=t("st_soon")+" ("+Math.ceil(dl)+" "+t("dayUnit")+")"}else we.classList.remove("show");
   const sup=safeUrl(CONFIG.supportUrl)||safeUrl(TV.subSupportUrl),ren=safeUrl(CONFIG.renewUrl)||sup;
-  const br=$("btnRenew"),bs=$("btnSupport");
+  const br=$("btnRenew"),bs=$("btnSupport"),bc=$("btnChannel"),chu=safeUrl(CONFIG.channelUrl);
+  if(chu){bc.style.display="";bc.href=chu}else bc.style.display="none";
+  const ft=$("foot");ft.textContent=String(CONFIG.footer||"").trim();
   if(ren){br.style.display="";br.href=ren}else br.style.display="none";
   if(sup){bs.style.display="";bs.href=sup}else bs.style.display="none";
   const hr=$("homeRenew");let need=s.k==="bad"||s.key==="soon"||(tot>0&&used/tot>=.85);
